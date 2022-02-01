@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,23 +15,12 @@ class Solution {
             }
         }
 
-        Map<Integer, List<Integer>> freqToNum = new HashMap<>();
-        numToFreq.entrySet().forEach(entry -> {
-            if (freqToNum.containsKey(entry.getValue())) {
-                freqToNum.get(entry.getValue()).add(entry.getKey());
-            } else {
-                freqToNum.put(entry.getValue(), new ArrayList<>(Arrays.asList(entry.getKey())));
-            }
-        });
-
-        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(k, Collections.reverseOrder());
-        priorityQueue.addAll(freqToNum.keySet());
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(k, (x, y) -> numToFreq.get(y) - numToFreq.get(x));
+        numToFreq.keySet().forEach(num -> priorityQueue.add(num));
 
         List<Integer> result = new ArrayList<>();
-        for (int i = 0; i < k;) {
-            int freq = priorityQueue.poll();
-            result.addAll(freqToNum.get(freq));
-            i += freqToNum.get(freq).size();
+        for (int i = 0; i < k && !priorityQueue.isEmpty(); i++) {
+            result.add(priorityQueue.poll());
         }
 
         return result.stream().mapToInt(Integer::intValue).toArray();

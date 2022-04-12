@@ -1,0 +1,22 @@
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(k, Comparator.reverseOrder());
+        int n = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                int e = matrix[i][j];
+                if (n < k) {
+                    priorityQueue.add(e);
+                    n++;
+                } else if (e < priorityQueue.peek()) {
+                    priorityQueue.poll();
+                    priorityQueue.add(e);
+                }
+            }
+        }
+        return priorityQueue.peek();
+    }
+}

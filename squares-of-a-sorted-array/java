@@ -1,0 +1,44 @@
+class Solution {
+    public int[] sortedSquares(int[] nums) {
+        int nz = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] < 0) {
+                nz++;
+            } else {
+                break;
+            }
+        }
+
+        int[] result = new int[nums.length];
+
+        int i = nz - 1;
+        int j = nz;
+        int k = 0;
+        while (i >= 0 && j < nums.length) {
+            int si = (int) Math.pow(nums[i], 2);
+            int sj = (int) Math.pow(nums[j], 2);
+            if (si < sj) {
+                result[k] = si;
+                i--;
+            } else {
+                result[k] = sj;
+                j++;
+            }
+            k++;
+        }
+        while (i >= 0) {
+            int si = (int) Math.pow(nums[i], 2);
+            result[k] = si;
+            i--;
+            k++;
+        }
+        while (j < nums.length) {
+            int sj = (int) Math.pow(nums[j], 2);
+            result[k] = sj;
+            j++;
+            k++;
+        }
+
+        return result;
+    }
+}

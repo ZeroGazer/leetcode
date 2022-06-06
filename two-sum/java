@@ -1,0 +1,16 @@
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int[] diff = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            diff[i] = target - nums[i];
+        }
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < diff.length; j++) {
+                if (i != j && nums[i] == diff[j]) {
+                    return new int[] {i, j};
+                }
+            }
+        }
+        throw new IllegalStateException();
+    }
+}

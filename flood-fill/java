@@ -1,0 +1,45 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        if (color == image[sr][sc]) {
+            return image;
+        }
+
+        int previousColor = image[sr][sc];
+        image[sr][sc] = color;
+        Deque<Integer[]> q = new ArrayDeque<>();
+        q.add(new Integer[]{sr, sc});
+        while (!q.isEmpty()) {
+            Integer[] p = q.poll();
+            int row = p[0];
+            int col = p[1];
+            if (row - 1 > -1) {
+                if (image[row - 1][col] == previousColor) {
+                    image[row - 1][col] = color;
+                    q.add(new Integer[]{row - 1, col});
+                }
+            }
+            if (col - 1 > -1) {
+                if (image[row][col - 1] == previousColor) {
+                    image[row][col - 1] = color;
+                    q.add(new Integer[]{row, col - 1});
+                }
+            }
+            if (row + 1 < image.length) {
+                if (image[row + 1][col] == previousColor) {
+                    image[row + 1][col] = color;
+                    q.add(new Integer[]{row + 1, col});
+                }
+            }
+            if (col + 1 < image[0].length) {
+                if (image[row][col + 1] == previousColor) {
+                    image[row][col + 1] = color;
+                    q.add(new Integer[]{row, col + 1});
+                }
+            }
+        }
+        return image;
+    }
+}

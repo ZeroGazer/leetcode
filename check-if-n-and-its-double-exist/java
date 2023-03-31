@@ -1,0 +1,18 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public boolean checkIfExist(int[] arr) {
+        Map<Integer, List<Integer>> s = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            if (s.containsKey(arr[i])) {
+                s.get(arr[i]).add(i);
+            } else {
+                s.put(arr[i], new ArrayList<Integer>(i));
+            }
+        }
+        return s.keySet().stream().filter(v -> s.containsKey(v * 2)).anyMatch(k -> k != 0 || s.get(k).size() > 0);
+    }
+}

@@ -1,0 +1,37 @@
+import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.HashSet;
+
+class Solution {
+    public int thirdMax(int[] nums) {
+        if (nums.length == 1) {
+            return nums[0];
+        } else if (nums.length == 2) {
+            return nums[0] > nums[1] ? nums[0] : nums[1];
+        }
+        
+        Set<Integer> s = new HashSet<>();
+        PriorityQueue<Integer> q = new PriorityQueue<>(3);
+        for (int i = 0; i < nums.length; i++) {
+            if (s.contains(nums[i])) {
+                continue;
+            }
+            s.add(nums[i]);
+            if (q.size() < 3) {
+                q.add(nums[i]);
+            } else if (q.peek() < nums[i]) {
+                q.poll();
+                q.add(nums[i]);
+            }
+        }
+        if (q.size() < 3) {
+            int result = q.poll();
+            while (!q.isEmpty()) {
+                result = q.poll();
+            }
+            return result;
+        } else {
+            return q.poll();
+        }
+    }
+}

@@ -2,10 +2,10 @@ class Solution {
     public int search(int[] nums, int target) {
         int p = 0, q = nums.length - 1;
         while (p <= q) {
-            int m = (q - p) / 2 + p;
+            int m = (q-p)/2 + p;
             if (target == nums[m]) {
                 return m;
-            } else if (target <= nums[m]) {
+            } else if (target < nums[m]) {
                 q = m - 1;
             } else {
                 p = m + 1;

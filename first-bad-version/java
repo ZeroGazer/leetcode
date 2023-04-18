@@ -4,17 +4,14 @@
 public class Solution extends VersionControl {
     public int firstBadVersion(int n) {
         int p = 1, q = n;
-        while (p <= q) {
-            int m = (q - p) / 2 + p;
-            boolean isBad = isBadVersion(m);
-            if (isBad && (m == 1 || !isBadVersion(m - 1))) {
-                return m;
-            } else if (!isBad) {
-                p = m + 1;
+        while (p < q) {
+            int m = (q-p)/2 + p;
+            if (isBadVersion(m)) {
+                q = m;
             } else {
-                q = m - 1;
+                p = m + 1;
             }
         }
-        return -1;
+        return p;
     }
 }

@@ -1,0 +1,20 @@
+class Solution {
+    public int mySqrt(int x) {
+        if (x < 2) {
+            return x;
+        }
+        int p = 1, q = x/2;
+        while (p <= q) {
+            int m = (q-p)/2+p;
+            long result = (long) m * m;
+            if (result == x) {
+                return m;
+            } else if (result < x) {
+                p = m + 1;
+            } else {
+                q = m - 1;
+            }
+        }
+        return q;
+    }
+}

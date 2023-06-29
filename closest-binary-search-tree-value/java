@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+import java.math.BigDecimal;
+
+class Solution {
+    public int closestValue(TreeNode root, double target) {
+        if (target <= root.val) {
+            return find(root.left, new BigDecimal(Double.toString(target)), new BigDecimal(root.val)).intValue();
+        } else {
+            return find(root.right, new BigDecimal(Double.toString(target)), new BigDecimal(root.val)).intValue();
+        }
+    }
+    
+    private BigDecimal find(TreeNode root, BigDecimal target, BigDecimal nearest) {
+        if (root == null) {
+            return nearest;
+        }
+        BigDecimal rootValue = new BigDecimal(root.val);
+        if (target.compareTo(rootValue) == 0) {
+            return rootValue;
+        }
+        
+        BigDecimal minNearest = target.subtract(nearest).abs().compareTo(target.subtract(rootValue).abs()) < 0 ? nearest : 
+        target.subtract(nearest).abs().compareTo(target.subtract(rootValue).abs()) == 0 ? rootValue.min(nearest) : rootValue;
+        if (target.compareTo(rootValue) <= 0) {
+            return find(root.left, target, minNearest);
+        } else {
+            return find(root.right, target, minNearest);
+        }
+    }
+}

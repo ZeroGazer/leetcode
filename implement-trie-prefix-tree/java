@@ -1,0 +1,78 @@
+class Trie {
+
+    private TrieNode node;
+
+    public Trie() {
+        this.node = new TrieNode();
+    }
+    
+    public void insert(String word) {
+        TrieNode prefix = this.node;
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (!prefix.containsKey(c)) {
+                prefix.put(c, new TrieNode());
+            }
+            prefix = prefix.get(c);
+        }
+        prefix.setEnd();
+    }
+    
+    public boolean search(String word) {
+        TrieNode prefix = searchPrefix(word);
+        return prefix != null && prefix.isEnd();
+    }
+    
+    public boolean startsWith(String prefix) {
+        return searchPrefix(prefix) != null;
+    }
+
+    private TrieNode searchPrefix(String word) {
+        TrieNode current = this.node;
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (!current.containsKey(c)) {
+                return null;
+            }
+            current = current.get(c);
+        }
+        return current;
+    }
+
+    private static class TrieNode {
+
+        private TrieNode[] links;
+
+        private final int SIZE = 26;
+
+        private boolean isEnd;
+
+        public TrieNode() {
+            links = new TrieNode[SIZE];
+        }
+
+        public boolean containsKey(char ch) {
+            return links[ch - 'a'] != null;
+        }
+        public TrieNode get(char ch) {
+            return links[ch - 'a'];
+        }
+        public void put(char ch, TrieNode node) {
+            links[ch - 'a'] = node;
+        }
+        public void setEnd() {
+            isEnd = true;
+        }
+        public boolean isEnd() {
+            return isEnd;
+        }
+}
+}
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.insert(word);
+ * boolean param_2 = obj.search(word);
+ * boolean param_3 = obj.startsWith(prefix);
+ */

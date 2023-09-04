@@ -1,0 +1,54 @@
+class Solution {
+    public int countComponents(int n, int[][] edges) {
+        UnionFind uf = new UnionFind(n);
+        
+        int regions = n;
+        
+        for (int i = 0; i < edges.length; i++) {
+            if (uf.union(edges[i][0], edges[i][1])) {
+                regions--;
+            }
+        }
+        
+        return regions;
+    }
+    
+    private static final class UnionFind {
+        private int[] root;
+        private int[] rank;
+        
+        public UnionFind(int size) {
+            root = new int[size];
+            rank = new int[size];
+            
+            for (int i = 0; i < size; i++) {
+                root[i] = i;
+            }
+        }
+        
+        private int find(int a) {
+            if (root[a] == a) {
+                return a;
+            }
+            return root[a] = find(root[a]);
+        }
+        
+        public boolean union(int a, int b) {
+            int rootA = find(a);
+            int rootB = find(b);
+            if (rootA != rootB) {
+                if (rank[rootA] > rank[rootB]) {
+                    root[rootB] = rootA;
+                } else if (rank[rootA] < rank[rootB]) {
+                    root[rootA] = rootB;
+                } else {
+                    rank[rootA] += 1;
+                    root[rootB] = rootA;
+                }
+                
+                return true;
+            }
+            return false;
+        }
+    }
+}

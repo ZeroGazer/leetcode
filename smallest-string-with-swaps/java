@@ -1,0 +1,64 @@
+class Solution {
+    public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
+        UnionFind uf = new UnionFind(s.length());
+        for (List<Integer> pair: pairs) {
+            uf.union(pair.get(0), pair.get(1));
+        }
+
+        char[] c = new char[s.length()];
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        IntStream.range(0, s.length()).forEach(i -> {
+            int root = uf.find(i);
+            map.putIfAbsent(root, new ArrayList<>());
+            map.get(root).add(i);
+        });
+        map.values().forEach(nodes -> {
+            List<Character> tc = new ArrayList<>();
+            for (Integer node: nodes) {
+                tc.add(s.charAt(node));
+            }
+            Collections.sort(tc);
+            for (int j = 0; j < nodes.size(); j++) {
+                c[nodes.get(j)] = tc.get(j);
+            }
+        });
+
+        return new String(c);
+    }
+
+    private static final class UnionFind {
+
+        private int[] root;
+        private int[] rank;
+
+        public UnionFind(int size) {
+            root = new int[size];
+            rank = new int[size];
+            for (int i = 0; i < size; i++) {
+                root[i] = i;
+            }
+        }
+
+        public int find(int a) {
+            if (root[a] == a) {
+                return a;
+            }
+            return root[a] = find(root[a]);
+        }
+
+        public void union(int a, int b) {
+            int rootA = find(a);
+            int rootB = find(b);
+            if (rootA != rootB) {
+                if (rank[rootA] > rank[rootB]) {
+                    root[rootB] = rootA;
+                } else if (rank[rootA] < rank[rootB]) {
+                    root[rootA] = rootB;
+                } else {
+                    root[rootB] = rootA;
+                    rank[rootA] += 1;
+                }
+            }
+        }
+    }
+}

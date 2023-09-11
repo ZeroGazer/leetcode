@@ -1,0 +1,43 @@
+class Solution {
+
+    private Map<String, List<String>> map = new HashMap<>();
+    private Map<String, boolean[]> seen = new HashMap<>();
+    private int travel;
+
+    public List<String> findItinerary(List<List<String>> tickets) {
+        tickets.forEach(ticket -> map.computeIfAbsent(ticket.get(0), k -> new ArrayList<String>())
+            .add(ticket.get(1)));
+        travel = map.values().stream().map(List::size).reduce(0, Integer::sum).intValue();
+        map.values().forEach(Collections::sort);
+        map.entrySet().forEach(entry -> seen.put(
+            entry.getKey(), new boolean[entry.getValue().size()]));
+
+        LinkedList<String> result = new LinkedList<>();
+        result.add("JFK");
+        find(result, "JFK");
+
+        return result;
+    }
+
+    private boolean find(LinkedList<String> route, String destination) {
+        if (route.size() == travel + 1) {
+            return true;
+        }
+
+        if (map.containsKey(destination)) {
+            for (int i = 0; i < map.get(destination).size(); i++) {
+                if (!seen.get(destination)[i]) {
+                    seen.get(destination)[i] = true;
+                    route.add(map.get(destination).get(i));
+                    if (find(route, map.get(destination).get(i))) {
+                        return true;
+                    }
+                    route.removeLast();
+                    seen.get(destination)[i] = false;
+                }
+            }
+        }
+
+        return false;
+    }
+}

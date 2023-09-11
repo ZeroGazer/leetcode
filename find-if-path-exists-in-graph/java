@@ -1,29 +1,28 @@
 class Solution {
     public boolean validPath(int n, int[][] edges, int source, int destination) {
-
-        Map<Integer, List<Integer>> graph = new HashMap<>();
-        for (int[] edge: edges) {
-            graph.computeIfAbsent(edge[0], k -> new ArrayList<Integer>()).add(edge[1]);
-            graph.computeIfAbsent(edge[1], k -> new ArrayList<Integer>()).add(edge[0]);
-        }
-
-        Queue<Integer> queue = new LinkedList<>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        Arrays.stream(edges).forEach(edge -> {
+            map.computeIfAbsent(edge[0], key -> new ArrayList<Integer>()).add(edge[1]);
+            map.computeIfAbsent(edge[1], key -> new ArrayList<Integer>()).add(edge[0]);
+        });
         boolean[] seen = new boolean[n];
+        Queue<Integer> queue = new LinkedList<>();
         seen[source] = true;
         queue.add(source);
         while (!queue.isEmpty()) {
-            int node = queue.remove();
-            if (node == destination) {
+            int current = queue.poll();
+            if (current == destination) {
                 return true;
             }
-            for (int neighbour: graph.get(node)) {
-                if (!seen[neighbour]) {
-                    seen[neighbour] = true;
-                    queue.offer(neighbour);
+            if (map.containsKey(current)) {
+                for (int neighbour: map.get(current)) {
+                    if (!seen[neighbour]) {
+                        queue.add(neighbour);
+                        seen[neighbour] = true;
+                    }
                 }
             }
         }
-
         return false;
     }
 }

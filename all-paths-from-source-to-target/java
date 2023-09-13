@@ -1,26 +1,27 @@
 class Solution {
 
-
-
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
         List<List<Integer>> result = new ArrayList<>();
-        List<Integer> path = new ArrayList<>();
+        LinkedList<Integer> path = new LinkedList<>();
         path.add(0);
-        find(graph, path, result);
+        Queue<LinkedList<Integer>> queue = new LinkedList<>();
+        queue.add(path);
+        while (!queue.isEmpty()) {
+            LinkedList<Integer> currentPath = queue.poll();
+            int currentNode = currentPath.getLast();
 
-        return result;
-    }
+            if (currentNode == graph.length - 1) {
+                result.add(new ArrayList<>(currentPath));
+                continue;
+            }
 
-    private void find(int[][] graph, List<Integer> path, List<List<Integer>> result) {
-        int e = path.get(path.size() - 1);
-        if (e == graph.length - 1) {
-            result.add(new ArrayList<Integer>(path));
-        } else {
-            for (int neighbour: graph[e]) {
-                path.add(neighbour);
-                find(graph, path, result);
-                path.remove(path.size() - 1);
+            for (int neighbour: graph[currentNode]) {
+                LinkedList<Integer> newPath = new LinkedList<>(currentPath);
+                newPath.addLast(neighbour);
+                queue.add(newPath);
             }
         }
+
+        return result;
     }
 }

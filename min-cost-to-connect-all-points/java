@@ -1,0 +1,89 @@
+import java.math.BigDecimal;
+import java.math.MathContext;
+
+class Solution {
+
+
+    public int minCostConnectPoints(int[][] points) {
+        if (points.length == 1) {
+            return 0;
+        }
+
+        PriorityQueue<Edge> queue = new PriorityQueue<Edge>((e1, e2) -> e1.length - e2.length);
+
+        for (int i = 0; i < points.length; i++) {
+            for (int j = i + 1; j < points.length; j++) {
+                queue.add(new Edge(i, j, Math.abs(points[i][0] - points[j][0]) + Math.abs(points[i][1] - points[j][1])));
+            }
+        }
+
+        UnionFind uf = new UnionFind(points.length);
+
+        int cost = 0;
+
+        for (int i = 0; i < points.length - 1;) {
+            Edge edge = queue.poll();
+            if (!uf.isConnected(edge.point1, edge.point2)) {
+                uf.union(edge.point1, edge.point2);
+                cost += edge.length;
+                ++i;
+            }
+        }
+
+        return cost;
+    }
+
+    private static final class UnionFind {
+        private int[] root;
+        private int[] rank;
+
+        public UnionFind(int size) {
+            root = new int[size];
+            rank = new int[size];
+
+            for (int i = 0; i < root.length; ++i) {
+                root[i] = i;
+            }
+        }
+
+        public int find(int a) {
+            int rootA = root[a];
+            if (rootA == a) {
+                return a;
+            }
+            return root[a] = find(rootA);
+        }
+
+        public void union(int a, int b) {
+            int rootA = find(a);
+            int rootB = find(b);
+            if (rootA == rootB) {
+                return;
+            }
+            if (rank[rootA] > rank[rootB]) {
+                root[rootB] = rootA;
+            } else if (rank[rootA] < rank[rootB]) {
+                root[rootA] = rootB;
+            } else {
+                rank[rootA] += 1;
+                root[rootB] = rootA;
+            }
+        }
+
+        public boolean isConnected(int a, int b) {
+            return find(a) == find(b);
+        }
+    }
+
+    private static final class Edge {
+        public int point1;
+        public int point2;
+        public int length;
+
+        public Edge(int point1, int point2, int length) {
+            this.point1 = point1;
+            this.point2 = point2;
+            this.length = length;
+        }
+    }
+}

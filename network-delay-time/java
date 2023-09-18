@@ -1,0 +1,42 @@
+class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+        Map<Integer, List<int[]>> map = new HashMap<>();
+        Arrays.stream(times).forEach(time -> map.
+            computeIfAbsent(time[0], key -> new ArrayList<int[]>()).
+            add(time));
+
+        int[] receivedAt = new int[n + 1];
+        Arrays.fill(receivedAt, Integer.MAX_VALUE);
+        receivedAt[k] = 0;
+
+        PriorityQueue<int[]> queue = new PriorityQueue<>((x, y) -> x[0] - y[0]);
+        queue.add(new int[] {0, k});
+
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int currentTime = current[0];
+            int currentNode = current[1];
+
+            if (currentTime > receivedAt[currentNode]) {
+                continue;
+            }
+
+            if (!map.containsKey(currentNode)) {
+                continue;
+            }
+
+            for (int[] neighbour: map.get(currentNode)) {
+                if (receivedAt[neighbour[1]] > currentTime + neighbour[2]) {
+                    receivedAt[neighbour[1]] = currentTime + neighbour[2];
+                    queue.add(new int[] {receivedAt[neighbour[1]], neighbour[1]});
+                }
+            }
+        }
+
+        int max = Integer.MIN_VALUE;
+        for (int i = 1; i < n + 1; ++i) {
+            max = Math.max(max, receivedAt[i]);
+        }
+        return max == Integer.MAX_VALUE ? -1 : max;
+    }
+}

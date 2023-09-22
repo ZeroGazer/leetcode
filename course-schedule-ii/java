@@ -1,0 +1,46 @@
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        Map<Integer, Integer> indegree = new HashMap<>();
+        Map<Integer, List<Integer>> edges = new HashMap<>();
+
+        for (int i = 0; i < numCourses; i++) {
+            indegree.put(i, 0);
+        }
+
+        for (int[] prerequisite: prerequisites) {
+            indegree.computeIfPresent(prerequisite[0], (k, v) -> ++v);
+            edges.computeIfAbsent(prerequisite[1], v -> new ArrayList<Integer>()).add(prerequisite[0]);
+        }
+
+        List<Integer> result = new ArrayList<>();
+        Queue<Integer> queue = new LinkedList<>();
+        indegree.entrySet().forEach(e -> {
+            if (e.getValue() == 0) {
+                queue.offer(e.getKey());
+            }
+        });
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            result.add(current);
+            if (!edges.containsKey(current)) {
+                continue;
+            }
+            for (int neighbour: edges.get(current)) {
+                if (indegree.computeIfPresent(neighbour, (k, v) -> --v) == 0) {
+                    queue.offer(neighbour);
+                }
+            }
+        }
+
+        if (result.isEmpty()) {
+            if (numCourses == 1) {
+                return new int[] {0};
+            }
+            return new int[0];
+        } else if (result.size() < numCourses) {
+            return new int[0];
+        } else {
+            return result.stream().mapToInt(Integer::intValue).toArray();
+        }
+    }
+}

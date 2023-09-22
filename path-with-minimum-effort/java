@@ -1,0 +1,39 @@
+class Solution {
+    private static final int[][] DIRECTIONS = new int[][] {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public int minimumEffortPath(int[][] heights) {
+        int[][] cost = new int[heights.length][heights[0].length];
+        boolean[][] visited = new boolean[heights.length][heights[0].length];
+
+        for (int[] row: cost) {
+            Arrays.fill(row, Integer.MAX_VALUE);
+        }
+        cost[0][0] = 0;
+
+        Queue<int[]> queue = new PriorityQueue<>((x, y) -> x[2] - y[2]);
+        queue.add(new int[] {0, 0, 0});
+        while (!queue.isEmpty()) {
+            int[] node = queue.poll();
+            visited[node[0]][node[1]] = true;
+            if (node[0] == heights.length - 1 && node[1] == heights[0].length - 1) {
+                return cost[heights.length - 1][heights[0].length - 1];
+            }
+            for (int[] direction: DIRECTIONS) {
+                int newX = direction[0] + node[0];
+                int newY = direction[1] + node[1];
+                if (newX > -1 && newX < heights.length &&
+                    newY > -1 && newY < heights[0].length) {
+                    if (!visited[newX][newY]) {
+                        int difference = Math.abs(heights[node[0]][node[1]] - heights[newX][newY]);
+                        int maxDifference = Math.max(cost[node[0]][node[1]], difference);
+                        if (cost[newX][newY] > maxDifference) {
+                            cost[newX][newY] = maxDifference;
+                            queue.add(new int[] {newX, newY, maxDifference});
+                        }
+                    }
+                }
+            }
+        }
+        return cost[heights.length - 1][heights[0].length - 1];
+    }
+}

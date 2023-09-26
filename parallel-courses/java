@@ -1,0 +1,46 @@
+class Solution {
+    public int minimumSemesters(int n, int[][] relations) {
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        Map<Integer, Integer> indegree = new HashMap<>();
+
+        for (int[] relation: relations) {
+            int prev = relation[0];
+            int next = relation[1];
+            map.computeIfAbsent(prev, k -> new ArrayList<>()).add(next);
+            indegree.putIfAbsent(prev, 0);
+            indegree.computeIfPresent(next, (k , v) -> ++v);
+            indegree.putIfAbsent(next, 1);
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+        indegree.entrySet().forEach(e -> {
+            if (e.getValue() == 0) {
+                queue.add(e.getKey());
+            }
+        });
+
+        int size;
+        int sem = 0;
+
+        while (!queue.isEmpty()) {
+            size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int course = queue.poll();
+                if (!map.containsKey(course)) {
+                    continue;
+                }
+                for (int next: map.get(course)) {
+                    if (indegree.compute(next, (k, v) -> --v) == 0) {
+                        queue.offer(next);
+                    }
+                }
+            }
+            sem++;
+        }
+
+        if (indegree.values().stream().anyMatch(v -> v != 0)) {
+            return -1;
+        }
+        return sem;
+    }
+}

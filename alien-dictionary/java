@@ -1,0 +1,65 @@
+class Solution {
+    public String alienOrder(String[] words) {
+        Map<Character, Integer> indegree = new HashMap<>();
+        Map<Character, Set<Character>> map = new HashMap<>();
+
+        for (int i = 0; i < words[0].length(); i++) {
+            char c = words[0].charAt(i);
+            indegree.putIfAbsent(c, 0);
+        }
+        for (int i = 1; i < words.length; i++) {
+            String s = words[i];
+            String prev = words[i - 1];
+            int j = 0;
+            boolean hasFirst = false;
+            while (j < prev.length()) {
+                if (j < s.length()) {
+                    char pc = prev.charAt(j);
+                    char cc = s.charAt(j);
+                    indegree.putIfAbsent(cc, 0);
+                    if (pc != cc && !hasFirst) {
+                        hasFirst = true;
+                        if (!map.containsKey(pc) || !map.get(pc).contains(cc)) {
+                            indegree.compute(cc, (k, v) -> ++v);
+                            map.computeIfAbsent(pc, k -> new HashSet<>()).add(cc);
+                        }
+                    }
+                } else if (!hasFirst) {
+                    return "";
+                }
+                ++j;
+            }
+            while (j < s.length()) {
+                indegree.putIfAbsent(s.charAt(j), 0);
+                ++j;
+            }
+        }
+
+        Queue<Character> queue = new LinkedList<>();
+        indegree.entrySet().forEach(e -> {
+            if (e.getValue() == 0) {
+                queue.add(e.getKey());
+            }
+        });
+
+        StringBuilder sb = new StringBuilder();
+        while (!queue.isEmpty()) {
+            char current = queue.poll();
+            sb.append(current);
+            if (!map.containsKey(current)) {
+                continue;
+            }
+
+            for (char neighbour: map.get(current)) {
+                if (indegree.compute(neighbour, (k, v) -> --v) == 0) {
+                    queue.add(neighbour);
+                }
+            }
+        }
+
+        if (indegree.values().stream().anyMatch(v -> v != 0)) {
+            return "";
+        }
+        return sb.toString();
+    }
+}

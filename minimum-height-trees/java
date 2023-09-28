@@ -1,0 +1,42 @@
+class Solution {
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        List<Integer> result = new ArrayList<>();
+        if (n == 1) {
+            result.add(0);
+            return result;
+        }
+
+        Map<Integer, List<Integer>> neighbours = new HashMap<>();
+        Arrays.stream(edges).forEach(edge -> {
+            neighbours.computeIfAbsent(edge[0], k -> new ArrayList<Integer>()).add(edge[1]);
+            neighbours.computeIfAbsent(edge[1], k -> new ArrayList<Integer>()).add(edge[0]);
+        });
+
+        Queue<Integer> queue = new LinkedList<>();
+
+        neighbours.entrySet().forEach(e -> {
+            if (e.getValue().size() == 1) {
+                queue.offer(e.getKey());
+            }
+        });
+
+        int count = n;
+        int size;
+
+        while (!queue.isEmpty() && count > 2) {
+            size = queue.size();
+            count -= size;
+
+            for (int i = 0; i < size; i++) {
+                Integer current = queue.poll();
+                int neighbour = neighbours.get(current).get(0);
+                neighbours.get(neighbour).remove(current);
+                neighbours.remove(current);
+                if (neighbours.get(neighbour).size() == 1) {
+                    queue.offer(neighbour);
+                }
+            }
+        }
+        return neighbours.keySet().stream().toList();
+    }
+}

@@ -1,0 +1,63 @@
+class Solution {
+    public int minCostToSupplyWater(int n, int[] wells, int[][] pipes) {
+        Queue<int[]> queue = new PriorityQueue<int[]>((x, y) -> x[2] - y[2]);
+        Arrays.stream(pipes).forEach(pipe -> queue.add(pipe));
+        IntStream.range(0, n).forEach(i -> queue.add(new int[] {0, i + 1, wells[i]}));
+
+        UnionFind uf = new UnionFind(n + 1);
+        int i = 0;
+        int cost = 0;
+        while (i < n) {
+            int[] edge = queue.poll();
+            if (!uf.isConnected(edge[0], edge[1])) {
+                uf.union(edge[0], edge[1]);
+                cost += edge[2];
+                ++i;
+            }
+        }
+
+        return cost;
+    }
+
+    class UnionFind {
+
+        private int[] root;
+        private int[] rank;
+
+        public UnionFind(int size) {
+            root = new int[size];
+            rank = new int[size];
+            for (int i = 0; i < size; i++) {
+                root[i] = i;
+                rank[i] = 1;
+            }
+        }
+
+        public int find(int a) {
+            if (root[a] == a) {
+                return a;
+            }
+            return root[a] = find(root[a]);
+        }
+
+        public void union(int a, int b) {
+            int rootA = find(a);
+            int rootB = find(b);
+            if (rootA == rootB) {
+                return;
+            }
+            if (rank[rootA] > rank[rootB]) {
+                root[rootB] = rootA;
+            } else if (rank[rootA] < rank[rootB]) {
+                root[rootA] = rootB;
+            } else {
+                rank[rootA] += 1;
+                root[rootB] = rootA;
+            }
+        }
+
+        public boolean isConnected(int a, int b) {
+            return find(a) == find(b);
+        }
+    }
+}

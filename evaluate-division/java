@@ -1,0 +1,56 @@
+class Solution {
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        Map<String, Map<String, Double>> graph = new HashMap<>();
+        for (int i = 0; i < equations.size(); ++i) {
+            List<String> equation = equations.get(i);
+            String dividend = equation.get(0);
+            String divisor = equation.get(1);
+            double value = values[i];
+            graph.computeIfAbsent(dividend, k -> new HashMap<String, Double>()).put(divisor, value);
+            graph.computeIfAbsent(divisor, k -> new HashMap<String, Double>()).put(dividend, 1 / value);
+        }
+
+        double[] results = new double[queries.size()];
+
+        for (int i = 0; i < queries.size(); i++) {
+            List<String> query = queries.get(i);
+            String dividend = query.get(0);
+            String divisor = query.get(1); 
+
+            double result = -1;
+            if (!graph.containsKey(dividend) || !graph.containsKey(divisor)) {
+                result = -1;
+            } else if (dividend.equals(divisor)) {
+                result = 1;
+            } else {
+                Set<String> visited = new HashSet<>();
+                result = backtrack(graph, dividend, divisor, visited);
+            }
+
+            results[i] = result;
+        }
+
+        return results;
+    }
+
+    double backtrack(Map<String, Map<String, Double>> graph, String dividend, String divisor, Set<String> visited) {
+        visited.add(dividend);
+        if (graph.get(dividend).containsKey(divisor)) {
+            return graph.get(dividend).get(divisor);
+        }
+
+        for (Map.Entry<String, Double> next: graph.get(dividend).entrySet()) {
+            if (visited.contains(next.getKey())) {
+                continue;
+            }
+
+            double nextResult = backtrack(graph, next.getKey(), divisor, visited);
+            if (nextResult < 0) {
+                continue;
+            }
+            return next.getValue() * nextResult;
+        }
+
+        return -1;
+    }
+}

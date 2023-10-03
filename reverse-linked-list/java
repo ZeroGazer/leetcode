@@ -1,5 +1,3 @@
-import java.util.Stack;
-
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -15,18 +13,10 @@ class Solution {
         if (head == null || head.next == null) {
             return head;
         }
-        Stack<ListNode> s = new Stack<>();
-        while (head != null) {
-            s.push(head);
-            head = head.next;
-        }
-        head = s.pop();
-        ListNode p = head;
-        while (!s.isEmpty()) {
-            p.next = s.pop();
-            p = p.next;
-        }
-        p.next = null;
-        return head;
+
+        ListNode newHead = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
     }
 }

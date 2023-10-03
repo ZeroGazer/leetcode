@@ -1,0 +1,69 @@
+import java.util.StringJoiner;
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        StringJoiner sj = new StringJoiner(",");
+        while (!queue.isEmpty()) {
+            TreeNode current = queue.poll();
+            if (current == null) {
+                sj.add(null);
+                continue;
+            }
+            sj.add(Integer.toString(current.val, 10));
+            queue.add(current.left);
+            queue.add(current.right);
+        }
+
+        return sj.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data == null) {
+            return null;
+        }
+        String[] sequences = data.split(",");
+        TreeNode root = new TreeNode(Integer.parseInt(sequences[0]));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        int i = 1;
+        while (i < sequences.length) {
+            TreeNode current = queue.poll();
+            String sequence = sequences[i];
+            if (!sequence.equals("null")) {
+                current.left = new TreeNode(Integer.parseInt(sequence));
+                queue.add(current.left);
+            }
+            i++;
+            sequence = sequences[i];
+            if (!sequence.equals("null")) {
+                current.right = new TreeNode(Integer.parseInt(sequence));
+                queue.add(current.right);
+            }
+            i++;
+        }
+        return root;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));

@@ -1,0 +1,28 @@
+class Solution {
+    public int numSquares(int n) {
+        List<Integer> squares = new ArrayList<>();
+        for (int i = 1; i <= Math.sqrt(n); i++) {
+            squares.add(i * i);
+        }
+        int[] cost = new int[n];
+        Arrays.fill(cost, Integer.MAX_VALUE);
+        squares.forEach(sq -> cost[sq - 1] = 1);
+
+        Queue<Integer> queue = new LinkedList<>();
+        squares.forEach(queue::add);
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            if (current == n) {
+                return cost[current - 1];
+            }
+            squares.forEach(sq -> {
+                int newNum = current + sq;
+                if (newNum <= n && cost[newNum - 1] > cost[current - 1] + 1) {
+                    cost[newNum - 1] = cost[current - 1] + 1;
+                    queue.add(newNum);
+                }
+            });
+        }
+        return -1;
+    }
+}

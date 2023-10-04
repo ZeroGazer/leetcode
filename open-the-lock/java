@@ -1,0 +1,40 @@
+class Solution {
+    public int openLock(String[] deadends, String target) {
+        Set<String> deadendsSet = new HashSet<>();
+        Arrays.stream(deadends).forEach(deadendsSet::add);
+
+        if (deadendsSet.contains("0000")) {
+            return -1;
+        }
+
+        int[] cost = new int[10000];
+        Arrays.fill(cost, Integer.MAX_VALUE);
+        cost[0] = 0;
+        Queue<String> queue = new LinkedList<>();
+        queue.add("0000");
+        while (!queue.isEmpty()) {
+            String current = queue.poll();
+
+            if (current.equals(target)) {
+                return cost[Integer.parseInt(target)];
+            }
+
+            for (int i = 0; i < 4; i++) {
+                char c = current.charAt(i);
+                String plus = current.substring(0, i) + (c - '0' + 1) % 10 + current.substring(i + 1, current.length());
+                String minus = current.substring(0, i) + (c - '0' + 9) % 10 + current.substring(i + 1, current.length());
+                if (!deadendsSet.contains(plus) && cost[Integer.parseInt(plus)] > cost[Integer.parseInt(current)] + 1) {
+                    cost[Integer.parseInt(plus)] = cost[Integer.parseInt(current)] + 1;
+                    queue.add(plus);
+                }
+                if (!deadendsSet.contains(minus) && cost[Integer.parseInt(minus)] > cost[Integer.parseInt(current)] + 1) {
+                    cost[Integer.parseInt(minus)] = cost[Integer.parseInt(current)] + 1;
+                    queue.add(minus);
+                }
+            }
+        }
+        
+
+        return -1;
+    }
+}

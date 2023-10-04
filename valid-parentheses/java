@@ -1,19 +1,20 @@
-import java.util.Stack;
-
 class Solution {
+
+    private Map<Character, Character> map = Map.of(')', '(', '}', '{', ']', '[');
+
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
-        Map<Character, Character> cm = Map.of(')', '(', '}', '{', ']', '[');
-        
+
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (!stack.isEmpty() && cm.get(c) == stack.peek()) {
-                stack.pop();
+            if (!map.containsKey(c)) {
+                stack.add(c);
+            } else if (stack.isEmpty() || !stack.peek().equals(map.get(c))) {
+                return false;
             } else {
-                stack.push(c);
+                stack.pop();
             }
         }
-        
-        return stack.size() == 0;
+        return stack.isEmpty();
     }
 }

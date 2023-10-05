@@ -1,0 +1,48 @@
+class Solution {
+    public String decodeString(String s) {
+        Stack<String> strings = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if ('0' <= c && c <= '9') {
+                int value = Character.getNumericValue(c);
+                if (!strings.isEmpty()) {
+                    String prev = strings.peek();
+                    try {
+                        int n = Integer.parseInt(prev);
+                        value = n * 10 + value;
+                        strings.pop();
+                    } catch (NumberFormatException ex) {
+                    }
+                }
+                strings.push(Integer.toString(value, 10));
+            } else if (']' == c) {
+                StringBuilder sb = new StringBuilder();
+                while (!strings.isEmpty()) {
+                    if (!strings.peek().equals("[")) {
+                        sb.insert(0, strings.pop());
+                    } else {
+                        strings.pop();
+                        int repeat = Integer.parseInt(strings.pop());
+                        String tmp = sb.toString();
+                        for (int j = 0; j < repeat - 1; j++) {
+                            sb.append(tmp);
+                        }
+                        if (!strings.isEmpty() && !strings.peek().equals("[")) {
+                            strings.push(strings.pop() + sb.toString());
+                        } else {
+                            strings.push(sb.toString());
+                        }
+                        break;
+                    }
+                }
+            } else {
+                strings.push(Character.toString(c));
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        while (!strings.isEmpty()) {
+            sb.insert(0, strings.pop());
+        }
+        return sb.toString();
+    }
+}

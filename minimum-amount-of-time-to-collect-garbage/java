@@ -1,0 +1,28 @@
+class Solution {
+    public int garbageCollection(String[] garbage, int[] travel) {
+        int[] prefixSum = new int[garbage.length];
+        prefixSum[0] = 0;
+        Map<Character, int[]> last = new HashMap<>();
+        last.put('G', new int[] {0, 0});
+        last.put('P', new int[] {0, 0});
+        last.put('M', new int[] {0, 0});
+        for (int i = 0; i < travel.length; i++) {
+            prefixSum[i + 1] = prefixSum[i] + travel[i];
+        }
+        for (int i = 0; i < garbage.length; i++) {
+            for (int j = 0; j < garbage[i].length(); j++) {
+                int[] record = last.get(garbage[i].charAt(j));
+                record[0] = i;
+                record[1] += 1;
+            }
+        }
+        int sum = 0;
+        for (int[] e: last.values()) {
+            if (e[1] > 0) {
+                sum += e[1];
+                sum += prefixSum[e[0]];
+            }
+        }
+        return sum;
+    }
+}

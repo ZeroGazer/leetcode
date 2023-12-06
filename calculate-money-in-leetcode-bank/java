@@ -1,0 +1,7 @@
+class Solution {
+    public int totalMoney(int n) {
+        int r = n / 7;
+        int d = n % 7;
+        return (56 + 7 * (r - 1)) * r / 2 + (2 * r + 1 + d) * d / 2;
+    }
+}

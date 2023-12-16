@@ -1,24 +1,23 @@
-import java.util.HashMap;
-import java.util.Map;
-
 class Solution {
     public boolean isAnagram(String s, String t) {
         if (s.length() != t.length()) {
             return false;
         }
+
         Map<Character, Integer> m = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {
-            m.computeIfPresent(s.charAt(i), (c, count) -> ++count);
+            m.computeIfPresent(s.charAt(i), (k, v) -> ++v);
             m.putIfAbsent(s.charAt(i), 1);
         }
         for (int i = 0; i < t.length(); i++) {
-            if (!m.containsKey(t.charAt(i))) {
-                return false;
-            } else {
-                int count = m.computeIfPresent(t.charAt(i), (c, v) -> --v);
-                if (count < 0) {
+            if (m.containsKey(t.charAt(i))) {
+                if (m.get(t.charAt(i)) == 0) {
                     return false;
+                } else {
+                    m.compute(t.charAt(i), (k, v) -> --v);
                 }
+            } else {
+                return false;
             }
         }
         return true;

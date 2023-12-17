@@ -1,0 +1,53 @@
+class FoodRatings {
+
+    private Map<String, Food> nameFoods = new HashMap<>();
+    private Map<String, Queue<Food>> cuisineFoods = new HashMap<>();
+
+    public FoodRatings(String[] foods, String[] cuisines, int[] ratings) {
+        for (int i = 0; i < foods.length; i++) {
+            Food f = new Food(foods[i], cuisines[i], ratings[i]);
+            nameFoods.put(foods[i], f);
+            cuisineFoods.putIfAbsent(cuisines[i], new PriorityQueue<Food>());
+            cuisineFoods.get(cuisines[i]).add(f);
+        }
+    }
+    
+    public void changeRating(String food, int newRating) {
+        Food f = nameFoods.get(food);
+        cuisineFoods.get(f.cuisine).remove(f);
+        f.rating = newRating;
+        cuisineFoods.get(f.cuisine).add(f);
+    }
+    
+    public String highestRated(String cuisine) {
+        return cuisineFoods.get(cuisine).peek().name;
+    }
+
+    class Food implements Comparable<Food> {
+
+        String name;
+        String cuisine;
+        int rating;
+
+        public Food(String name, String cuisine, int rating) {
+            this.name = name;
+            this.cuisine = cuisine;
+            this.rating = rating;
+        }
+
+        @Override
+        public int compareTo(Food other) {
+            if (this.rating == other.rating) {
+                return this.name.compareTo(other.name);
+            }
+            return other.rating - this.rating;
+        }
+    }
+}
+
+/**
+ * Your FoodRatings object will be instantiated and called as such:
+ * FoodRatings obj = new FoodRatings(foods, cuisines, ratings);
+ * obj.changeRating(food,newRating);
+ * String param_2 = obj.highestRated(cuisine);
+ */

@@ -1,0 +1,24 @@
+class Solution {
+    public int maxProductDifference(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        int secondMax = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        int secondMin = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            int n = nums[i];
+            if (n > max) {
+                secondMax = max;
+                max = n;
+            } else {
+                secondMax = Math.max(secondMax, n);
+            }
+            if (n < min) {
+                secondMin = min;
+                min = n;
+            } else {
+                secondMin = Math.min(secondMin, n);
+            }
+        }
+        return max * secondMax - min * secondMin;
+    }
+}

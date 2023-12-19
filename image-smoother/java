@@ -1,0 +1,29 @@
+class Solution {
+    public int[][] imageSmoother(int[][] img) {
+        for (int i = 0; i < img.length; i++) {
+            for (int j = 0; j < img[i].length; j++) {
+                int xMin = Math.max(0, i - 1);
+                int xMax = Math.min(img.length - 1, i + 1);
+                int yMin = Math.max(0, j - 1);
+                int yMax = Math.min(img[i].length - 1, j + 1);
+
+                int count = 0;
+                int sum = 0;
+                for (int k = xMin; k <= xMax; k++) {
+                    for (int l = yMin; l <= yMax; l++) {
+                        sum += img[k][l] % 256;
+                        ++count;
+                    }
+                }
+                img[i][j] += (sum / count) * 256;
+            }
+        }
+
+        for (int i = 0; i < img.length; i++) {
+            for (int j = 0; j < img[i].length; j++) {
+                img[i][j] /= 256;
+            }
+        }
+        return img;
+    }
+}

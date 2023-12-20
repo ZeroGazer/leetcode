@@ -1,0 +1,16 @@
+class Solution {
+    public int buyChoco(int[] prices, int money) {
+        int min = Integer.MAX_VALUE;
+        int secondMin = Integer.MAX_VALUE;
+        for (int price : prices) {
+            if (price < min) {
+                secondMin = min;
+                min = price;
+            } else {
+                secondMin = Math.min(secondMin, price);
+            }
+        }
+        int left = money - min - secondMin;
+        return left >= 0 ? left : money;
+    }
+}

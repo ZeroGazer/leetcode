@@ -1,0 +1,12 @@
+class Solution {
+    public int maxDistance(int[] colors) {
+        int i = 0, j = colors.length - 1;
+        while (colors[0] == colors[j]) {
+            j--;
+        }
+        while (colors[i] == colors[colors.length - 1]) {
+            i++;
+        }
+        return Math.max(j, colors.length - 1 - i);
+    }
+}

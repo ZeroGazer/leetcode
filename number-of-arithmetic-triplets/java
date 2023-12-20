@@ -1,0 +1,21 @@
+class Solution {
+    public int arithmeticTriplets(int[] nums, int diff) {
+        Map<Integer, Integer> s = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            s.put(nums[i] - diff, i);
+        }
+        Map<Integer, Integer> m = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (s.containsKey(nums[i]) && i != s.get(nums[i])) {
+                m.put(i, s.get(nums[i]));
+            }
+        }
+        int sum = 0;
+        for (Map.Entry<Integer, Integer> e : m.entrySet()) {
+            if (m.containsKey(e.getValue())) {
+                ++sum;
+            }
+        }
+        return sum;
+    }
+}

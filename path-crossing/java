@@ -1,0 +1,22 @@
+class Solution {
+    public boolean isPathCrossing(String path) {
+        Map<Character, List<Integer>> map = Map.of(
+            'N', List.of(0, 1),
+            'E', List.of(1, 0),
+            'S', List.of(0, -1),
+            'W', List.of(-1, 0)
+        );
+        Set<List<Integer>> set = new HashSet<>();
+        List<Integer> curr = List.of(0, 0);
+        set.add(curr);
+        for (int i = 0; i < path.length(); i++) {
+            List<Integer> move = map.get(path.charAt(i));
+            curr = List.of(move.get(0) + curr.get(0), move.get(1) + curr.get(1));
+            if (set.contains(curr)) {
+                return true;
+            }
+            set.add(curr);
+        }
+        return false;
+    }
+}

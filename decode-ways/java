@@ -8,25 +8,20 @@ class Solution {
             return 1;
         }
 
-        int[] dp = new int[s.length()];
-        dp[0] = 1;
-        if (s.charAt(1) != '0') {
-            dp[1] = Integer.parseInt(s.substring(0, 2)) >= 10 && Integer.parseInt(s.substring(0, 2)) <= 26 ? 2 : 1;
-        } else { 
-            dp[1] = Integer.parseInt(s.substring(0, 2)) >= 10 && Integer.parseInt(s.substring(0, 2)) <= 26 ? 1 : 0;
-        }
-        
-        for (int i = 2; i < s.length(); i++) {
+        int sum0 = 1;
+        int sum1 = 1;
+        for (int i = 1; i < s.length(); i++) {
+            int sum2 = 0;
             if (s.charAt(i) != '0') {
-                dp[i] = dp[i - 1];
+                sum2 += sum1;
             }
-            
-            if (Integer.parseInt(s.substring(i - 1, i + 1)) <= 26
-                && Integer.parseInt(s.substring(i - 1, i + 1)) >= 10) {
-                dp[i] += dp[i - 2];
+            int last2Digits = Integer.parseInt("" + s.charAt(i - 1) + s.charAt(i));
+            if (last2Digits >= 10 && last2Digits <= 26) {
+                sum2 += sum0;
             }
+            sum0 = sum1;
+            sum1 = sum2;
         }
-        
-        return dp[s.length() - 1];
+        return sum1;
     }
 }

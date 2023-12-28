@@ -1,0 +1,43 @@
+class Solution {
+    public int myAtoi(String s) {
+        int sign = -1;
+        int value = 0;
+        boolean isSpaceExpected = true;
+        boolean isPrevDigit = false;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == ' ' && isSpaceExpected) {
+                continue;
+            } else if (c == '-' && isSpaceExpected && !isPrevDigit) {
+                sign = 1;
+                isSpaceExpected = false;
+            } else if (c == '+' && isSpaceExpected && !isPrevDigit) {
+                isSpaceExpected = false;
+            } else if (c == '0' && !isPrevDigit) {
+                isSpaceExpected = false;
+                continue;
+            } else if ('1' <= c && c <= '9' && !isPrevDigit) {
+                isSpaceExpected = false;
+                value -= Character.getNumericValue(c);
+                isPrevDigit = true;
+            } else if ('0' <= c && c <= '9' && isPrevDigit) {
+                if (value >= Integer.MIN_VALUE / 10) {
+                    value *= 10;
+                } else {
+                    value = Integer.MIN_VALUE;
+                }
+                if (value >= Integer.MIN_VALUE + Character.getNumericValue(c)) {
+                    value -= Character.getNumericValue(c);
+                } else {
+                    value = Integer.MIN_VALUE;
+                }
+            } else {
+                break;
+            }
+        }
+        if (value == Integer.MIN_VALUE && sign == -1) {
+            return Integer.MAX_VALUE;
+        }
+        return value * sign;
+    }
+}

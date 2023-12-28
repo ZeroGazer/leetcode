@@ -1,0 +1,28 @@
+class Solution {
+    public int compress(char[] chars) {
+        int length = 0;
+        int i = 0, j = 0;
+        while (i < chars.length && j < chars.length) {
+            int segmentLength = 0;
+            while (j < chars.length && chars[i] == chars[j]) {
+                j++;
+                segmentLength++;
+            }
+            i++;
+            length++;
+            if (segmentLength > 1) {
+                String segment = String.valueOf(segmentLength);
+                for (int k = 0; k < segment.length(); k++) {
+                    chars[i] = segment.charAt(k);
+                    i++;
+                }
+                length += segment.length();
+            }
+            if (j < chars.length) {
+                chars[i] = chars[j];
+            }
+        }
+        System.out.println(length);
+        return length;
+    }
+}

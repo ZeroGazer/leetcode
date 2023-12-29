@@ -1,0 +1,22 @@
+class Solution {
+    public boolean validPalindrome(String s) {
+        int p = 0, q = s.length() - 1;
+        while (p < q) {
+            if (s.charAt(p) != s.charAt(q)) {
+                return valid(s, p + 1, q) || valid(s, p, q - 1);
+            }
+            p++;
+            q--;
+        }
+        return true;
+    }
+
+    private boolean valid(String s, int p, int q) {
+        while (p < q) {
+            if (s.charAt(p++) != s.charAt(q--)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

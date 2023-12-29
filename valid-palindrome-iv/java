@@ -1,0 +1,19 @@
+class Solution {
+    public boolean makePalindrome(String s) {
+        int count = 0;
+
+        int p = 0, q = s.length() - 1;
+        while (p < q) {
+            if (s.charAt(p) != s.charAt(q)) {
+                if (count < 2) {
+                    count++;
+                } else {
+                    return false;
+                }
+            }
+            p++;
+            q--;
+        }
+        return true;
+    }
+}

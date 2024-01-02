@@ -1,0 +1,14 @@
+class Solution {
+    public List<List<Integer>> findMatrix(int[] nums) {
+        int[] counter = new int[nums.length + 1];
+        List<List<Integer>> result = new ArrayList<>();
+        for (int i : nums) {
+            if (result.size() <= counter[i]) {
+                result.add(new ArrayList<Integer>());
+            }
+            result.get(counter[i]).add(i);
+            counter[i]++;
+        }
+        return result;
+    }
+}

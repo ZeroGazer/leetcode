@@ -1,0 +1,62 @@
+class Solution {
+    public int[] assignBikes(int[][] workers, int[][] bikes) {
+        Queue<Queue<WorkerBike>> queue = new PriorityQueue<>((Queue<WorkerBike> q1, Queue<WorkerBike> q2) -> {
+            if (q1.isEmpty() && q2.isEmpty()) {
+                return -1;
+            } else if (q1.isEmpty()) {
+                return 1;
+            } else if (q2.isEmpty()) {
+                return -1;
+            }
+
+            return q1.peek().compareTo(q2.peek());
+        });
+        for (int i = 0; i < bikes.length; i++) {
+            int[] bike = bikes[i];
+            Queue<WorkerBike> bikeQueue = new PriorityQueue<>();
+            for (int j = 0; j < workers.length; j++) {
+                int[] worker = workers[j];
+                bikeQueue.add(new WorkerBike(j, i, Math.abs(worker[0] - bike[0]) + Math.abs(worker[1] - bike[1])));
+            }
+            queue.add(bikeQueue);
+        }
+
+        int count = 0;
+        int[] paired = new int[workers.length];
+        Arrays.fill(paired, -1);
+        while (!queue.isEmpty() && count != workers.length) {
+            Queue<WorkerBike> bikeQueue = queue.poll();
+            WorkerBike workerBike = bikeQueue.poll();
+            if (paired[workerBike.worker] == -1) {
+                paired[workerBike.worker] = workerBike.bike;
+                count++;
+            } else {
+                queue.add(bikeQueue);
+            }
+        }
+        return paired;
+    }
+
+    class WorkerBike implements Comparable<WorkerBike> {
+        int worker;
+        int bike;
+        int distance;
+
+        public WorkerBike(int worker, int bike, int distance) {
+            this.worker = worker;
+            this.bike = bike;
+            this.distance = distance;
+        }
+
+        @Override
+        public int compareTo(WorkerBike other) {
+            if (this.distance != other.distance) {
+                return this.distance - other.distance;
+            } else if (this.worker != other.worker) {
+                return this.worker - other.worker;
+            } else {
+                return this.bike - other.bike;
+            }
+        }
+    }
+}

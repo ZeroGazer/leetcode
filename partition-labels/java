@@ -1,0 +1,30 @@
+class Solution {
+    public List<Integer> partitionLabels(String s) {
+        Map<Character, int[]> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (map.containsKey(s.charAt(i))) {
+                map.get(s.charAt(i))[1] = i;
+            } else {
+                map.put(s.charAt(i), new int[] {i, i});
+            }
+        }
+
+        List<int[]> ranges = new ArrayList<>(map.values());
+        Collections.sort(ranges, (int[] o1, int[] o2) -> o1[0] - o2[0]);
+
+        List<Integer> result = new ArrayList<>();
+        int i = 0;
+        while (i < ranges.size()) {
+            int[] next = ranges.get(i);
+            int start = next[0];
+            int end = next[1];
+            i++;
+            while (i < ranges.size() && ranges.get(i)[0] < end) {
+                end = Math.max(end, ranges.get(i)[1]);
+                i++;
+            }
+            result.add(end - start + 1);
+        }
+        return result;
+    }
+}

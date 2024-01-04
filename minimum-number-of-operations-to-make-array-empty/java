@@ -1,0 +1,24 @@
+class Solution {
+    public int minOperations(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            if (map.containsKey(num)) {
+                map.put(num, map.get(num) + 1);
+            } else {
+                map.put(num, 1);
+            }
+        }
+        int count = 0;
+        for (int frequency : map.values()) {
+            if (frequency == 1) {
+                return -1;
+            }
+            if (frequency % 3 == 0) {
+                count += frequency / 3;
+            } else {
+                count += frequency / 3 + 1;
+            }
+        }
+        return count;
+    }
+}

@@ -1,0 +1,16 @@
+class Solution {
+    public int minimumOperations(int[] nums) {
+        int[] freqs = new int[100];
+        for (int num : nums) {
+            if (num > 0)
+                freqs[--num]++;
+        }
+        int count = 0;
+        for (int freq : freqs) {
+            if (freq > 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+}

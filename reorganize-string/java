@@ -1,0 +1,35 @@
+class Solution {
+    public String reorganizeString(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        int maxFreq = 0;
+        char maxChar = s.charAt(0);
+        for (int i = 0; i < s.length(); i++) {
+            map.put(s.charAt(i), map.getOrDefault(s.charAt(i), 0) + 1);
+            if (map.get(s.charAt(i)) > maxFreq) {
+                maxFreq = map.get(s.charAt(i));
+                maxChar = s.charAt(i);
+            }
+        }
+        if (maxFreq > (s.length() + 1) / 2) {
+            return "";
+        }
+        char[] result = new char[s.length()];
+        int index = 0;
+        while (maxFreq != 0) {
+            result[index] = maxChar;
+            index += 2;
+            maxFreq--;
+        }
+        map.remove(maxChar);
+        for (Map.Entry<Character, Integer> e : map.entrySet()) {
+            for (int i = 0; i < e.getValue(); i++) {
+                 if (index >= s.length()) {
+                    index = 1;
+                }
+                result[index] = e.getKey();
+                index += 2;
+            }
+        }
+        return new String(result);
+    }
+}

@@ -1,0 +1,32 @@
+class Solution {
+
+    private boolean[] bikesChosen;
+    private int minDistance = Integer.MAX_VALUE;
+
+    private void dfs(int[][] workers, int[][] bikes, int worker, int currDistance) {
+        if (worker == workers.length) {
+            minDistance = Math.min(minDistance, currDistance);
+            return;
+        }
+        if (currDistance >= minDistance) {
+            return;
+        }
+        for (int i = 0; i < bikes.length; i++) {
+            if (!bikesChosen[i]) {
+                bikesChosen[i] = true;
+                dfs(workers, bikes, worker + 1, currDistance + diff(workers[worker], bikes[i]));
+                bikesChosen[i] = false;
+            }
+        }
+    }
+
+    private int diff(int[] worker, int[] bike) {
+        return Math.abs(worker[0] - bike[0]) + Math.abs(worker[1] - bike[1]);
+    }
+
+    public int assignBikes(int[][] workers, int[][] bikes) {
+        bikesChosen = new boolean[bikes.length];
+        dfs(workers, bikes, 0, 0);
+        return minDistance;
+    }
+}

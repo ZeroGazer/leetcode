@@ -1,0 +1,64 @@
+class Solution {
+
+    private Set<Character>[] rows = new Set[9];
+    private Set<Character>[] cols = new Set[9];
+    private Set<Character>[] grids = new Set[9];
+
+    public void solveSudoku(char[][] board) {
+        for (int i = 0; i < 9; i++) {
+            rows[i] = new HashSet<>();
+            cols[i] = new HashSet<>();
+            grids[i] = new HashSet<>();
+        }
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] != '.') {
+                    rows[i].add(board[i][j]);
+                    cols[j].add(board[i][j]);
+                    grids[i / 3 * 3 + j / 3].add(board[i][j]);
+                }
+            }
+        }
+        solve(board, 0, 0);
+    }
+
+    private boolean solve(char[][] board, int x, int y) {
+        if (Arrays.stream(rows).allMatch(e -> e.size() == 9)
+            || Arrays.stream(cols).allMatch(e -> e.size() == 9)
+            || Arrays.stream(grids).allMatch(e -> e.size() == 9)) {
+                return true;
+            }
+        if (board[x][y] != '.') {
+            if (x == 8) {
+                return solve(board, 0, y + 1);
+            } else {
+                return solve(board, x + 1, y);
+            }
+        }
+        for (int i = 0; i < 9; i++) {
+            char c = (char)(i + '1');
+            if (rows[x].contains(c) || cols[y].contains(c) || grids[x / 3 * 3 + y / 3].contains(c)) {
+                continue;
+            }
+            rows[x].add(c);
+            cols[y].add(c);
+            grids[x / 3 * 3 + y / 3].add(c);
+            board[x][y] = c;
+            if (x == 8) {
+                if (solve(board, 0, y + 1)) {
+                    return true;
+                }
+            } else {
+                if (solve(board, x + 1, y)) {
+                    return true;
+                }
+            }
+            board[x][y] = '.';
+            rows[x].remove(c);
+            cols[y].remove(c);
+            grids[x / 3 * 3 + y / 3].remove(c);
+        }
+        return false;
+    }
+}

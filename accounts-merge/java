@@ -1,0 +1,49 @@
+class Solution {
+
+    private Map<String, List<String>> adjacent = new HashMap<>();
+    private Set<String> visited = new HashSet<>();
+
+    private void dfs(String email, List<String> newAccounts) {
+        visited.add(email);
+        newAccounts.add(email);
+        if (!adjacent.containsKey(email)) {
+            return;
+        }
+
+        for (String e : adjacent.get(email)) {
+            if (!visited.contains(e)) {
+                dfs(e, newAccounts);
+            }
+        }
+    }
+
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+        for (List<String> accountList : accounts) {
+            String firstEmail = accountList.get(1);
+            for (String email : accountList.subList(2, accountList.size())) {
+                if (!adjacent.containsKey(firstEmail)) {
+                    adjacent.put(firstEmail, new ArrayList<>());
+                }
+                adjacent.get(firstEmail).add(email);
+                if (!adjacent.containsKey(email)) {
+                    adjacent.put(email, new ArrayList<>());
+                }
+                adjacent.get(email).add(firstEmail);
+            }
+        }
+
+        List<List<String>> merged = new ArrayList<>();
+        for (List<String> accountList : accounts) {
+            String name = accountList.get(0);
+            String email = accountList.get(1);
+            if (!visited.contains(email)) {
+                List<String> newAccounts = new ArrayList<>();
+                newAccounts.add(name);
+                dfs(email, newAccounts);
+                Collections.sort(newAccounts.subList(1, newAccounts.size())); 
+                merged.add(newAccounts);
+            }
+        }
+        return merged;
+    }
+}

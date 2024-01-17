@@ -1,24 +1,26 @@
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-        Set<List<Integer>> result = new HashSet<>();
-        for (int i = 0; i < nums.length - 1; i++) {
-            Set<List<Integer>> set = new HashSet<>();
-            Map<Integer, Integer> target = new HashMap<>();
-            for (int j = i + 1; j < nums.length; j++) {
-                target.put(nums[j], target.getOrDefault(nums[j], 0) + 1);
+        Arrays.sort(nums);
+        List<List<Integer>> result = new ArrayList<>();
+        for (int i = 0; i < nums.length && nums[i] <= 0; ++i)
+            if (i == 0 || nums[i - 1] != nums[i]) {
+                twoSum(nums, i, result);
             }
-            for (int j = i + 1; j < nums.length; j++) {
-                if (target.containsKey(0 - nums[i] - nums[j])) {
-                    if (nums[j] == 0 - nums[i] - nums[j] && target.get(nums[j]) == 1) {
-                        continue;
-                    }
-                    List<Integer> list = new ArrayList<>(Arrays.asList(nums[i], nums[j], 0 - nums[i] - nums[j]));
-                    Collections.sort(list);
-                    set.add(list);
-                }
+        return result;
+    }
+    private void twoSum(int[] nums, int i, List<List<Integer>> result) {
+        int left = i + 1, right = nums.length - 1;
+        while (left < right) {
+            int sum = nums[i] + nums[left] + nums[right];
+            if (sum < 0) {
+                ++left;
+            } else if (sum > 0) {
+                --right;
+            } else {
+                result.add(Arrays.asList(nums[i], nums[left++], nums[right--]));
+                while (left < right && nums[left] == nums[left - 1])
+                    ++left;
             }
-            result.addAll(set);
         }
-        return new ArrayList<List<Integer>>(result);
     }
 }

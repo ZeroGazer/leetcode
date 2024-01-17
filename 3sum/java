@@ -1,0 +1,24 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        Set<List<Integer>> result = new HashSet<>();
+        for (int i = 0; i < nums.length - 1; i++) {
+            Set<List<Integer>> set = new HashSet<>();
+            Map<Integer, Integer> target = new HashMap<>();
+            for (int j = i + 1; j < nums.length; j++) {
+                target.put(nums[j], target.getOrDefault(nums[j], 0) + 1);
+            }
+            for (int j = i + 1; j < nums.length; j++) {
+                if (target.containsKey(0 - nums[i] - nums[j])) {
+                    if (nums[j] == 0 - nums[i] - nums[j] && target.get(nums[j]) == 1) {
+                        continue;
+                    }
+                    List<Integer> list = new ArrayList<>(Arrays.asList(nums[i], nums[j], 0 - nums[i] - nums[j]));
+                    Collections.sort(list);
+                    set.add(list);
+                }
+            }
+            result.addAll(set);
+        }
+        return new ArrayList<List<Integer>>(result);
+    }
+}

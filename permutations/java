@@ -1,23 +1,22 @@
 class Solution {
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> paths = new ArrayList<>();
-        paths.add(new ArrayList<Integer>());
-        return permute(nums, paths, 0);
+        List<Integer> path = new ArrayList<>();
+        permute(nums, paths, path);
+        return paths;
     }
 
-    private List<List<Integer>> permute(int[] nums, List<List<Integer>> paths, int index) {
-        if (index == nums.length) {
-            return paths;
+    private void permute(int[] nums, List<List<Integer>> paths, List<Integer> path) {
+        if (path.size() == nums.length) {
+            paths.add(new ArrayList<Integer>(path));
+            return;
         }
-        List<List<Integer>> result = new ArrayList<>();
-        for (List<Integer> path : paths) {
-            for (int i = 0; i <= path.size(); i++) {
-                List<Integer> subPath = new ArrayList<>(path);
-                subPath.add(i, nums[index]);
-                result.add(subPath);
+        for (int num : nums) {
+            if (!path.contains(num)) {
+                path.add(num);
+                permute(nums, paths, path);
+                path.removeLast();
             }
         }
-        
-        return permute(nums, result, index + 1);
     }
 }

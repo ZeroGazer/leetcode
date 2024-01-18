@@ -1,0 +1,31 @@
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        if (s.length() < p.length()) {
+            return Collections.emptyList();
+        }
+        Map<Character, Integer> sFreq = new HashMap<>();
+        Map<Character, Integer> pFreq = new HashMap<>();
+        for (int i = 0; i < p.length(); i++) {
+            char pc = p.charAt(i);
+            pFreq.put(pc, pFreq.getOrDefault(pc, 0) + 1);
+        }
+        for (int i = 0; i < p.length() - 1; i++) {
+            char sc = s.charAt(i);
+            sFreq.put(sc, sFreq.getOrDefault(sc, 0) + 1);
+        }
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i <= s.length() - p.length(); i++) {
+            char lc = s.charAt(i + p.length() - 1);
+            sFreq.put(lc, sFreq.getOrDefault(lc, 0) + 1);
+            if (sFreq.equals(pFreq)) {
+                result.add(i);
+            }
+            char fc = s.charAt(i);
+            sFreq.put(fc, sFreq.getOrDefault(fc, 0) - 1);
+            if (sFreq.get(fc) == 0) {
+                sFreq.remove(fc);
+            }
+        }
+        return result;
+    }
+}

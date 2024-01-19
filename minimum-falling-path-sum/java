@@ -1,0 +1,26 @@
+class Solution {
+    public int minFallingPathSum(int[][] matrix) {
+        int n = matrix.length;
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) {
+            dp[i] = matrix[0][i];
+        }
+        for (int i = 1; i < n; i++) {
+            int[] temp = new int[n];
+            for (int j = 0; j < n; j++) {
+                int num = matrix[i][j];
+                int min = Integer.MAX_VALUE;
+                for (int k = Math.max(0, j - 1); k <= Math.min(n - 1, j + 1); k++) {
+                    min = Math.min(min, dp[k] + num);
+                }
+                temp[j] = min;
+            }
+            dp = temp;
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i : dp) {
+            min = Math.min(min, i);
+        }
+        return min;
+    }
+}

@@ -1,0 +1,42 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        if (s.length() < t.length()) {
+            return "";
+        }
+
+        Map<Character, Integer> sFreq = new HashMap<>();
+        Map<Character, Integer> tFreq = new HashMap<>();
+        for (char c : t.toCharArray()) {
+            tFreq.put(c, tFreq.getOrDefault(c, 0) + 1);
+        }
+        int left = 0;
+        int min = Integer.MAX_VALUE;
+        int minIndex = 0;
+        for (int right = 0; right < s.length(); right++) {
+            char sc = s.charAt(right);
+            sFreq.put(sc, sFreq.getOrDefault(sc, 0) + 1);
+            if (isSubString(sFreq, tFreq)) {
+                do {
+                    if (min > right - left + 1) {
+                        min = right - left + 1;
+                        minIndex = left;
+                    }
+                    char spc = s.charAt(left++);
+                    sFreq.put(spc, sFreq.get(spc) - 1);
+                    if (sFreq.get(spc) == 0) {
+                        sFreq.remove(spc);
+                    }
+                } while (isSubString(sFreq, tFreq));
+            }
+        }
+        if (min == Integer.MAX_VALUE) {
+            return "";
+        } else {
+            return s.substring(minIndex, minIndex + min);
+        }
+    }
+
+    private boolean isSubString(Map<Character, Integer> sFreq, Map<Character, Integer> tFreq) {
+        return tFreq.entrySet().stream().allMatch(tEntry -> sFreq.containsKey(tEntry.getKey()) && sFreq.get(tEntry.getKey()) >= tEntry.getValue());
+    }
+}

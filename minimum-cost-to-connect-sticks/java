@@ -1,20 +1,15 @@
-import java.util.PriorityQueue;
-
 class Solution {
     public int connectSticks(int[] sticks) {
-        PriorityQueue<Integer> q = new PriorityQueue<>();
-        for (int i = 0; i < sticks.length; i++) {
-            q.add(sticks[i]);
+        if (sticks.length == 1) {
+            return 0;
         }
+        Queue<Integer> pq = new PriorityQueue<>();
+        Arrays.stream(sticks).forEach(pq::add);
         int cost = 0;
-        while (!q.isEmpty()) {
-            int e1 = q.poll();
-            if (q.isEmpty()) {
-                break;
-            }
-            int sum = q.poll() + e1;
-            cost += sum;
-            q.add(sum);
+        while (pq.size() > 1) {
+            int stick = pq.poll() + pq.poll();
+            cost += stick;
+            pq.add(stick);
         }
         return cost;
     }

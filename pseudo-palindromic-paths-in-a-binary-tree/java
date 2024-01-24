@@ -1,0 +1,52 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    private int count = 0;
+
+    public int pseudoPalindromicPaths (TreeNode root) {
+        int[] freqs = new int[10];
+        dfs(root, freqs);
+        return count;
+    }
+
+    private void dfs(TreeNode root, int[] freqs) {
+        freqs[root.val]++;
+        if (root.left == null && root.right == null) {
+            boolean hasNode = false;
+            int odd = 0;
+            for (int freq : freqs) {
+                if (freq > 0) {
+                    hasNode = true;
+                }
+                if (freq % 2 == 1) {
+                    odd++;
+                }
+            }
+            if (hasNode && odd < 2) {
+                count++;
+            }
+        } else {
+            if (root.left != null) {
+                dfs(root.left, freqs);
+            }
+            if (root.right != null) {
+                dfs(root.right, freqs);
+            }
+        }
+        freqs[root.val]--;
+    }
+}

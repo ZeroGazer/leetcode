@@ -1,0 +1,20 @@
+class Solution {
+    public long minimumHealth(int[] damage, int armor) {
+        int max = 0;
+        long sum = 0;
+        for (int d : damage) {
+            sum += d;
+            max = Math.max(max, d);
+        }
+        if (max > armor) {
+            sum -= armor;
+        } else {
+            sum -= max;
+        }
+        if (sum > 0) {
+            return sum + 1;
+        } else {
+            return 1;
+        }
+    }
+}

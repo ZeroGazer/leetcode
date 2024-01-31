@@ -1,0 +1,59 @@
+class Solution {
+    public List<String> mostVisitedPattern(String[] username, int[] timestamp, String[] website) {
+        Map<String, List<History>> userHistories = new HashMap<>();
+        for (int i = 0; i < username.length; i++) {
+            History history = new History(timestamp[i], username[i], website[i]);
+            userHistories.putIfAbsent(history.username, new ArrayList<History>());
+            userHistories.get(history.username).add(history);
+        }
+        Map<List<String>, Integer> scores = new HashMap<>();
+        for (List<History> histories : userHistories.values()) {
+            Collections.sort(histories);
+            Set<List<String>> visited = new HashSet<>();
+            for (int i = 0; i < histories.size(); i++) {
+                for (int j = i + 1; j < histories.size(); j++) {
+                    for (int k = j + 1; k < histories.size(); k++) {
+                        List<String> pattern = Arrays.asList(histories.get(i).website, histories.get(j).website, histories.get(k).website);
+                        visited.add(pattern);
+                    }
+                }
+            }
+            visited.forEach(pattern -> scores.put(pattern, scores.getOrDefault(pattern, 0) + 1));
+        }
+        PriorityQueue<Map.Entry<List<String>, Integer>> pq = new PriorityQueue<>((Map.Entry<List<String>, Integer> e1, Map.Entry<List<String>, Integer> e2) -> {
+            if (e1.getValue() != e2.getValue()) {
+                return e2.getValue() - e1.getValue();
+            }
+            for (int i = 0; i < 3; i++) {
+                if (!e1.getKey().get(i).equals(e2.getKey().get(i))) {
+                    return e1.getKey().get(i).compareTo(e2.getKey().get(i));
+                }
+            }
+            return 0;
+        });
+        scores.entrySet().forEach(pq::add);
+        return pq.poll().getKey();
+    }
+}
+
+class History implements Comparable<History> {
+    int timestamp;
+    String username;
+    String website;
+    public History(int timestamp, String username, String website) {
+        this.timestamp = timestamp;
+        this.username = username;
+        this.website = website;
+    }
+
+    @Override
+    public int compareTo(History o) {
+        if (timestamp != o.timestamp) {
+            return timestamp - o.timestamp;
+        }
+        if (!website.equals(o.website)) {
+            return website.compareTo(o.website);
+        }
+        return username.compareTo(o.username);
+    }
+}

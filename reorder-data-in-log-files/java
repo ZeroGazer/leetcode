@@ -1,38 +1,50 @@
 class Solution {
     public String[] reorderLogFiles(String[] logs) {
-        Map<String, List<String>> letterLogToIds = new TreeMap<>();
+        List<LetterLog> letterLogs = new ArrayList<>();
         List<String> digitLogs = new ArrayList<>();
         for (String log : logs) {
-            String[] segment = log.split(" ");
-            boolean isDigit = true;
-            for (int i = 0; i < segment[1].length(); i++) {
-                char c = segment[1].charAt(i);
-                if (!('0' <= c && c <= '9')) {
-                    isDigit = false;
-                    break;
-                }
-            }
-            if (isDigit) {
+            char c = log.charAt(log.indexOf(" ") + 1);
+            if ('0' <= c && c <= '9') {
                 digitLogs.add(log);
             } else {
-                String logWithoutIdentifier = log.substring(log.indexOf(" ") + 1);
-                letterLogToIds.putIfAbsent(logWithoutIdentifier, new ArrayList<>());
-                letterLogToIds.get(logWithoutIdentifier).add(segment[0]);
+                letterLogs.add(new LetterLog(log));
             }
         }
+        Collections.sort(letterLogs);
         String[] result = new String[logs.length];
         int index = 0;
-        for (Map.Entry<String, List<String>> e : letterLogToIds.entrySet()) {
-            Collections.sort(e.getValue());
-            for (String id : e.getValue()) {
-                result[index] = id + " " + e.getKey();
-                index++;
-            }
+        for (LetterLog log : letterLogs) {
+            result[index] = log.toString();
+            index++;
         }
         for (String log : digitLogs) {
             result[index] = log;
             index++;
         }
         return result;
+    }
+}
+
+class LetterLog implements Comparable<LetterLog> {
+    private String id;
+    private String body;
+
+    public LetterLog(String log) {
+        int index = log.indexOf(" ");
+        id = log.substring(0, index);
+        body = log.substring(index + 1);
+    }
+
+    @Override
+    public int compareTo(LetterLog o) {
+        if (body.compareTo(o.body) == 0) {
+            return id.compareTo(o.id);
+        }
+        return body.compareTo(o.body);
+    }
+
+    @Override
+    public String toString() {
+        return id + " " + body;
     }
 }

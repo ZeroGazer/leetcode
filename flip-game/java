@@ -1,0 +1,16 @@
+class Solution {
+    public List<String> generatePossibleNextMoves(String currentState) {
+        char[] state = currentState.toCharArray();
+        List<String> result = new ArrayList<>();
+        for (int i = 1; i < state.length; i++) {
+            if (state[i - 1] == '+' && state[i] == '+') {
+                state[i - 1] = '-';
+                state[i] = '-';
+                result.add(new String(state));
+                state[i - 1] = '+';
+                state[i] = '+';
+            }
+        }
+        return result;
+    }
+}

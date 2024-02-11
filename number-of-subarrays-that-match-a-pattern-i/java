@@ -1,18 +1,31 @@
 class Solution {
+    
     public int countMatchingSubarrays(int[] nums, int[] pattern) {
-        int count = 0;
-        for (int i = 0; i < nums.length - pattern.length; i++) {
-            boolean pass = true;
-            for (int j = 0; j < pattern.length; j++) {
-                if (pattern[j] == 1 && nums[i + j + 1] <= nums[i + j]
-                        || pattern[j] == 0 && nums[i + j + 1] != nums[i + j]
-                        || pattern[j] == -1 && nums[i + j + 1] >= nums[i + j]) {
-                    pass = false;
-                    break;
-                }
+        StringBuilder sb1 = new StringBuilder();
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > nums[i - 1]) {
+                sb1.append(2);
+            } else if (nums[i] < nums[i - 1]) {
+                sb1.append(0);
+            } else {
+                sb1.append(1);
             }
-            if (pass) {
+        }
+        StringBuilder sb2 = new StringBuilder();
+        for (int p : pattern) {
+            sb2.append(p + 1);
+        }
+        String n = sb1.toString();
+        String p = sb2.toString();
+        int count = 0;
+        int index = 0;
+        while (index < n.length()) {
+            int target = n.indexOf(p, index);
+            if (target > -1) {
                 count++;
+                index = target + 1;
+            } else {
+                break;
             }
         }
         return count;

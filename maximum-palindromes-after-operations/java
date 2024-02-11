@@ -1,0 +1,44 @@
+class Solution {
+    public int maxPalindromesAfterOperations(String[] words) {
+        Arrays.sort(words, (String w1, String w2) -> w1.length() - w2.length());
+        int[] freqs = new int[26];
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
+                freqs[c - 'a']++;
+            }
+        }
+        int odd = 0;
+        int even = 0;
+        for (int freq : freqs) {
+            if (freq == 0) {
+                continue;
+            }
+            if (freq % 2 == 1) {
+                odd++;
+                even += freq - 1;
+            } else {
+                even += freq;
+            }
+        }
+        int count = 0;
+        for (String word : words) {
+            if (word.length() % 2 == 1) {
+                if (odd > 0 && even >= word.length() - 1) {
+                    odd--;
+                    even -= word.length() - 1;
+                    count++;
+                } else if (odd == 0 && even >= word.length() + 1) {
+                    even -= word.length() + 1;
+                    odd++;
+                    count++;
+                }
+            } else {
+                if (even >= word.length()) {
+                    even -= word.length();
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}

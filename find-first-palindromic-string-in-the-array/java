@@ -1,0 +1,23 @@
+class Solution {
+    public String firstPalindrome(String[] words) {
+        for (String word : words) {
+            if (check(word)) {
+                return word;
+            }
+        }
+        return "";
+    }
+
+    private boolean check(String word) {
+        char[] arr = word.toCharArray();
+        int left = 0, right = arr.length - 1;
+        while (left < right) {
+            if (arr[left] != arr[right]) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}

@@ -1,0 +1,19 @@
+import java.math.BigInteger;
+
+class Solution {
+    public String kthLargestNumber(String[] nums, int k) {
+        Queue<BigInteger> pq = new PriorityQueue<>();
+        for (String i : nums) {
+            BigInteger num = new BigInteger(i);
+            if (pq.size() != k) {
+                pq.add(num);
+            } else {
+                if (num.compareTo(pq.peek()) > 0) {
+                    pq.poll();
+                    pq.add(num);
+                }
+            }
+        }
+        return pq.peek().toString();
+    }
+}

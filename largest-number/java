@@ -1,0 +1,10 @@
+class Solution {
+    public String largestNumber(int[] nums) {
+        List<String> list = Arrays.stream(nums).boxed().map(x -> Integer.toString(x)).collect(Collectors.toList());
+        list.sort((String s1, String s2) -> (s2 + s1).compareTo(s1 + s2));
+        if (list.getFirst().equals("0")) {
+            return "0";
+        }
+        return String.join("", list);
+    }
+}

@@ -1,0 +1,29 @@
+class Solution {
+    public List<List<Integer>> removeInterval(int[][] intervals, int[] toBeRemoved) {
+        List<List<Integer>> result = new ArrayList<>();
+        
+        for (int[] interval : intervals) {
+            int start = interval[0];
+            int end = interval[1];
+            if (start < toBeRemoved[0]) {
+                if (end <= toBeRemoved[0]) {
+                    result.add(Arrays.asList(start, end));
+                } else if (end <= toBeRemoved[1]) {
+                    result.add(Arrays.asList(start, toBeRemoved[0]));
+                } else {
+                    result.add(Arrays.asList(start, toBeRemoved[0]));
+                    result.add(Arrays.asList(toBeRemoved[1], end));
+                }
+            } else if (start < toBeRemoved[1]) {
+                if (end <= toBeRemoved[1]) {
+                    // Do nothing
+                } else {
+                    result.add(Arrays.asList(toBeRemoved[1], end));
+                }
+            } else {
+                result.add(Arrays.asList(start, end));
+            }
+        }
+        return result;
+    }
+}

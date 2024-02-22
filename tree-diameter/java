@@ -1,0 +1,55 @@
+class Solution {
+    private int diameter;
+    private boolean seen[];
+
+    public int treeDiameter(int[][] edges) {
+        if (edges.length == 0) {
+            return 0;
+        }
+        Map<Integer, Node> adjacencyList = new HashMap<>();
+        for (int[] edge : edges) {
+            Node n1 = adjacencyList.getOrDefault(edge[0], new Node(edge[0]));
+            Node n2 = adjacencyList.getOrDefault(edge[1], new Node(edge[1]));
+            n1.children.add(n2);
+            n2.children.add(n1);
+            adjacencyList.put(edge[0], n1);
+            adjacencyList.put(edge[1], n2);
+        }
+        seen = new boolean[adjacencyList.size()];
+        dfs(adjacencyList.get(0));
+        return diameter;
+    }
+
+    private int dfs(Node root) {
+        seen[root.value] = true;
+        if (root.children.isEmpty()) {
+            return 0;
+        }
+
+        int max = 0;
+        int max2 = 0;
+        for (Node child : root.children) {
+            if (seen[child.value]) {
+                continue;
+            }
+            int length = dfs(child) + 1;
+            if (length > max) {
+                max2 = max;
+                max = length;
+            } else {
+                max2 = Math.max(length, max2);
+            }
+        }
+        this.diameter = Math.max(this.diameter, max + max2);
+        return max;
+    }
+}
+
+class Node {
+    int value;
+    List<Node> children = new ArrayList<>();
+    
+    public Node(int value) {
+        this.value = value;
+    }
+}

@@ -1,0 +1,73 @@
+class Solution {
+    public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
+        Map<Integer, List<int[]>> map = new TreeMap<>();
+        for (int[] meeting : meetings) {
+            map.putIfAbsent(meeting[2], new ArrayList<>());
+            map.get(meeting[2]).add(meeting);
+        }
+        UnionFind uf = new UnionFind(n);
+        uf.union(0, firstPerson);
+        for (List<int[]> meetingsAtTheSameTime : map.values()) {
+            for (int[] meeting : meetingsAtTheSameTime) {
+                uf.union(meeting[0], meeting[1]);
+            }
+            for (int[] meeting : meetingsAtTheSameTime) {
+                if (!uf.connected(0, meeting[0])) {
+                    uf.reset(meeting[0]);
+                    uf.reset(meeting[1]);
+                }
+            }
+        }
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (uf.connected(0, i)) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+}
+
+class UnionFind {
+    int[] root;
+    int[] rank;
+
+    public UnionFind(int size) {
+        root = new int[size];
+        rank = new int[size];
+        for (int i = 0; i < rank.length; i++) {
+            root[i] = i;
+        }
+    }
+
+    public int find(int a) {
+        if (root[a] != a) {
+            root[a] = find(root[a]);
+        }
+        return root[a];
+    }
+
+    public void union(int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
+        if (rootA != rootB) {
+            if (rank[rootA] > rank[rootB]) {
+                root[rootB] = rootA;
+            } else if (rank[rootA] < rank[rootB]) {
+                root[rootA] = rootB;
+            } else {
+                rank[rootA]++;
+                root[rootB] = rootA;
+            }
+        }
+    }
+
+    public boolean connected(int a, int b) {
+        return find(a) == find(b);
+    }
+
+    public void reset(int a) {
+        root[a] = a;
+        rank[a] = 0;
+    }
+}

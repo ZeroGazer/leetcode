@@ -1,0 +1,82 @@
+class Solution {
+    public boolean canTraverseAllPairs(int[] nums) {
+        int MAX = 100000;
+        int N = nums.length;
+        boolean[] has = new boolean[MAX + 1];
+        for (int x: nums) {
+            has[x] = true;
+        }
+
+        if (N == 1) {
+            return true;
+        }
+        if (has[1]) {
+            return false;
+        }
+
+        int[] sieve = new int[MAX + 1];
+        for (int d = 2; d <= MAX; d++) {
+            if (sieve[d] == 0) {
+                for (int v = d; v <= MAX; v += d) {
+                    sieve[v] = d;
+                }
+            }
+        }
+
+        UnionFind uf = new UnionFind(2 * MAX + 1);
+        for (int x: nums) {
+            int val = x;
+            while (val > 1) {
+                int prime = sieve[val];
+                int root = prime + MAX;
+                uf.union(x, root);
+                while (val % prime == 0) {
+                    val /= prime;
+                }
+            }
+        }
+
+        int count = 0;
+        for (int i = 2; i <= MAX; i++) {
+            if (has[i] && uf.find(i) == i) {
+                count++;
+            }
+        }
+        return count == 1;
+    }
+}
+
+class UnionFind {
+    private int[] root;
+    private int[] rank;
+
+    public UnionFind(int size) {
+        root = new int[size];
+        rank = new int[size];
+        for (int i = 0; i < size; i++) {
+            root[i] = i;
+        }
+    }
+
+    public int find(int a) {
+        if (root[a] != a) {
+            root[a] = find(root[a]);
+        }
+        return root[a];
+    }
+
+    public void union(int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
+        if (rootA != rootB) {
+            if (rank[rootA] > rank[rootB]) {
+                root[rootB] = rootA;
+            } else if (rank[rootA] < rank[rootB]) {
+                root[rootA] = rootB;
+            } else {
+                rank[rootA]++;
+                root[rootB] = rootA;
+            }
+        }
+    }
+}

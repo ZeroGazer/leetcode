@@ -1,0 +1,27 @@
+class Solution {
+    public int minimumKeypresses(String s) {
+        int[] freqs = new int[26];
+        for (char c : s.toCharArray()) {
+            freqs[c - 'a']++;
+        }
+        List<Integer> counts = new ArrayList<>();
+        for (int freq : freqs) {
+            if (freq > 0) {
+                counts.add(freq);
+            }
+        }
+        counts.sort(Comparator.reverseOrder());
+        int step = 1;
+        int stepCount = 0;
+        int result = 0;
+        for (int count : counts) {
+            result += count * step;
+            stepCount++;
+            if (stepCount == 9) {
+                step++;
+                stepCount = 0;
+            }
+        }
+        return result;
+    }
+}

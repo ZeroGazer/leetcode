@@ -1,0 +1,22 @@
+class Solution {
+    public boolean equalFrequency(String word) {
+        Map<Character, Integer> freqs = new HashMap<>();
+        for (char c: word.toCharArray()) {
+            freqs.put(c, freqs.getOrDefault(c, 0) + 1);
+        }
+        Map<Integer, Integer> counts = new HashMap<>();
+        freqs.values().forEach(value -> counts.put(value, counts.getOrDefault(value, 0) + 1));
+        if (counts.keySet().size() == 2) {
+            Iterator<Integer> it = counts.keySet().iterator();
+            int key1 = it.next();
+            int key2 = it.next();
+            return (Math.abs(key1 - key2) == 1 && (key1 > key2 && counts.get(key1) == 1 || key2 > key1 && counts.get(key2) == 1))
+                || (key1 == 1 && counts.get(key1) == 1 || key2 == 1 && counts.get(key2) == 1);
+        }
+        if (counts.keySet().size() == 1) {
+            int key = counts.keySet().iterator().next();
+            return key == 1 || counts.get(key) == 1;
+        }
+        return false;
+    }
+}

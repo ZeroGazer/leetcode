@@ -1,0 +1,57 @@
+class Solution {
+    public int[] resultArray(int[] nums) {
+        List<Integer> a1 = new ArrayList<>();
+        List<Integer> a2 = new ArrayList<>();
+        List<Integer> s1 = new ArrayList<>();
+        List<Integer> s2 = new ArrayList<>();
+        a1.add(nums[0]);
+        a2.add(nums[1]);
+        s1.add(nums[0]);
+        s2.add(nums[1]);
+        for (int i = 2; i < nums.length; i++) {
+            int b1 = find(s1, nums[i]);
+            int b2 = find(s2, nums[i]);
+            if (b1 > b2) {
+                a1.add(nums[i]);
+                insert(s1, nums[i]);
+            } else if (b1 < b2) {
+                a2.add(nums[i]);
+                insert(s2, nums[i]);
+            } else {
+                if (a1.size() > a2.size()) {
+                    a2.add(nums[i]);
+                    insert(s2, nums[i]);
+                } else if (a1.size() < a2.size()) {
+                    a1.add(nums[i]);
+                    insert(s1, nums[i]);
+                } else {
+                    a1.add(nums[i]);
+                    insert(s1, nums[i]);
+                }
+            }
+        }
+        a1.addAll(a2);
+        return a1.stream().mapToInt(i->i).toArray();
+    }
+    
+    void insert(List<Integer> list, int n) {
+        int index = find(list, n);
+        list.add(index, n);
+    }
+    
+    int find(List<Integer> list, int n) {
+        int left = 0, right = list.size() - 1;
+        while (left < right) {
+            int middle = left + (right - left) / 2;
+            if (list.get(middle) > n) {
+                left = middle + 1;
+            } else {
+                right = middle;
+            }
+        }
+        if (list.get(left) > n) {
+            return left + 1;
+        }
+        return left;
+    }
+}

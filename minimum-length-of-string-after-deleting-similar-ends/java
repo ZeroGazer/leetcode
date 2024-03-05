@@ -1,0 +1,21 @@
+class Solution {
+    public int minimumLength(String s) {
+        int left = 0, right = s.length() - 1;
+        char[] arr = s.toCharArray();
+        while (left < right) {
+            char lc = arr[left], rc = arr[right];
+            if (lc == rc) {
+                char c = lc;
+                while (left < right && arr[left] == c) {
+                    left++;
+                }
+                while (left <= right && arr[right] == c) {
+                    right--;
+                }
+            } else {
+                break;
+            }
+        }
+        return right - left + 1;
+    }
+}

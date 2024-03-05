@@ -1,0 +1,16 @@
+class Solution {
+    public int destroyTargets(int[] nums, int space) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int max = 0;
+        for (int num : nums) {
+            max = Math.max(max, map.merge(num % space, 1, Integer::sum));
+        }
+        int min = Integer.MAX_VALUE;
+        for (int num : nums) {
+            if (map.containsKey(num % space) && map.get(num % space) == max) {
+                min = Math.min(min, num);
+            }
+        }
+        return min;
+    }
+}

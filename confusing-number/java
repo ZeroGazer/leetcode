@@ -1,0 +1,21 @@
+class Solution {
+    private Map<Character, Character> confused = Map.of('6', '9', '9', '6');
+    private Set<Character> identical = Set.of('0', '1', '8');
+    public boolean confusingNumber(int n) {
+        String num = Integer.toString(n);
+        StringBuilder sb = new StringBuilder();
+        char[] arr = num.toCharArray();
+        for(int i = arr.length - 1; i >= 0; i--) {
+            char c = arr[i];
+            if (confused.containsKey(c)) {
+                sb.append(confused.get(c));
+            } else if (identical.contains(c)) {
+                sb.append(c);
+            } else {
+                return false;
+            }
+        }
+
+        return !sb.toString().equals(num);
+    }
+}

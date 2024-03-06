@@ -1,0 +1,49 @@
+class StringIterator {
+
+    private List<Char> chars;
+
+    public StringIterator(String compressedString) {
+        chars = new ArrayList<>();
+        int p = 0;
+        while (p < compressedString.length()) {
+            char c = compressedString.charAt(p++);
+            int length = Character.getNumericValue(compressedString.charAt(p++));
+            while (p < compressedString.length() && '0' <= compressedString.charAt(p) && compressedString.charAt(p) <= '9') {
+                length *= 10;
+                length += Character.getNumericValue(compressedString.charAt(p++));
+            }
+            chars.add(new Char(c, length));
+        }
+    }
+    
+    public char next() {
+        if (hasNext()) {
+            char c = chars.getFirst().c;
+            if (--chars.getFirst().i == 0) {
+                chars.removeFirst();
+            }
+            return c;
+        }
+        return ' ';
+    }
+    
+    public boolean hasNext() {
+        return !chars.isEmpty();
+    }
+}
+
+class Char {
+    char c;
+    int i;
+    public Char (char c, int i) {
+        this.c = c;
+        this.i = i;
+    }
+}
+
+/**
+ * Your StringIterator object will be instantiated and called as such:
+ * StringIterator obj = new StringIterator(compressedString);
+ * char param_1 = obj.next();
+ * boolean param_2 = obj.hasNext();
+ */

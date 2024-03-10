@@ -1,0 +1,15 @@
+class Solution {
+    public boolean check(int[] nums) {
+        boolean mayRotated = false;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] < nums[i - 1]) {
+                if (mayRotated) {
+                    return false;
+                } else {
+                    mayRotated = true;
+                }
+            }
+        }
+        return !mayRotated || nums.length == 1 || nums[nums.length - 1] <= nums[0];
+    }
+}

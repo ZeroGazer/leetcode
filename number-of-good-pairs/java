@@ -1,0 +1,15 @@
+class Solution {
+    public int numIdenticalPairs(int[] nums) {
+        int[] freqs = new int[101];
+        for (int num : nums) {
+            freqs[num]++;
+        }
+        int count = 0;
+        for (int freq : freqs) {
+            if (freq > 1) {
+                count += freq * (freq - 1) / 2;
+            }
+        }
+        return count;
+    }
+}

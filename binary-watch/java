@@ -1,0 +1,35 @@
+class Solution {
+    private int[] map = {1, 2, 4, 8, 1, 2, 4, 8, 16, 32};
+    public List<String> readBinaryWatch(int turnedOn) {
+        List<List<Integer>> permutations = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        permutate(permutations, path, 0, turnedOn);
+        List<String> result = new ArrayList<>();
+        for (List<Integer> candidate : permutations) {
+            int hour = 0, min = 0;
+            for (int index : candidate) {
+                if (index < 4) {
+                    hour += map[index];
+                } else {
+                    min += map[index];
+                }
+            }
+            if (hour < 12 && min < 60) {
+                result.add(hour + ":" + (min < 10 ? "0" + min : min));
+            }
+        }
+        return result;
+    }
+
+    private void permutate(List<List<Integer>> permutations, List<Integer> path, int index, int size) {
+        if (path.size() == size) {
+            permutations.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = index; i < 10; i++) {
+            path.add(i);
+            permutate(permutations, path, i + 1, size);
+            path.removeLast();
+        }
+    }
+}

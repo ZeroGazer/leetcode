@@ -1,0 +1,20 @@
+class Solution {
+    public String customSortString(String order, String s) {
+        int[] o = new int[26];
+        for (char c : s.toCharArray()) {
+            o[c - 'a']++;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (char c : order.toCharArray()) {
+            sb.repeat(c, o[c - 'a']);
+            o[c - 'a'] = 0;
+        }
+        for (char c : s.toCharArray()) {
+            if (o[c - 'a'] > 0) {
+                sb.repeat(c, o[c - 'a']);
+                o[c - 'a'] = 0;
+            }
+        }
+        return sb.toString();
+    }
+}

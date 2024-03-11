@@ -1,0 +1,35 @@
+class Solution {
+    public boolean validWordAbbreviation(String word, String abbr) {
+        int p = 0, q = 0;
+        int size = 0;
+        while (p < word.length() && q < abbr.length()) {
+            char w = word.charAt(p);
+            char a = abbr.charAt(q);
+            if ('0' <= a && a <= '9') {
+                int n = Character.getNumericValue(a);
+                if (n == 0 && size == 0) {
+                    return false;
+                }
+                size = size * 10 + n;
+                q++;
+            } else {
+                if (size != 0) {
+                    p += size;
+                    size = 0;
+                } else {
+                    if (w != a) {
+                        return false;
+                    } else {
+                        p++;
+                        q++;
+                    }
+                }
+            }
+        }
+        if (size != 0) {
+            p += size;
+            size = 0;
+        }
+        return p == word.length() && q == abbr.length();
+    }
+}

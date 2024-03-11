@@ -1,0 +1,23 @@
+class Solution {
+    public int findShortestSubArray(int[] nums) {
+        Map<Integer, List<Integer>> freqs = new HashMap<>();
+        int max = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            freqs.putIfAbsent(num, new ArrayList<>());
+            freqs.get(num).add(i);
+            max = Math.max(max, freqs.get(num).size());
+        }
+        if (max == 1) {
+            return 1;
+        }
+        int min = Integer.MAX_VALUE;
+        for (List<Integer> freq : freqs.values()) {
+            if (freq.size() != max) {
+                continue;
+            }
+            min = Math.min(min, freq.getLast() - freq.getFirst() + 1);
+        }
+        return min;
+    }
+}

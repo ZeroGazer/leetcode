@@ -1,0 +1,28 @@
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        dfs(candidates, result, path, target, 0);
+        return result;
+    }
+
+    private void dfs(int[] candidates, List<List<Integer>> result, List<Integer> path, int target, int index) {
+        int sum = path.stream().mapToInt(x -> x).sum();
+        if (sum > target) {
+            return;
+        } else if (sum == target) {
+            result.add(new ArrayList<>(path));
+        } else {
+            for (int i = index; i < candidates.length; i++) {
+                int candidate = candidates[i];
+                path.add(candidate);
+                dfs(candidates, result, path, target, i + 1);
+                path.removeLast();
+                while (i + 1 < candidates.length && candidate == candidates[i + 1]) {
+                    i++;
+                }
+            }
+        }
+    }
+}

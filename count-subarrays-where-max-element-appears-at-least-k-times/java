@@ -1,0 +1,19 @@
+class Solution {
+    public long countSubarrays(int[] nums, int k) {
+        int max = Arrays.stream(nums).max().getAsInt();
+        long count = 0, size = 0;
+
+        for (int i = 0, j = 0; j < nums.length; j++) {
+            if (nums[j] == max) {
+                size++;
+            }
+            while (size == k) {
+                if (nums[i++] == max) {
+                    size--;
+                }
+            }
+            count += i;
+        }
+        return count;
+    }
+}

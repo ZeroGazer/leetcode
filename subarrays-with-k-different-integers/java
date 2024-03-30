@@ -1,0 +1,23 @@
+class Solution {
+    public int subarraysWithKDistinct(int[] nums, int k) {
+        return subarraysWithAtMostKDistinct(nums, k) - subarraysWithAtMostKDistinct(nums, k - 1);
+    }
+
+    public int subarraysWithAtMostKDistinct(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int count = 0;
+        for (int i = 0, j = 0; j < nums.length; j++) {
+            int num = nums[j];
+            map.put(num, map.getOrDefault(num, 0) + 1);
+            while (map.size() > k) {
+                int prev = nums[i++];
+                map.put(prev, map.get(prev) - 1);
+                if (map.get(prev) == 0) {
+                    map.remove(prev);
+                }
+            }
+            count += j - i + 1;
+        }
+        return count;
+    }
+}

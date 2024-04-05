@@ -1,0 +1,19 @@
+class Solution {
+    public String makeGood(String s) {
+        Deque<Character> deque = new ArrayDeque<>();
+        for (char c : s.toCharArray()) {
+            if (!deque.isEmpty() &&
+                (Character.isLowerCase(deque.peekLast()) && Character.isUpperCase(c) && Character.toUpperCase(deque.peekLast()) == c
+                || Character.isUpperCase(deque.peekLast()) && Character.isLowerCase(c) && Character.toLowerCase(deque.peekLast()) == c)) {
+                deque.pollLast();
+            } else {
+                deque.addLast(c);
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        while (!deque.isEmpty()) {
+            sb.append(deque.pollFirst());
+        }
+        return sb.toString();
+    }
+}

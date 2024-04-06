@@ -1,0 +1,27 @@
+class Solution {
+    public String minRemoveToMakeValid(String s) {
+        Deque<Integer> deque = new ArrayDeque<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                deque.addLast(i);
+            } else if (c == ')') {
+                if (!deque.isEmpty() && s.charAt(deque.peekLast()) == '(') {
+                    deque.removeLast();
+                } else {
+                    deque.addLast(i);
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (!deque.isEmpty() && i == deque.peekFirst()) {
+                deque.removeFirst();
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+}

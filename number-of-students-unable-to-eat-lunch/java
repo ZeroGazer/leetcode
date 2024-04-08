@@ -1,0 +1,21 @@
+class Solution {
+    public int countStudents(int[] students, int[] sandwiches) {
+        Queue<Integer> studentsQueue = new LinkedList<>();
+        Queue<Integer> sandwichesQueue = new LinkedList<>();
+        Arrays.stream(students).forEach(studentsQueue::offer);
+        Arrays.stream(sandwiches).forEach(sandwichesQueue::offer);
+        int size = studentsQueue.size();
+        do {
+            size = studentsQueue.size();
+            for (int i = 0; i < size; i++) {
+                if (sandwichesQueue.peek() == studentsQueue.peek()) {
+                    sandwichesQueue.poll();
+                    studentsQueue.poll();
+                } else {
+                    studentsQueue.offer(studentsQueue.poll());
+                }
+            }
+        } while (studentsQueue.size() != size);
+        return studentsQueue.size();
+    }
+}

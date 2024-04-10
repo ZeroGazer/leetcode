@@ -1,0 +1,19 @@
+class Solution {
+    public int[] deckRevealedIncreasing(int[] deck) {
+        Queue<Integer> queue = new LinkedList<>();
+        IntStream.range(0, deck.length).forEach(queue::add);
+        List<Integer> indexes = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            indexes.add(queue.poll());
+            if (!queue.isEmpty()) {
+                queue.offer(queue.poll());
+            }
+        }
+        Arrays.sort(deck);
+        int[] result = new int[deck.length];
+        for (int i = 0; i < deck.length; i++) {
+            result[indexes.get(i)] = deck[i];
+        }
+        return result;
+    }
+}

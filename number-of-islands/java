@@ -6,36 +6,27 @@ class Solution {
         int count = 0;
 
         Queue<int[]> queue = new LinkedList<>();
-        int[] notDiscoveredLand = getNotDiscoveredLand(grid);
-        while (notDiscoveredLand != null) {
-            grid[notDiscoveredLand[0]][notDiscoveredLand[1]] = '0';
-            queue.add(notDiscoveredLand);
-            while (!queue.isEmpty()) {
-                int[] current = queue.poll();
-                Arrays.stream(directions).map(x -> new int[] {current[0] + x[0], current[1] + x[1]})
-                .filter(x -> x[0] > -1 && x[0] < grid.length &&  x[1] > -1 && x[1] < grid[0].length)
-                .forEach(x -> {
-                    if (grid[x[0]][x[1]] == '1') {
-                        grid[x[0]][x[1]] = '0';
-                        queue.add(x);
-                    }
-                });
-            }
-            count++;
-            notDiscoveredLand = getNotDiscoveredLand(grid);
-        }
-
-        return count;
-    }
-
-    private int[] getNotDiscoveredLand(char[][] grid) {
-        for (int i = 0; i < grid.length; i++) {
+         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 if (grid[i][j] == '1') {
-                    return new int[] {i, j};
+                    grid[i][j] = '0';
+                    queue.add(new int[] {i, j});
+                    while (!queue.isEmpty()) {
+                        int[] current = queue.poll();
+                        Arrays.stream(directions).map(x -> new int[] {current[0] + x[0], current[1] + x[1]})
+                        .filter(x -> x[0] > -1 && x[0] < grid.length &&  x[1] > -1 && x[1] < grid[0].length)
+                        .forEach(x -> {
+                            if (grid[x[0]][x[1]] == '1') {
+                                grid[x[0]][x[1]] = '0';
+                                queue.add(x);
+                            }
+                        });
+                    }
+                    count++;
                 }
             }
         }
-        return null;
+
+        return count;
     }
 }

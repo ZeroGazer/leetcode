@@ -1,0 +1,64 @@
+class Solution {
+    private int[][] DIRECTIONS = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        List<Integer> result = new ArrayList<>();
+        UnionFind uf = new UnionFind(m * n);
+        int count = 0;
+        for (int[] position : positions) {
+            int land = position[0] * n + position[1];
+            if (uf.root[land] == -1) {
+                uf.root[land] = land;
+                count++;
+                for (int[] DIRECTION : DIRECTIONS) {
+                    int[] neighbour = {position[0] + DIRECTION[0], position[1] + DIRECTION[1]};
+                    if (0 <= neighbour[0] && neighbour[0] < m && 0 <= neighbour[1] && neighbour[1] < n) {
+                        int neighbourLand = neighbour[0] * n + neighbour[1];
+                        if (uf.root[neighbourLand] != -1) {
+                            if (uf.union(neighbourLand, land)) {
+                                count--;
+                            }
+                        }
+                    }
+                }
+            }
+            result.add(count);
+        }
+        return result;
+    }
+}
+
+class UnionFind {
+    int[] root;
+    int[] rank;
+
+    public UnionFind(int size) {
+        root = new int[size];
+        Arrays.fill(root, -1);
+        rank = new int[size];
+    }
+
+    public int find(int a) {
+        if (a != root[a]) {
+            root[a] = find(root[a]);
+        }
+        return root[a];
+    }
+
+    public boolean union(int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
+        if (rootA != rootB) {
+            if (rank[rootA] > rank[rootB]) {
+                root[rootB] = rootA;
+            } else if (rank[rootA] < rank[rootB]) {
+                root[rootA] = rootB;
+            } else {
+                rank[rootA]++;
+                root[rootB] = rootA;
+            }
+
+            return true;
+        }
+        return false;
+    }
+}

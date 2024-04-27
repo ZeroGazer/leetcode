@@ -1,0 +1,36 @@
+class Solution {
+    public int findRotateSteps(String ring, String key) {
+        Map<Character, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < ring.length(); i++) {
+            map.computeIfAbsent(ring.charAt(i), k -> new ArrayList<>()).add(i);
+        }
+
+        Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        pq.offer(new int[] { 0, 0, 0 });
+
+        Set<Pair<Integer, Integer>> seen = new HashSet<>();
+        int total = 0;
+        while (!pq.isEmpty()) {
+            int[] state = pq.poll();
+            total = state[0];
+            int ringIndex = state[1];
+            int keyIndex = state[2];
+            if (keyIndex == key.length()) {
+                break;
+            }
+            Pair<Integer, Integer> curr = new Pair<>(ringIndex, keyIndex);
+            if (seen.contains(curr)) {
+                continue;
+            }
+            seen.add(curr);
+            for (int nextIndex : map.get(key.charAt(keyIndex))) {
+                pq.offer( new int[] {
+                    total + Math.min(Math.abs(ringIndex - nextIndex), ring.length() - Math.abs(ringIndex - nextIndex)),
+                    nextIndex,
+                    keyIndex + 1
+                });
+            }
+        }
+        return total + key.length();
+    }
+}

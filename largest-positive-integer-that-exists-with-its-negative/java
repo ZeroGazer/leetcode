@@ -1,0 +1,14 @@
+class Solution {
+    public int findMaxK(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        int max = -1;
+        for (int num : nums) {
+            int abs = Math.abs(num);
+            if (set.contains(-num)) {
+                max = Math.max(max, abs);
+            }
+            set.add(num);
+        }
+        return max;
+    }
+}

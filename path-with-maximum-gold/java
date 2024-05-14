@@ -1,0 +1,46 @@
+class Solution {
+    private int[][] DIRECTIONS = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    public int getMaximumGold(int[][] grid) {
+        boolean[][] seen = new boolean[grid.length][grid[0].length];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 0) {
+                    seen[i][j] = true;
+                }
+            }
+        }
+
+        List<Integer> result = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (seen[i][j] == false) {
+                    seen[i][j] = true;
+                    path.add(grid[i][j]);
+                    dfs(result, path, grid, seen, i, j);
+                    path.removeLast();
+                    seen[i][j] = false;
+                }
+            }
+        }
+        return result.stream().mapToInt(Integer::intValue).max().orElse(0);
+    }
+
+    private void dfs(List<Integer> result, List<Integer> path, int[][] grid, boolean[][] seen, int x, int y) {
+        List<int[]> next = Arrays.stream(DIRECTIONS)
+            .map(direction -> new int[] {direction[0] + x, direction[1] + y})
+            .filter(direction -> direction[0] > -1 && direction[0] < grid.length && direction[1] > -1 && direction[1] < grid[0].length && seen[direction[0]][direction[1]] == false)
+            .toList();
+        if (next.isEmpty()) {
+            result.add(path.stream().mapToInt(Integer::intValue).sum());
+        } else {
+            next.forEach(direction -> {
+                seen[direction[0]][direction[1]] = true;
+                path.add(grid[direction[0]][direction[1]]);
+                dfs(result, path, grid, seen, direction[0], direction[1]);
+                path.removeLast();
+                seen[direction[0]][direction[1]] = false;
+            });
+        }
+    }
+}

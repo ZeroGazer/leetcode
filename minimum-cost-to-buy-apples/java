@@ -1,0 +1,39 @@
+class Solution {
+    public long[] minCost(int n, int[][] roads, int[] appleCost, int k) {
+        Map<Integer, List<Pair<Integer, Integer>>> edges = new HashMap<>();
+        Arrays.stream(roads).forEach(road -> {
+            edges.computeIfAbsent(road[0] - 1, key -> new ArrayList<>()).add(new Pair<>(road[1] - 1, road[2]));
+            edges.computeIfAbsent(road[1] - 1, key -> new ArrayList<>()).add(new Pair<>(road[0] - 1, road[2]));
+        });
+
+        long[] result = new long[n];
+        for (int i = 0; i < n; i++) {
+            result[i] = compute(n, edges, appleCost, k, i);
+        }
+        return result;
+    }
+
+    private long compute(int n, Map<Integer, List<Pair<Integer, Integer>>> edges, int[] appleCost, int k, int start) {
+        int[] cost = new int[n];
+        Arrays.fill(cost, Integer.MAX_VALUE);
+        cost[start] = 0;
+        Queue<int[]> pq = new PriorityQueue<>((i, j) -> Integer.compare(i[0], j[0]));
+        pq.add(new int[] {0, start});
+        long min = Integer.MAX_VALUE;
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            min = Math.min(min, curr[0] * (k + 1) + appleCost[curr[1]]);
+            if (edges.containsKey(curr[1])) {
+                edges.get(curr[1]).forEach(edge -> {
+                    int neighbour = edge.getKey();
+                    int toNeighbourCost = edge.getValue() + curr[0];
+                    if (cost[neighbour] > toNeighbourCost) {
+                        cost[neighbour] = toNeighbourCost;
+                        pq.add(new int[] {cost[neighbour], neighbour});
+                    }
+                });
+            }
+        }
+        return min;
+    }
+}

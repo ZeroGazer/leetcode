@@ -1,0 +1,27 @@
+class Solution {
+    public int minimumSwaps(int[] nums) {
+        int max = Arrays.stream(nums).max().getAsInt();
+        int min = Arrays.stream(nums).min().getAsInt();
+        if (max == min) {
+            return 0;
+        }
+        int mini = 0, maxi = nums.length - 1;
+        while (mini < nums.length) {
+            if (nums[mini] == min) {
+                break;
+            }
+            mini++;
+        }
+        while (maxi > -1) {
+            if (nums[maxi] == max) {
+                break;
+            }
+            maxi--;
+        }
+        if (mini < maxi) {
+            return nums.length - 1 - maxi + mini;
+        } else {
+            return nums.length - 1 - maxi + mini - 1;
+        }
+    }
+}

@@ -1,0 +1,36 @@
+class SQL {
+    private Map<String, Map<Integer, List<String>>> db = new HashMap<>();
+    private Map<String, Integer> ids = new HashMap<>();
+
+    public SQL(List<String> names, List<Integer> columns) {
+        names.forEach(name -> {
+            db.put(name, new HashMap<>());
+        });
+    }
+    
+    public void insertRow(String name, List<String> row) {
+        db.get(name).put(generateId(name), row);
+    }
+    
+    public void deleteRow(String name, int rowId) {
+        db.get(name).remove(rowId);
+    }
+    
+    public String selectCell(String name, int rowId, int columnId) {
+        return db.get(name).get(rowId).get(columnId - 1);
+    }
+
+    private int generateId(String name) {
+        int id = ids.getOrDefault(name, 0) + 1;
+        ids.put(name, id);
+        return id;
+    }
+}
+
+/**
+ * Your SQL object will be instantiated and called as such:
+ * SQL obj = new SQL(names, columns);
+ * obj.insertRow(name,row);
+ * obj.deleteRow(name,rowId);
+ * String param_3 = obj.selectCell(name,rowId,columnId);
+ */

@@ -1,0 +1,21 @@
+class Solution {
+    public int minimumOperations(int[] nums) {
+        int n = nums.length;
+        int head = nums[0], tail = nums[n - 1], headi = 0, taili = n - 1;
+        int count = 0;
+        while (headi < taili) {
+            if (head != tail) {
+                if (head < tail) {
+                    head = head + nums[++headi];
+                } else {
+                    tail = tail + nums[--taili];
+                }
+                count++;
+            } else {
+                head = nums[++headi];
+                tail = nums[--taili];
+            }
+        }
+        return count;
+    }
+}

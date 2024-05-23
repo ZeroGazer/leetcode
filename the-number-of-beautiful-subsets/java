@@ -1,0 +1,31 @@
+class Solution {
+    public int beautifulSubsets(int[] nums, int k) {
+        Map<Integer, Map<Integer, Integer>> groups = new HashMap<>();
+        for (int num : nums) {
+            Map<Integer, Integer> group = groups.getOrDefault(num % k, new TreeMap<>());
+            group.put(num, group.getOrDefault(num, 0) + 1);
+            groups.put(num % k, group);
+        }
+        int result = 1;
+        for (Map<Integer, Integer> group : groups.values()) {
+            int prevNum = -k, prev2 = 0, prev1 = 1, count = 1;
+            for (Map.Entry<Integer, Integer> e : group.entrySet()) {
+                int num = e.getKey();
+                int freq = e.getValue();
+                int skip = prev1; 
+                int take;
+                if (num - prevNum == k) {
+                    take = ((1 << freq) - 1) * prev2;
+                } else {
+                    take = ((1 << freq) - 1) * prev1;
+                }
+                count = skip + take;
+                prev2 = prev1;
+                prev1 = count;
+                prevNum = num;
+            }
+            result *= count;
+        }
+        return result - 1;
+    }
+}

@@ -1,0 +1,47 @@
+class Solution {
+    private int max = 0;
+    public int maxScoreWords(String[] words, char[] letters, int[] score) {
+        int[] counts = new int[26];
+        for (char letter : letters) {
+            counts[letter - 'a']++;
+        }
+        int[] wordScores = new int[words.length];
+        for (int i = 0; i < words.length; i++) {
+            int s = 0;
+            for (char c : words[i].toCharArray()) {
+                s += score[c - 'a'];
+            }
+            wordScores[i] = s;
+        }
+        dfs(words, wordScores, counts, score, 0, 0);
+        return max;
+    }
+
+    private void dfs(String[] words, int[] wordScores, int[] counts, int[] score, int total, int index) {
+        if (index == words.length) {
+            max = Math.max(max, total);
+            return;
+        }
+        dfs(words, wordScores, counts, score, total, index + 1);
+
+        String word = words[index];
+        for (char c : word.toCharArray()) {
+            counts[c - 'a']--;
+        }
+        total += wordScores[index];
+        boolean isValid = true;
+        for (int count : counts) {
+            if (count < 0) {
+                isValid = false;
+                break;
+            }
+        }
+        if (isValid) {
+            dfs(words, wordScores, counts, score, total, index + 1);
+        }
+        for (char c : word.toCharArray()) {
+            counts[c - 'a']++;
+        }
+        total -= wordScores[index];
+    }
+}

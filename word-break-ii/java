@@ -1,0 +1,29 @@
+import java.util.StringJoiner;
+
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        List<List<String>> result = new ArrayList<>();
+        dfs(s, new HashSet<>(wordDict), result, new ArrayList<>(), 0);
+        return result.stream().map(candidate -> {
+            StringJoiner sj = new StringJoiner(" ");
+            candidate.forEach(sj::add);
+            return sj.toString();
+        }).toList();
+    }
+
+    private void dfs(String s, Set<String> wordDict, List<List<String>> result, List<String> candidate, int index) {
+        if (index >= s.length()) {
+            result.add(new ArrayList<>(candidate));
+            return;
+        }
+
+        for (int i = index + 1; i <= s.length(); i++) {
+            String substring = s.substring(index, i);
+            if (wordDict.contains(substring)) {
+                candidate.add(substring);
+                dfs(s, wordDict, result, candidate, i);
+                candidate.removeLast();
+            }
+        }
+    }
+}

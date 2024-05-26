@@ -1,0 +1,30 @@
+class Solution {
+    private int MOD = (int) 1e9 + 7;
+
+    public int checkRecord(int n) {
+        int[][] dp = new int[2][3];
+        dp[0][0] = 1;
+        for (int day = 0; day < n; day++) {
+            int[][] temp = new int[2][3];
+            for (int absent = 0; absent <= 1; absent++) {
+                for (int late = 0; late <= 2; late++) {
+                    temp[absent][0] = (temp[absent][0] + dp[absent][late]) % MOD;
+                    if (absent < 1) {
+                        temp[absent + 1][0] = (temp[absent + 1][0] + dp[absent][late]) % MOD;
+                    }
+                    if (late < 2) {
+                        temp[absent][late + 1] = (temp[absent][late + 1] + dp[absent][late]) % MOD;
+                    }
+                }
+            }
+            dp = temp;
+        }
+        int count = 0;
+        for (int absent = 0; absent <= 1; absent++) {
+            for (int late = 0; late <= 2; late++) {
+                count = (count + dp[absent][late]) % MOD; 
+            }
+        }
+        return count;
+    }
+}

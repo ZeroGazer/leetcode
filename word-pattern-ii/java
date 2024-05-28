@@ -1,0 +1,35 @@
+class Solution {
+    public boolean wordPatternMatch(String pattern, String s) {
+        return dfs(pattern, s, new HashMap<>(), new HashSet<>(), 0, 0);
+    }
+
+    private boolean dfs(String pattern, String s, Map<Character, String> wordMap, Set<String> visited, int indexP, int indexS) {
+        if (indexP == pattern.length()) {
+            return indexS == s.length();
+        }
+
+        char p = pattern.charAt(indexP++);
+        if (wordMap.containsKey(p)) {
+            if (!s.startsWith(wordMap.get(p), indexS)) {
+                return false;
+            } else {
+                return dfs(pattern, s, wordMap, visited, indexP, indexS + wordMap.get(p).length());
+            }
+        } else {
+            for (int i = indexS + 1; i <= s.length(); i++) {
+                String subString = s.substring(indexS, i);
+                if (visited.contains(subString)) {
+                    continue;
+                }
+                wordMap.put(p, subString);
+                visited.add(subString);
+                if (dfs(pattern, s, wordMap, visited, indexP, i)) {
+                    return true;
+                }
+                wordMap.remove(p, subString);
+                visited.remove(subString);
+            }
+            return false;
+        }
+    }
+}

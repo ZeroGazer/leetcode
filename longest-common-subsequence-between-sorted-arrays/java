@@ -1,0 +1,28 @@
+class Solution {
+    public List<Integer> longestCommonSubsequence(int[][] arrays) {
+        List<Integer> result = new ArrayList<>();
+        int[] indexes = new int[arrays.length];
+        
+        for (int i = 0; i < arrays[0].length; i++) {
+            int curr = arrays[0][i];
+            boolean found = true;
+            for (int index = 0; index < indexes.length; index++) {
+                while (indexes[index] < arrays[index].length && arrays[index][indexes[index]] < curr) {
+                    indexes[index]++;
+                }
+                if (indexes[index] >= arrays[index].length) {
+                    return result;
+                }
+                if (arrays[index][indexes[index]] > curr) {
+                    found = false;
+                    break;
+                }
+                indexes[index]++;
+            }
+            if (found) {
+                result.add(curr);
+            }
+        }
+        return result;
+    }
+}

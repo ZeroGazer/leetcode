@@ -1,0 +1,18 @@
+class Solution {
+    public int appendCharacters(String s, String t) {
+        int i = 0;
+        int count = t.length();
+        for (int j = 0; j < t.length(); j++) {
+            while (i < s.length() && t.charAt(j) != s.charAt(i)) {
+                i++;
+            }
+            if (i >= s.length()) {
+                break;
+            } else {
+                i++;
+                count--;
+            }
+        }
+        return count;
+    }
+}

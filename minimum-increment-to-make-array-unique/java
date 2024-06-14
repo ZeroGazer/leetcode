@@ -1,0 +1,19 @@
+class Solution {
+    public int minIncrementForUnique(int[] nums) {
+        int max = Arrays.stream(nums).max().getAsInt();
+        int[] freq = new int[nums.length + max];
+        for (int num : nums) {
+            freq[num]++;
+        }
+        int increment = 0;
+        for (int i = 0; i < freq.length; i++) {
+            if (freq[i] <= 1) {
+                continue;
+            } else {
+                freq[i + 1] += freq[i] - 1;
+                increment += freq[i] - 1;
+            }
+        }
+        return increment;
+    }
+}

@@ -1,0 +1,19 @@
+class Solution {
+    public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+        int maxWork = Arrays.stream(worker).max().getAsInt();
+        int[] jobs = new int[maxWork + 1];
+        for (int i = 0; i < difficulty.length; i++) {
+            if (difficulty[i] <= maxWork) {
+                jobs[difficulty[i]] = Math.max(jobs[difficulty[i]], profit[i]);
+            }
+        }
+        for (int i = 1; i <= maxWork; i++) {
+            jobs[i] = Math.max(jobs[i], jobs[i - 1]);
+        }
+        int maxProfit = 0;
+        for (int i = 0; i < worker.length; i++) {
+            maxProfit += jobs[worker[i]];
+        }
+        return maxProfit;
+    }
+}

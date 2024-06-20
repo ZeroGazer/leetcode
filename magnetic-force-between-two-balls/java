@@ -1,0 +1,28 @@
+class Solution {
+    public int maxDistance(int[] position, int m) {
+        Arrays.sort(position);
+        int left = 0, right = Math.ceilDiv(position[position.length - 1], m - 1);
+        int min = 0;
+        while (left <= right) {
+            int middle = left + (right - left) / 2;
+            if (canAchieve(position, middle, m)) {
+                min = middle;
+                left = middle + 1;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return min;
+    }
+
+    private boolean canAchieve(int[] position, int middle, int m) {
+        int prev = position[0], ball = 1;
+        for (int i = 1; i < position.length && ball < m; i++) {
+            if (position[i] - prev >= middle) {
+                ball++;
+                prev = position[i];
+            }
+        }
+        return ball == m;
+    }
+}

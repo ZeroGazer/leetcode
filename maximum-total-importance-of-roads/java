@@ -1,0 +1,15 @@
+class Solution {
+    public long maximumImportance(int n, int[][] roads) {
+        long[] degrees = new long[n];
+        for (int[] road : roads) {
+            degrees[road[0]]++;
+            degrees[road[1]]++;
+        }
+        Arrays.sort(degrees);
+        long factor = 1, importance = 0;
+        for (long degree : degrees) {
+            importance += degree * factor++;
+        }
+        return importance;
+    }
+}

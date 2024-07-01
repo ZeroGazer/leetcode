@@ -1,57 +1,49 @@
-import java.util.Arrays;
-
 class Solution {
     public int earliestAcq(int[][] logs, int n) {
-        Arrays.sort(logs, (x, y) -> x[0] - y[0]);
-
-        int regions = n;
+        Arrays.sort(logs, (x, y) -> Integer.compare(x[0], y[0]));
         UnionFind uf = new UnionFind(n);
         for (int i = 0; i < logs.length; i++) {
-            if (uf.union(logs[i][1], logs[i][2])) {
-                regions--;
-                if (regions == 1) {
-                    return logs[i][0];
-                }
+            if (uf.union(logs[i][1], logs[i][2]) && --n == 1) {
+                return logs[i][0];
             }
         }
         return -1;
     }
+}
 
-    private static final class UnionFind {
-        private int root[];
-        private int rank[];
+class UnionFind {
+    private int root[];
+    private int rank[];
 
-        public UnionFind(int size) {
-            root = new int[size];
-            rank = new int[size];
-            for (int i = 0; i < size; i++) {
-                root[i] = i;
-            }
+    public UnionFind(int size) {
+        root = new int[size];
+        rank = new int[size];
+        for (int i = 0; i < size; i++) {
+            root[i] = i;
         }
+    }
 
-        private int find(int a) {
-            if (a == root[a]) {
-                return a;
-            }
-            return root[a] = find(root[a]);
+    private int find(int a) {
+        if (a == root[a]) {
+            return a;
         }
+        return root[a] = find(root[a]);
+    }
 
-        public boolean union(int a, int b) {
-            int rootA = find(a);
-            int rootB = find(b);
-            if (rootA != rootB) {
-                if (rank[rootA] > rank[rootB]) {
-                    root[rootB] = rootA;
-                } else if (rank[rootA] < rank[rootB]) {
-                    root[rootA] = rootB;
-                } else {
-                    rank[rootA] += 1;
-                    root[rootB] = rootA;
-                }
-
-                return true;
+    public boolean union(int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
+        if (rootA != rootB) {
+            if (rank[rootA] > rank[rootB]) {
+                root[rootB] = rootA;
+            } else if (rank[rootA] < rank[rootB]) {
+                root[rootA] = rootB;
+            } else {
+                rank[rootA] += 1;
+                root[rootB] = rootA;
             }
-            return false;
+            return true;
         }
+        return false;
     }
 }

@@ -1,0 +1,63 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+        List<Character> start = new ArrayList<>();
+        List<Character> dest = new ArrayList<>();
+        find(root, startValue, start);
+        find(root, destValue, dest);
+
+        int startIndex = 0, destIndex = 0;
+        while (startIndex < start.size() && destIndex < dest.size() &&
+            start.get(startIndex) == dest.get(destIndex)) {
+            startIndex++;
+            destIndex++;
+        }
+        StringBuilder up = new StringBuilder();
+        while (startIndex++ < start.size()) {
+            up.append('U');
+        }
+        StringBuilder down = new StringBuilder();
+        while (destIndex < dest.size()) {
+            down.append(dest.get(destIndex++));
+        }
+        return up.toString() + down.toString();
+    }
+
+    private boolean find(TreeNode root, int value, List<Character> path) {
+        if (root == null) {
+            return false;
+        }
+
+        if (root.val == value) {
+            return true;
+        }
+
+        path.add('L');
+        if (find(root.left, value, path)) {
+            return true;
+        }
+        path.removeLast();
+
+        path.add('R');
+        if (find(root.right, value, path)) {
+            return true;
+        }
+        path.removeLast();
+
+        return false;
+    }
+}

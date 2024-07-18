@@ -1,0 +1,67 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    private int count = 0;
+
+    public int countPairs(TreeNode root, int distance) {
+        Set<TreeNode> leaves = new HashSet<>();
+        Map<TreeNode, List<TreeNode>> edges = new HashMap<>();
+        dfs1(root, leaves, edges);
+        Set<TreeNode> seen = new HashSet<>();
+        leaves.forEach(leaf -> {
+            seen.add(leaf);
+            dfs2(leaf, leaves, edges, seen, 0, distance);
+            seen.remove(leaf);
+        });
+        return count / 2;
+    }
+
+    private void dfs1(TreeNode root, Set<TreeNode> leaves, Map<TreeNode, List<TreeNode>> edges) {
+        if (root.left == null && root.right == null) {
+            leaves.add(root);
+        } else {
+            if (root.left != null) {
+                edges.computeIfAbsent(root, (key) -> new ArrayList<>()).add(root.left);
+                edges.computeIfAbsent(root.left, (key) -> new ArrayList<>()).add(root);
+                dfs1(root.left, leaves, edges);
+            }
+            if (root.right != null) {
+                edges.computeIfAbsent(root, (key) -> new ArrayList<>()).add(root.right);
+                edges.computeIfAbsent(root.right, (key) -> new ArrayList<>()).add(root);
+                dfs1(root.right, leaves, edges);
+            }
+        }
+    }
+
+    private void dfs2(TreeNode node, Set<TreeNode> leaves, Map<TreeNode, List<TreeNode>> edges, Set<TreeNode> seen, int distance, int distanceMax) {
+        if (leaves.contains(node) && distance > 0) {
+            if (distance <= distanceMax) {
+                count++;
+            }
+        } else {
+            if (edges.containsKey(node)) {
+                edges.get(node).forEach(next -> {
+                    if (!seen.contains(next)) {
+                        seen.add(next);
+                        dfs2(next, leaves, edges, seen, distance + 1, distanceMax);
+                        seen.remove(next);
+                    }
+                });
+            }
+        }
+    }
+}

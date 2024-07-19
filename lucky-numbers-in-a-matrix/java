@@ -1,0 +1,25 @@
+class Solution {
+    public List<Integer> luckyNumbers (int[][] matrix) {
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < matrix.length; i++) {
+            int rowMin = Integer.MAX_VALUE;
+            for (int j = 0; j < matrix[i].length; j++) {
+                rowMin = Math.min(rowMin, matrix[i][j]);
+            }
+            max = Math.max(max, rowMin);
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < matrix[0].length; i++) {
+            int colMax = Integer.MIN_VALUE;
+            for (int j = 0; j < matrix.length; j++) {
+                colMax = Math.max(colMax, matrix[j][i]);
+            }
+            min = Math.min(min, colMax);
+        }
+        if (min == max) {
+            return Arrays.asList(min);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+}

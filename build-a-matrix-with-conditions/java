@@ -1,0 +1,52 @@
+class Solution {
+    public int[][] buildMatrix(int k, int[][] rowConditions, int[][] colConditions) {
+        int[] rows = topologicalSort(rowConditions, k);
+        int[] cols = topologicalSort(colConditions, k);
+        if (rows.length == 0 || cols.length == 0) {
+            return new int[0][0];
+        }
+        int[][] result = new int[k][k];
+        for (int i = 0; i < k; i++) {
+            for (int j = 0; j < k; j++) {
+                if (rows[i] == cols[j]) {
+                    result[i][j] = rows[i];
+                }
+            }
+        }
+        return result;
+    }
+
+    private int[] topologicalSort(int[][] conditions, int k) {
+        List<Integer>[] adjacencies = new ArrayList[k + 1];
+        for (int i = 0; i < adjacencies.length; i++) {
+            adjacencies[i] = new ArrayList<>();
+        }
+        int[] indegrees = new int[k + 1];
+        for (int i = 0; i < conditions.length; i++) {
+            adjacencies[conditions[i][0]].add(conditions[i][1]);
+            indegrees[conditions[i][1]]++;
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 1; i <= k; i++) {
+            if (indegrees[i] == 0) {
+                queue.add(i);
+            }
+        }
+        int[] result = new int[k];
+        int index = 0;
+        while (!queue.isEmpty()) {
+            int num = queue.poll();
+            result[index++] = num;
+            for (int neighbour : adjacencies[num]) {
+                if (--indegrees[neighbour] == 0) {
+                    queue.add(neighbour);
+                }
+            }
+            k--;
+        }
+        if (k != 0) {
+            return new int[0];
+        }
+        return result;
+    }
+}

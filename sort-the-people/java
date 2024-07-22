@@ -1,0 +1,10 @@
+class Solution {
+    public String[] sortPeople(String[] names, int[] heights) {
+        List<Pair<String, Integer>> sorted = new ArrayList<>();
+        for (int i = 0; i < names.length; i++) {
+            sorted.add(new Pair<>(names[i], heights[i]));
+        }
+        sorted.sort((o1, o2) -> Integer.compare(o2.getValue(), o1.getValue()));
+        return sorted.stream().map(x -> x.getKey()).toArray(String[]::new);
+    }
+}

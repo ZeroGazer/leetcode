@@ -1,0 +1,45 @@
+class Solution {
+    public int minimumCost(int n, int[][] highways, int discounts) {
+        List<List<int[]>> adjacencies = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adjacencies.add(new ArrayList<>());
+        }
+        for (int i = 0; i < highways.length; i++) {
+            adjacencies.get(highways[i][0]).add(new int[] {highways[i][1], highways[i][2]});
+            adjacencies.get(highways[i][1]).add(new int[] {highways[i][0], highways[i][2]});
+        }
+        int[][] dp = new int[n][discounts + 1];
+        for (int i = 0; i < dp.length; i++) {
+            Arrays.fill(dp[i], Integer.MAX_VALUE);
+        }
+        dp[0][0] = 0;
+        Queue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o[2]));
+        queue.add(new int[] {0, 0, 0});
+        boolean[][] visited = new boolean[n][discounts + 1];
+        while (!queue.isEmpty()) {
+            int[] curr = queue.poll();
+            int city = curr[0], discount = curr[1], cost = curr[2];
+            if (visited[city][discount]) {
+                continue;
+            }
+            visited[city][discount] = true;
+            for (int[] neighbour : adjacencies.get(city)) {
+                int next = neighbour[0], toll = neighbour[1];
+                if (cost + toll < dp[next][discount]) {
+                    dp[next][discount] = cost + toll;
+                    queue.add(new int[] {next, discount, dp[next][discount]});
+                }
+                if (discount < discounts &&
+                    cost + toll / 2 < dp[next][discount + 1]) {
+                    dp[next][discount + 1] = cost + toll / 2;
+                    queue.add(new int[] {next, discount + 1, dp[next][discount + 1]});
+                }
+            }
+        }
+        int min = Arrays.stream(dp[n - 1]).min().getAsInt();
+        if (min == Integer.MAX_VALUE) {
+            return -1;
+        }
+        return min;
+    }
+}

@@ -1,0 +1,19 @@
+class Solution {
+    private int[] mapping;
+
+    public int[] sortJumbled(int[] mapping, int[] nums) {
+        this.mapping = mapping;
+        List<Pair<Integer, Integer>> result = Arrays.stream(nums).boxed().map(this::map).collect(Collectors.toList());
+        Collections.sort(result, Comparator.comparingInt(o -> o.getKey()));
+        return result.stream().map(o -> o.getValue()).mapToInt(Integer::intValue).toArray();
+    }
+
+    private Pair<Integer, Integer> map(int i) {
+        String num = Integer.toString(i);
+        StringBuilder sb = new StringBuilder();
+        for (char c : num.toCharArray()) {
+            sb.append(mapping[Character.getNumericValue(c)]);
+        }
+        return new Pair<>(Integer.parseInt(sb.toString()), i);
+    }
+}

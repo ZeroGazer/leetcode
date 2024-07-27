@@ -1,0 +1,54 @@
+class Solution {
+    public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
+        List<List<int[]>> adjacencyList = new ArrayList<>();
+        for (int i = 0; i < 26; i++) {
+            adjacencyList.add(new ArrayList<>());
+        }
+        for (int i = 0; i < original.length; i++) {
+            adjacencyList.get(original[i] - 'a').add(new int[] {changed[i] - 'a', cost[i]});
+        }
+        long[][] costs = new long[26][26];
+        for (int i = 0; i < 26; i++) {
+            costs[i] = dijkstra(i, adjacencyList);
+        }
+        long totalCost = 0;
+        for (int i = 0; i < source.length(); i++) {
+            if (source.charAt(i) != target.charAt(i)) {
+                long charConversionCost = costs[source.charAt(i) - 'a'][target.charAt(i) - 'a'];
+                if (charConversionCost == Long.MAX_VALUE) {
+                    return -1;
+                }
+                totalCost += charConversionCost;
+            }
+        }
+        return totalCost;
+    }
+
+    private long[] dijkstra(int startChar, List<List<int[]>> adjacencyList) {
+        long[] costs = new long[26];
+        Arrays.fill(costs, Long.MAX_VALUE);
+        costs[startChar] = 0;
+
+        PriorityQueue<Pair<Long, Integer>> pq = new PriorityQueue<>(Comparator.comparingLong(e -> e.getKey()));
+        pq.add(new Pair<>(0L, startChar));
+        while (!pq.isEmpty()) {
+            Pair<Long, Integer> current = pq.poll();
+            long cost = current.getKey();
+            int currentChar = current.getValue();
+
+            if (costs[currentChar] < cost) {
+                continue;
+            }
+            for (int[] conversion : adjacencyList.get(currentChar)) {
+                int targetChar = conversion[0];
+                long conversionCost = conversion[1];
+                long newCost = cost + conversionCost;
+                if (newCost < costs[targetChar]) {
+                    costs[targetChar] = newCost;
+                    pq.add(new Pair<>(newCost, targetChar));
+                }
+            }
+        }
+        return costs;
+    }
+}

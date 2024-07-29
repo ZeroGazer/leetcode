@@ -1,0 +1,30 @@
+class Solution {
+
+    public int numTeams(int[] rating) {
+        int[][] increasing = new int[rating.length][3], decreasing = new int[rating.length][3];
+
+        for (int i = 0; i < rating.length; i++) {
+            increasing[i][0] = 1;
+            decreasing[i][0] = 1;
+        }
+
+        for (int count = 1; count < 3; count++) {
+            for (int i = 0; i < rating.length; i++) {
+                for (int j = i + 1; j < rating.length; j++) {
+                    if (rating[j] > rating[i]) {
+                        increasing[j][count] += increasing[i][count - 1];
+                    }
+                    if (rating[j] < rating[i]) {
+                        decreasing[j][count] += decreasing[i][count - 1];
+                    }
+                }
+            }
+        }
+
+        int num = 0;
+        for (int i = 0; i < rating.length; i++) {
+            num += increasing[i][2] + decreasing[i][2];
+        }
+        return num;
+    }
+}

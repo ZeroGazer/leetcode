@@ -1,0 +1,72 @@
+import java.util.StringJoiner;
+
+class Solution {
+    private String[] unit = { "Thousand", "Million", "Billion" };
+    private Map<Integer, String> number = new HashMap<>();
+
+    public Solution() {
+        number.put(0, "Zero");
+        number.put(1, "One");
+        number.put(2, "Two");
+        number.put(3, "Three");
+        number.put(4, "Four");
+        number.put(5, "Five");
+        number.put(6, "Six");
+        number.put(7, "Seven");
+        number.put(8, "Eight");
+        number.put(9, "Nine");
+        number.put(10, "Ten");
+        number.put(11, "Eleven");
+        number.put(12, "Twelve");
+        number.put(13, "Thirteen");
+        number.put(14, "Fourteen");
+        number.put(15, "Fifteen");
+        number.put(16, "Sixteen");
+        number.put(17, "Seventeen");
+        number.put(18, "Eighteen");
+        number.put(19, "Nineteen");
+        number.put(20, "Twenty");
+        number.put(30, "Thirty");
+        number.put(40, "Forty");
+        number.put(50, "Fifty");
+        number.put(60, "Sixty");
+        number.put(70, "Seventy");
+        number.put(80, "Eighty");
+        number.put(90, "Ninety");
+    }
+
+    public String numberToWords(int num) {
+        if (num == 0) {
+            return number.get(num);
+        }
+        return numberToWords(num, -1);
+    }
+    
+    private String numberToWords(int num, int level) {
+        StringJoiner sj = new StringJoiner(" ");
+        if (num / 1000 > 0) {
+            sj.add(numberToWords(num / 1000, level + 1));
+            num %= 1000;
+        }
+        boolean hasUnit = num > 0;
+        if (num / 100 > 0) {
+            sj.add(number.get(num / 100)).add("Hundred");
+            num %= 100;
+        }
+        if (num / 10 == 1) {
+            sj.add(number.get(num));
+        } else {
+            if (num / 10 > 1) {
+                sj.add(number.get(num / 10 * 10));
+                num %= 10;
+            }
+            if (num > 0) {
+                sj.add(number.get(num));
+            }
+        }
+        if (hasUnit && level > -1) {
+            sj.add(unit[level]);
+        }
+        return sj.toString();
+    }
+}

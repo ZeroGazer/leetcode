@@ -1,0 +1,25 @@
+class Solution {
+    private int[][] DIRECTIONS = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+    public int[][] spiralMatrixIII(int rows, int cols, int rStart, int cStart) {
+        int[][] result = new int[rows * cols][2];
+        int count = 0;
+        int turn = 0, direction = 0, incrementCount = 0, increment = 0;
+        result[count++] = new int[] {rStart, cStart};
+        while (count < rows * cols) {
+            if (turn == 0) {
+                direction = (direction + 1) % 4;
+            }
+            if (incrementCount == 0) {
+                increment++;
+            } 
+            rStart += DIRECTIONS[direction][1];
+            cStart += DIRECTIONS[direction][0];
+            if (0 <= rStart && rStart < rows && 0 <= cStart && cStart < cols) {
+                result[count++] = new int[] {rStart, cStart};
+            }
+            turn = (turn + 1) % increment;
+            incrementCount = (incrementCount + 1) % (increment * 2);
+        }
+        return result;
+    }
+}

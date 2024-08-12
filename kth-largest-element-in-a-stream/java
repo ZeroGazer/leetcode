@@ -1,35 +1,25 @@
-import java.util.PriorityQueue;
-
 class KthLargest {
 
-    private PriorityQueue<Integer> priorityQueue;
-    private int k;
+    private PriorityQueue<Integer> pq;
+    private int size;
 
     public KthLargest(int k, int[] nums) {
-        this.k = k;
-        this.priorityQueue = new PriorityQueue<>(k);
-        for (int i = 0; i < nums.length; i++) {
-            if (i < k) {
-                this.priorityQueue.add(nums[i]);
-            } else {
-                if (this.priorityQueue.peek() < nums[i]) {
-                    this.priorityQueue.poll();
-                    this.priorityQueue.add(nums[i]);
-                }
+        size = k;
+        pq = new PriorityQueue<>(k);
+        for (int i : nums) {
+            pq.add(i);
+            if (pq.size() > size) {
+                pq.poll();
             }
         }
     }
-
+    
     public int add(int val) {
-        if (this.priorityQueue.size() < k) {
-            this.priorityQueue.add(val);
-        } else {
-            if (this.priorityQueue.peek() < val) {
-                this.priorityQueue.poll();
-                this.priorityQueue.add(val);
-            }
+        pq.add(val);
+        if (pq.size() > size) {
+            pq.poll();
         }
-        return priorityQueue.peek();
+        return pq.peek();
     }
 }
 
@@ -38,4 +28,3 @@ class KthLargest {
  * KthLargest obj = new KthLargest(k, nums);
  * int param_1 = obj.add(val);
  */
-

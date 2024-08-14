@@ -1,0 +1,39 @@
+class Solution {
+
+    public int numberOfPatterns(int m, int n) {
+        int[][] jump = new int[10][10];
+        jump[1][3] = jump[3][1] = 2;
+        jump[4][6] = jump[6][4] = 5;
+        jump[7][9] = jump[9][7] = 8;
+        jump[1][7] = jump[7][1] = 4;
+        jump[2][8] = jump[8][2] = 5;
+        jump[3][9] = jump[9][3] = 6;
+        jump[1][9] = jump[9][1] = jump[3][7] = jump[7][3] = 5;
+
+        boolean[] visited = new boolean[10];
+
+        return count(1, 1, m, n, jump, visited) * 4 +
+            count(2, 1, m, n, jump, visited) * 4 +
+            count(5, 1, m, n, jump, visited);
+    }
+
+    private int count(int current, int length, int min, int max, int[][] jump, boolean[] visited) {
+        if (length > max) {
+            return 0;
+        }
+        int total = 0;
+        if (length >= min) {
+            total++;
+        }
+
+        visited[current] = true;
+        for (int next = 1; next <= 9; next++) {
+            int jumpNext = jump[current][next];
+            if (!visited[next] && (jumpNext == 0 || visited[jumpNext])) {
+                total += count(next, length + 1, min, max, jump, visited);
+            }
+        }
+        visited[current] = false;
+        return total;
+    }
+}

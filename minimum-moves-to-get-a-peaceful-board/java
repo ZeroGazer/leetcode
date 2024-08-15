@@ -1,0 +1,15 @@
+class Solution {
+
+    public int minMoves(int[][] rooks) {
+        int min = 0;
+        Arrays.sort(rooks, Comparator.comparingInt(x -> x[0]));
+        for (int i = 0; i < rooks.length; i++) {
+            min += Math.abs(i - rooks[i][0]);
+        }
+        Arrays.sort(rooks, Comparator.comparingInt(x -> x[1]));
+        for (int i = 0; i < rooks.length; i++) {
+            min += Math.abs(i - rooks[i][1]);
+        }
+        return min;
+    }
+}

@@ -1,0 +1,26 @@
+class Solution {
+    public long maxPoints(int[][] points) {
+        long[] dp = new long[points[0].length];
+        for (int i = 0; i < dp.length; i++) {
+            dp[i] = points[0][i];
+        }
+        for (int i = 1; i < points.length; i++) {
+            long[] temp = new long[dp.length];
+            long[] left = new long[dp.length];
+            long[] right = new long[dp.length];
+            left[0] = dp[0];
+            for (int j = 1; j < dp.length; j++) {
+                left[j] = Math.max(left[j - 1] - 1, dp[j]);
+            }
+            right[dp.length - 1] = dp[dp.length - 1];
+            for (int j = dp.length - 2; j > -1; j--) {
+                right[j] = Math.max(right[j + 1] - 1, dp[j]);
+            }
+            for (int j = 0; j < points[i].length; j++) {
+                temp[j] = points[i][j] + Math.max(left[j], right[j]);
+            }
+            dp = temp;
+        }
+        return Arrays.stream(dp).max().getAsLong();
+    }
+}

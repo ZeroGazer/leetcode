@@ -1,0 +1,11 @@
+class Solution {
+    public int findComplement(int num) {
+        int tmp = num, bit = 1;
+        while (tmp != 0) {
+            num = num ^ bit;
+            bit <<= 1;
+            tmp >>= 1;
+        }
+        return num;
+    }
+}

@@ -1,0 +1,40 @@
+class Solution {
+    public String nearestPalindromic(String n) {
+        long half = Long.parseLong(n.substring(0, (n.length() % 2 == 0 ? n.length() / 2 - 1 : n.length() / 2) + 1));
+        List<Long> candidates = Arrays.asList(
+            gen(half, n.length() % 2 == 0),
+            gen(half - 1, n.length() % 2 == 0),
+            gen(half + 1, n.length() % 2 == 0),
+            (long) Math.pow(10, n.length() - 1) - 1,
+            (long) Math.pow(10, n.length()) + 1
+        );
+        long diff = Long.MAX_VALUE, result = candidates.get(0), num = Long.parseLong(n);
+        for (Long candidate : candidates) {
+            if (candidate == num) {
+                continue;
+            }
+            long currentDiff = Math.abs(candidate - num);
+            if (currentDiff < diff) {
+                diff = currentDiff;
+                result = candidate;
+            } else if (currentDiff == diff) {
+                result = Math.min(candidate, result);
+            }
+        }
+
+        return Long.toString(result);
+    }
+
+    private long gen(long half, boolean even) {
+        long result = half;
+        if (!even) {
+            half /= 10;
+        }
+        while (half != 0) {
+            result *= 10;
+            result += half % 10;
+            half /= 10;
+        }
+        return result;
+    }
+}

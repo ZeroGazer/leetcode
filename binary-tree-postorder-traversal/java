@@ -16,16 +16,16 @@
 class Solution {
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
-        travel(result, root);
+        dfs(root, result);
         return result;
     }
     
-    private void travel(List<Integer> result, TreeNode root) {
+    private void dfs(TreeNode root, List<Integer> result) {
         if (root == null) {
             return;
         }
-        travel(result, root.left);
-        travel(result, root.right);
+        dfs(root.left, result);
+        dfs(root.right, result);
         result.add(root.val);
     }
 }

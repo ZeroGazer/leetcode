@@ -1,0 +1,29 @@
+class Solution {
+    public double maxProbability(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
+        Map<Integer, List<Pair<Integer, Double>>> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            map.put(i, new ArrayList<>());
+        }
+        for (int i = 0; i < edges.length; i++) {
+            int[] edge = edges[i];
+            map.get(edge[0]).add(new Pair<>(edge[1], succProb[i]));
+            map.get(edge[1]).add(new Pair<>(edge[0], succProb[i]));
+        }
+        double[] probabilities = new double[n];
+        probabilities[start_node] = 1;
+        Queue<Pair<Integer, Double>> queue = new PriorityQueue<>((a, b) -> b.getValue().compareTo(a.getValue()));
+        queue.add(new Pair<>(start_node, probabilities[start_node]));
+        while (!queue.isEmpty()) {
+            Pair<Integer, Double> curr = queue.poll();
+            double currCost = curr.getValue();
+            for (Pair<Integer, Double> neighbour : map.get(curr.getKey())) {
+                double newCost = neighbour.getValue() * currCost;
+                if (probabilities[neighbour.getKey()] < newCost) {
+                    probabilities[neighbour.getKey()] = newCost;
+                    queue.add(new Pair<>(neighbour.getKey(), newCost));
+                }
+            }
+        }
+        return probabilities[end_node];
+    }
+}

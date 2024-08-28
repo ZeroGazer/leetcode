@@ -1,0 +1,25 @@
+class Solution {
+    public List<String> generateAbbreviations(String word) {
+        List<String> result = new ArrayList<>();
+        backtracking(result, word, new StringBuilder(), 0, 0);
+        return result;
+    }
+
+    private void backtracking(List<String> result, String word, StringBuilder sb, int index, int count) {
+        if (index == word.length()) {
+            if (count > 0) {
+                sb.append(count);
+            }
+            result.add(sb.toString());
+            return;
+        }
+        int sbLength = sb.length();
+        if (count > 0) {
+            sb.append(count);
+        }
+        sb.append(word.charAt(index));
+        backtracking(result, word, sb, index + 1, 0);
+        sb.setLength(sbLength);
+        backtracking(result, word, sb, index + 1, count + 1);
+    }
+}

@@ -1,0 +1,39 @@
+class Solution {
+    private int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public int countSubIslands(int[][] grid1, int[][] grid2) {
+        boolean[][] visited = new boolean[grid1.length][grid1[0].length];
+        int count = 0;
+        for (int i = 0; i < grid2.length; i++) {
+            for (int j = 0; j < grid2[i].length; j++) {
+                if (!visited[i][j] && grid2[i][j] == 1) {
+                    visited[i][j] = true;
+                    if (dfs(i, j, grid1, grid2, visited)) {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    private boolean dfs(int i, int j, int[][] grid1, int[][] grid2, boolean[][] visited) {
+        boolean result = true;
+        if (grid1[i][j] == 0) {
+            result = false;
+        }
+        for (int[] direction : DIRECTIONS) {
+            int newI = i + direction[0], newJ = j + direction[1];
+            if (0 <= newI && newI < grid2.length && 0 <= newJ && newJ < grid2[0].length) {
+                if (!visited[newI][newJ] && grid2[newI][newJ] == 1) {
+                    visited[newI][newJ] = true;
+                    if (!dfs(newI, newJ, grid1, grid2, visited)) {
+                        result = false;
+                    }
+                }
+            }
+        }
+        return result;
+
+    }
+}

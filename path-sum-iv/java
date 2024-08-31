@@ -1,0 +1,21 @@
+class Solution {
+
+    private Map<Integer, Integer> map = new HashMap<>();
+
+    public int pathSum(int[] nums) {
+        for (int num : nums) {
+            map.put(num / 10, num % 10);
+        }
+        return dfs(nums[0] / 10, 0);
+    }
+
+    private int dfs(int node, int prev) {
+        int left = (node / 10 + 1) * 10 + node % 10 * 2 - 1;
+        int right = (node / 10 + 1) * 10 + node % 10 * 2;
+        int curr = prev + map.get(node);
+        if (!map.containsKey(left) && !map.containsKey(right)) {
+            return curr;
+        }
+        return (map.containsKey(left) ? dfs(left, curr) : 0) + (map.containsKey(right) ? dfs(right, curr) : 0);
+    }
+}

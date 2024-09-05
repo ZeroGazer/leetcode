@@ -1,0 +1,14 @@
+class Solution {
+    public int[] missingRolls(int[] rolls, int mean, int n) {
+        int sum = (rolls.length + n) * mean - Arrays.stream(rolls).sum();
+        if (Math.ceilDiv(sum, 6) > n || sum < n) {
+            return new int[0];
+        }
+        int[] result = new int[n];
+        Arrays.fill(result, sum / n);
+        for (int i = 0; i < sum % n; i++) {
+            result[i]++;
+        }
+        return result;
+    }
+}

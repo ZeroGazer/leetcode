@@ -1,0 +1,21 @@
+class Solution {
+    public int findTheLongestSubstring(String s) {
+        int[] ch = new int[26];
+        ch['a' - 'a'] = 1;
+        ch['e' - 'a'] = 2;
+        ch['i' - 'a'] = 4;
+        ch['o' - 'a'] = 8;
+        ch['u' - 'a'] = 16;
+        int[] occ = new int[32];
+        Arrays.fill(occ, -1);
+        int max = 0, prefix = 0;
+        for (int i = 0; i < s.length(); i++) {
+            prefix ^= ch[s.charAt(i) - 'a'];
+            if (occ[prefix] == -1 && prefix != 0) {
+                occ[prefix] = i;
+            }
+            max = Math.max(max, i - occ[prefix]);
+        }
+        return max;
+    }
+}

@@ -1,0 +1,23 @@
+class Solution {
+    public int findMinDifference(List<String> timePoints) {
+        List<List<Integer>> ts = timePoints.stream().map(t -> Arrays.stream(t.split("\\:")).map(Integer::parseInt).toList()).collect(Collectors.toList());
+        Collections.sort(ts, (t1, t2) -> {
+            if (t1.get(0).compareTo(t2.get(0)) != 0) {
+                return t1.get(0).compareTo(t2.get(0));
+            } else {
+                return t1.get(1).compareTo(t2.get(1));
+            }
+        });
+
+        int min = diff(ts.getFirst(), ts.getLast());
+        for (int i = 1; i < ts.size(); i++) {
+            min = Math.min(min, diff(ts.get(i - 1), ts.get(i)));
+        }
+        return min;
+    }
+
+    private int diff(List<Integer> t1, List<Integer> t2) {
+        int mins = (t2.get(0) - t1.get(0)) * 60 + t2.get(1) - t1.get(1);
+        return Math.min(mins, 1440 - mins);
+    }
+}

@@ -1,0 +1,32 @@
+class Solution {
+    public String findSmallestRegion(List<List<String>> regions, String region1, String region2) {
+        Map<String, String> map = new HashMap<>();
+        for (List<String> region : regions) {
+            String parent = region.get(0);
+            for (int i = 1; i < region.size(); i++) {
+                map.put(region.get(i), parent);
+            }
+        }
+        List<String> path1 = getPath(map, region1);
+        List<String> path2 = getPath(map, region2);
+        String result = "";
+        int i = 0, j = 0;
+        while (i < path1.size() && j < path2.size() && path1.get(i).equals(path2.get(j))) {
+            result = path1.get(i);
+            i++;
+            j++;
+        }
+        return result;
+    }
+
+    private List<String> getPath(Map<String, String> map, String region) {
+        List<String> path = new ArrayList<>();
+        path.add(region);
+        while (map.containsKey(region)) {
+            path.add(map.get(region));
+            region = map.get(region);
+        }
+        Collections.reverse(path);
+        return path;
+    }
+}

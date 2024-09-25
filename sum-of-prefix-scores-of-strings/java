@@ -1,0 +1,39 @@
+class Solution {
+    public int[] sumPrefixScores(String[] words) {
+        Trie trie = new Trie();
+        for (String s : words) {
+            trie.insert(s);
+        }
+        int[] scores = new int[words.length];
+        for (int i = 0; i < scores.length; i++) {
+            scores[i] = trie.count(words[i]);
+        }
+        return scores;
+    }
+}
+
+class Trie {
+    Trie[] children = new Trie[26];
+    int count = 0;
+
+    void insert(String s) {
+        Trie curr = this;
+        for (char c : s.toCharArray()) {
+            if (curr.children[c - 'a'] == null) {
+                curr.children[c - 'a'] = new Trie();
+            }
+            curr.children[c - 'a'].count++;
+            curr = curr.children[c - 'a'];
+        }
+    }
+
+    int count(String s) {
+        Trie curr = this;
+        int sum = 0;
+        for (char c : s.toCharArray()) {
+            sum += curr.children[c - 'a'].count;
+            curr = curr.children[c - 'a'];
+        }
+        return sum;
+    }
+}

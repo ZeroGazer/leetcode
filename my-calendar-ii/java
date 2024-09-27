@@ -1,0 +1,30 @@
+class MyCalendarTwo {
+
+    private List<Pair<Integer, Integer>> overlapped = new ArrayList<>();
+    private List<Pair<Integer, Integer>> period = new ArrayList<>();
+
+    public MyCalendarTwo() {
+        
+    }
+    
+    public boolean book(int start, int end) {
+        for (Pair<Integer,Integer> o : overlapped) {
+            if (Math.max(start, o.getKey()) < Math.min(end, o.getValue())) {
+                return false;
+            }
+        }
+        for (Pair<Integer,Integer> p : period) {
+            if (Math.max(start, p.getKey()) < Math.min(end, p.getValue())) {
+                overlapped.add(new Pair<>(Math.max(start, p.getKey()), Math.min(end, p.getValue())));
+            }
+        }
+        period.add(new Pair<>(start, end));
+        return true;
+    }
+}
+
+/**
+ * Your MyCalendarTwo object will be instantiated and called as such:
+ * MyCalendarTwo obj = new MyCalendarTwo();
+ * boolean param_1 = obj.book(start,end);
+ */

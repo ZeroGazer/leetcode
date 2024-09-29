@@ -1,0 +1,104 @@
+class AllOne {
+
+    private Node head;
+    private Node tail;
+    private Map<String, Node> map = new HashMap<>();
+
+    public AllOne() {
+        head = new Node();
+        tail = new Node();
+        head.next = tail;
+        tail.prev = head;
+    }
+    
+    public void inc(String key) {
+        if (map.containsKey(key)) {
+            Node node = map.get(key);
+            node.keys.remove(key);
+            Node next = node.next;
+            if (next == tail || next.freq != (node.freq + 1)) {
+                next = new Node();
+                next.freq = node.freq + 1;
+                next.prev = node;
+                next.next = node.next;
+                node.next.prev = next;
+                node.next = next;
+            }
+            next.keys.add(key);
+            map.put(key, next);
+            if (node.keys.isEmpty()) {
+                node.prev.next = node.next;
+                node.next.prev = node.prev;
+            }
+        } else {
+            Node node = head;
+            Node next = node.next;
+            if (next.freq != 1) {
+                next = new Node();
+                next.freq = 1;
+                next.prev = node;
+                next.next = node.next;
+                node.next.prev = next;
+                node.next = next;
+            }
+            next.keys.add(key);
+            map.put(key, next);
+        }
+    }
+    
+    public void dec(String key) {
+        Node node = map.get(key);
+        node.keys.remove(key);
+        Node prev = node.prev;
+        if (node.freq == 1) {
+            map.remove(key);
+        } else {
+            if (prev.freq != (node.freq - 1)) {
+                prev = new Node();
+                prev.freq = node.freq - 1;
+                prev.prev = node.prev;
+                node.prev.next = prev;
+                node.prev = prev;
+                prev.next = node;
+            }
+            prev.keys.add(key);
+            map.put(key, prev);
+        }
+        if (node.keys.isEmpty()) {
+            prev.next = node.next;
+            node.next.prev = prev;
+        }
+    }
+    
+    public String getMaxKey() {
+        if (tail.prev == head) {
+            return "";
+        }
+        System.out.println(tail.prev.keys.iterator().next());
+        return tail.prev.keys.iterator().next();
+    }
+    
+    public String getMinKey() {
+        if (head.next == tail) {
+            return "";
+        }
+        System.out.println(head.next.keys.iterator().next());
+        return head.next.keys.iterator().next();
+    }
+}
+
+class Node {
+    int freq = 0;
+    Set<String> keys = new HashSet<>();
+    Node prev;
+    Node next;
+}
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */

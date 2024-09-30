@@ -1,0 +1,44 @@
+class CustomStack {
+
+    private int[] stack;
+    private int[] change;
+    private int index = -1;
+
+    public CustomStack(int maxSize) {
+        stack = new int[maxSize];
+        change = new int[maxSize];
+    }
+    
+    public void push(int x) {
+        if (index + 1 < stack.length) {
+            stack[++index] = x;
+        }
+    }
+    
+    public int pop() {
+        if (index == -1) {
+            return -1;
+        }
+        int result = stack[index] += change[index];
+        if (index > 0) {
+            change[index - 1] += change[index];
+        }
+        change[index--] = 0;
+        return result;
+    }
+    
+    public void increment(int k, int val) {
+        if (index < 0) {
+            return;
+        }
+        change[Math.min(index, k - 1)] += val;
+    }
+}
+
+/**
+ * Your CustomStack object will be instantiated and called as such:
+ * CustomStack obj = new CustomStack(maxSize);
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * obj.increment(k,val);
+ */

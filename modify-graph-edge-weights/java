@@ -1,0 +1,63 @@
+class Solution {
+
+    private int MAX_VALUE = (int) 2e9;
+
+    public int[][] modifiedGraphEdges(int n, int[][] edges, int source, int destination, int target) {
+        List<int[]>[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        for (int[] edge : edges) {
+            if (edge[2] != -1) {
+                graph[edge[0]].add(new int[] { edge[1], edge[2] });
+                graph[edge[1]].add(new int[] { edge[0], edge[2] });
+            }
+        }
+        long min = dijkstra(graph, n, source, destination);
+        if (min < target) {
+            return new int[0][0];
+        }
+
+        boolean found = min == target;
+        for (int[] edge : edges) {
+            if (edge[2] > 0) {
+                continue;
+            }
+            edge[2] = found ? MAX_VALUE : 1;
+            graph[edge[0]].add(new int[] { edge[1], edge[2] });
+            graph[edge[1]].add(new int[] { edge[0], edge[2] });
+
+            if (!found) {
+                long newCost = dijkstra(graph, n, source, destination);
+                if (newCost <= target) {
+                    found = true;
+                    edge[2] += target - newCost;
+                }
+            }
+        }
+        
+        return found ? edges : new int[0][0];
+    }
+
+    private int dijkstra(List<int[]>[] graph, int n, int source, int target) {
+        int[] cost = new int[n];
+        Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(x -> x[1]));
+        Arrays.fill(cost, MAX_VALUE);
+        cost[source] = 0;
+        pq.add(new int[] { source, 0 });
+
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            if (curr[1] > cost[curr[0]]) {
+                continue;
+            }
+            for (int[] neighbor : graph[curr[0]]) {
+                if (curr[1] + neighbor[1] < cost[neighbor[0]]) {
+                    cost[neighbor[0]] = curr[1] + neighbor[1];
+                    pq.add(new int[] { neighbor[0], cost[neighbor[0]] });
+                }
+            }
+        }
+        return cost[target];
+    }
+}

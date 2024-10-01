@@ -1,0 +1,20 @@
+class Solution {
+    public boolean canArrange(int[] arr, int k) {
+        Map<Integer, Integer> count = new HashMap<>();
+        for (int i : arr) {
+            int remainder = ((i % k) + k) % k;
+            count.put(remainder, count.getOrDefault(remainder, 0) + 1);
+        }
+        for (int i : arr) {
+            int remainder = ((i % k) + k) % k;
+            if (remainder == 0) {
+                if (count.get(remainder) % 2 == 1) {
+                    return false;
+                }
+            } else if (!Objects.equals(count.get(remainder), count.get(k - remainder))) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

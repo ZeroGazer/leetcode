@@ -1,0 +1,17 @@
+class Solution {
+    public boolean areSentencesSimilar(String sentence1, String sentence2) {
+        String[] s1 = sentence1.split(" "), s2 = sentence2.split(" ");
+        if (s1.length < s2.length) {
+            return areSentencesSimilar(sentence2, sentence1);
+        }
+        int left = 0, right1 = s1.length - 1, right2 = s2.length - 1;
+        while (left < s2.length && s1[left].equals(s2[left])) {
+            left++;
+        }
+        while (right2 > -1 && s1[right1].equals(s2[right2])) {
+            right1--;
+            right2--;
+        }
+        return left > right2;
+    }
+}

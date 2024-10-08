@@ -1,0 +1,21 @@
+class Solution {
+    public long[] maximumCoins(int[] heroes, int[] monsters, int[] coins) {
+        Map<Integer, Long> count = new TreeMap<>();
+        for (int i = 0; i < monsters.length; i++) {
+            count.put(monsters[i], count.getOrDefault(monsters[i], 0L) + coins[i]);
+        }
+        long sum = 0;
+        TreeMap<Integer, Long> prefixSum = new TreeMap<>();
+        for (Map.Entry<Integer, Long> e : count.entrySet()) {
+            sum += e.getValue();
+            prefixSum.put(e.getKey(), sum);
+        }
+        long[] result = new long[heroes.length];
+        for (int i = 0; i < heroes.length; i++) {
+            if (prefixSum.floorEntry(heroes[i]) != null) {
+                result[i] = prefixSum.floorEntry(heroes[i]).getValue();
+            }
+        }
+        return result;
+    }
+}

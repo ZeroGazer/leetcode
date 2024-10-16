@@ -1,0 +1,26 @@
+class Solution {
+    public String longestDiverseString(int a, int b, int c) {
+        StringBuilder sb = new StringBuilder();
+        int ac = 0, bc = 0, cc = 0;
+        int count = a + b + c;
+        for (int i = 0; i < count; i++) {
+            if (a >= b && a >= c && ac < 2 || a > 0 && (bc == 2 || (cc == 2))) {
+                sb.append('a');
+                a--;
+                ac++;
+                bc = cc = 0;
+            } else if (b >= a && b >= c && bc < 2 || b > 0 && (ac == 2 || (cc == 2))) {
+                sb.append('b');
+                b--;
+                bc++;
+                ac = cc = 0;
+            } else if (c >= a && c >= b && cc < 2 || c > 0 && (ac == 2 || (bc == 2))) {
+                sb.append('c');
+                c--;
+                cc++;
+                ac = bc = 0;
+            }
+        }
+        return sb.toString();
+    }
+}

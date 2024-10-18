@@ -1,0 +1,21 @@
+class Solution {
+    public int countMaxOrSubsets(int[] nums) {
+        int max = 0;
+        for (int i : nums) {
+            max |= i;
+        }
+        Integer[][] memo = new Integer[nums.length][max + 1];
+        return dp(memo, nums, 0, 0, max);
+    }
+
+    private int dp(Integer[][] memo, int[] nums, int index, int curr, int max) {
+        if (index == nums.length) {
+            return curr == max ? 1 : 0;
+        }
+        if (memo[index][curr] != null) {
+            return memo[index][curr];
+        }
+        memo[index][curr] = dp(memo, nums, index + 1, curr, max) + dp(memo, nums, index + 1, curr | nums[index], max);
+        return memo[index][curr];
+    }
+}

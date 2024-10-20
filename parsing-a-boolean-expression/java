@@ -1,0 +1,49 @@
+class Solution {
+    public boolean parseBoolExpr(String expression) {
+        Stack<List<Character>> stack = new Stack<>();
+        for (char c : expression.toCharArray()) {
+            if (c == '!' || c == '&' || c == '|') {
+                stack.add(new ArrayList<>());
+                stack.peek().add(c);
+            } else if (c == 't' || c == 'f') {
+                stack.peek().add(c);
+            } else if (c == ',' || c == '(') {
+                continue;
+            } else {
+                List<Character> sub = stack.pop();
+                char op = sub.getFirst();
+                char result = sub.get(1);
+                if (op == '!') {
+                    if (result == 't') {
+                        result = 'f';
+                    } else {
+                        result = 't';
+                    }
+                } else {
+                    for (int i = 2; i < sub.size(); i++) {
+                        if (op == '&') {
+                            if (result == 't' && sub.get(i) == 't') {
+                                continue;
+                            } else {
+                                result = 'f';
+                                break;
+                            }
+                        } else {
+                            if (result == 'f' && sub.get(i) == 'f') {
+                                continue;
+                            } else {
+                                result = 't';
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (stack.isEmpty()) {
+                    stack.push(new ArrayList<>());
+                }
+                stack.peek().add(result);
+            }
+        }
+        return stack.pop().getFirst() == 't';
+    }
+}

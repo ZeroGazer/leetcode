@@ -1,0 +1,21 @@
+class Solution {
+    public int maxUniqueSplit(String s) {
+        return dfs(s, new HashSet<>(), 0);
+    }
+
+    private int dfs(String s, Set<String> seen, int start) {
+        if (start == s.length()) {
+            return 0;
+        }
+        int max = 0;
+        for (int i = start + 1; i <= s.length(); i++) {
+            String candidate = s.substring(start, i);
+            if (!seen.contains(candidate)) {
+                seen.add(candidate);
+                max = Math.max(max, dfs(s, seen, i) + 1);
+                seen.remove(candidate);
+            }
+        }
+        return max;
+    }
+}

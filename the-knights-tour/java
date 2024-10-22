@@ -1,0 +1,34 @@
+class Solution {
+    private int[][] DIRECTIONS = new int[][] {{1, -2}, {2, -1}, {2, 1}, {1, 2}, {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2}};
+    public int[][] tourOfKnight(int m, int n, int r, int c) {
+        int[][] board = new int[m][n];
+        for (int[] is : board) {
+            Arrays.fill(is, -1);
+        }
+        board[r][c] = 0;
+        dfs(board, r, c, m, n);
+        return board;
+    }
+
+    private boolean dfs(int[][] board, int r, int c, int m, int n) {
+        if (board[r][c] == m * n - 1) {
+            return true;
+        }
+        for (int[] direction : DIRECTIONS) {
+            int nr = r + direction[0], nc = c + direction[1];
+            if (validate(r, c, nr, nc, m, n) && board[nr][nc] == -1) {
+                board[nr][nc] = board[r][c] + 1;
+                if (dfs(board, nr, nc, m, n)) {
+                    return true;
+                }
+                board[nr][nc] = -1;
+            }
+        }
+        return false;
+    }
+
+    private boolean validate(int r, int c, int nr, int nc, int m, int n) {
+        return (0 <= nr && nr < m) && (0 <= nc && nc < n) &&
+            Math.min(Math.abs(r - nr), Math.abs(c - nc)) == 1 && (Math.max(Math.abs(r - nr), Math.abs(c - nc)) == 2);
+    }
+}

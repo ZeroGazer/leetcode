@@ -1,0 +1,47 @@
+import java.util.StringJoiner;
+
+class Solution {
+    public List<String> removeSubfolders(String[] folder) {
+        Folder root = new Folder();
+        for (String path : folder) {
+            insert(root, path.split("/"), 1);
+        }
+        List<String> result = new ArrayList<>();
+        List<String> segment = new ArrayList<>();
+        remove(result, root, segment);
+        return result;
+    }
+
+    private void insert(Folder root, String[] segment, int index) {
+        if (index == 0) {
+            System.out.println(segment[index]);
+        }
+        if (index == segment.length) {
+            root.end = true;
+        } else {
+            if (!root.map.containsKey(segment[index])) {
+                root.map.put(segment[index], new Folder());
+            }
+            insert(root.map.get(segment[index]), segment, index + 1);
+        }
+    }
+
+    private void remove(List<String> result, Folder root, List<String> path) {
+        if (root.end) {
+            StringJoiner sj = new StringJoiner("/", "/", "");
+            path.forEach(sj::add);
+            result.add(sj.toString());
+            return;
+        }
+        root.map.entrySet().forEach(e -> {
+            path.add(e.getKey());
+            remove(result, e.getValue(), path);
+            path.removeLast();
+        });
+    }
+}
+
+class Folder {
+    Map<String, Folder> map = new HashMap<>();
+    boolean end = false;
+}

@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int[] treeQueries(TreeNode root, int[] queries) {
+        Map<Integer, Integer> results = new HashMap<>();
+        Map<Integer, Integer> heights = new HashMap<>();
+        dfs(root, results, heights, 0, 0);
+        return Arrays.stream(queries).map(results::get).toArray();
+    }
+
+    private void dfs(TreeNode root, Map<Integer, Integer> results, Map<Integer, Integer> heights, int depth, int max) {
+        if (root == null) {
+            return;
+        }
+        results.put(root.val, max);
+        dfs(root.left, results, heights, depth + 1, Math.max(max, depth + 1 + getHeight(heights, root.right)));
+        dfs(root.right, results, heights, depth + 1, Math.max(max, depth + 1 + getHeight(heights, root.left)));
+    }
+
+    private int getHeight(Map<Integer, Integer> heights, TreeNode root) {
+        if (root == null) {
+            return -1;
+        }
+        if (heights.containsKey(root.val)) {
+            return heights.get(root.val);
+        }
+        heights.put(root.val, 1 + Math.max(getHeight(heights, root.left), getHeight(heights, root.right)));
+        return heights.get(root.val);
+    }
+}

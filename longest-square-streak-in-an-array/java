@@ -1,0 +1,22 @@
+class Solution {
+    public int longestSquareStreak(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            set.add(num);
+        }
+        int max = 0;
+        for (int num : nums) {
+            int curr = 0;
+            long candidate = num;
+            while (set.contains((int) candidate)) {
+                curr++;
+                if (candidate * candidate > 10e5) {
+                    break;
+                }
+                candidate *= candidate;
+            }
+            max = Math.max(max, curr);
+        }
+        return max == 1 ? -1 : max;
+    }
+}

@@ -1,0 +1,22 @@
+class Solution {
+    public int minCostII(int[][] costs) {
+        int[] dp = new int[costs[0].length];
+        for (int i = 0; i < costs[0].length; i++) {
+            dp[i] = costs[0][i];
+        }
+        for (int i = 1; i < costs.length; i++) {
+            int[] temp = new int[costs[0].length];
+            Arrays.fill(temp, Integer.MAX_VALUE);
+            for (int j = 0; j < costs[0].length; j++) {
+                for (int k = 0; k < costs[0].length; k++) {
+                    if (j == k) {
+                        continue;
+                    }
+                    temp[j] = Math.min(temp[j], dp[k] + costs[i][j]);
+                }
+            }
+            dp = temp;
+        }
+        return Arrays.stream(dp).min().getAsInt();
+    }
+}

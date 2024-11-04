@@ -1,0 +1,28 @@
+class Solution {
+    public String compressedString(String word) {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        Character prev = null;
+        for (char c : word.toCharArray()) {
+            if (prev == null) {
+                prev = c;
+                count++;
+            } else if (c != prev) {
+                sb.append(count);
+                sb.append(prev);
+                prev = c;
+                count = 1;
+            } else {
+                if (count == 9) {
+                    sb.append(count);
+                    sb.append(prev);
+                    count = 0;
+                }
+                count++;
+            }
+        }
+        sb.append(count);
+        sb.append(prev);
+        return sb.toString();
+    }
+}

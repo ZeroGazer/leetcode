@@ -1,0 +1,33 @@
+class Solution {
+    public int minimumSubarrayLength(int[] nums, int k) {
+        int start = 0;
+        int[] bits = new int[32];
+        int min = Integer.MAX_VALUE;
+        for (int end = 0; end < nums.length; end++) {
+            setBits(bits, nums[end], 1);
+            while (start <= end && getNum(bits) >= k) {
+                min = Math.min(min, end - start + 1);
+                setBits(bits, nums[start++], -1);
+            }
+        }
+        return min == Integer.MAX_VALUE ? -1 : min;
+    }
+
+    private void setBits(int[] bits, int num, int add) {
+        for (int i = 0; i < bits.length; i++) {
+            if (((num >> i) & 1) == 1) {
+                bits[i] += add;
+            }
+        }
+    }
+
+    private int getNum(int[] bits) {
+        int result = 0;
+        for (int i = 0; i < bits.length; i++) {
+            if (bits[i] > 0) {
+                result |= 1 << i;
+            }
+        }
+        return result;
+    }
+}

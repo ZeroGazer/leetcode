@@ -1,0 +1,31 @@
+class Solution {
+    public boolean primeSubOperation(int[] nums) {
+        int max = Arrays.stream(nums).max().getAsInt();
+        int[] primes = new int[max + 1];
+        for (int i = 2; i < primes.length; i++) {
+            if (isPrime(i)) {
+                primes[i] = i;
+            } else {
+                primes[i] = primes[i - 1];
+            }
+        }
+        int prev = 0;
+        for (int num : nums) {
+            int diff = num - prev;
+            if (diff <= 0) {
+                return false;
+            }
+            prev = num - primes[diff - 1];
+        }
+        return true;
+    }
+
+    private boolean isPrime(int num) {
+        for (int i = 2; i * i <= num; i++) {
+            if (num % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

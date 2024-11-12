@@ -1,0 +1,10 @@
+class Solution {
+    public int[] maximumBeauty(int[][] items, int[] queries) {
+        Arrays.sort(items, Comparator.comparingInt(x -> x[0]));
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        for (int[] item : items) {
+            map.put(item[0], Math.max(map.floorEntry(item[0]) == null ? 0 : map.floorEntry(item[0]).getValue(), item[1]));
+        }
+        return Arrays.stream(queries).map(query -> map.floorEntry(query) == null ? 0 : map.floorEntry(query).getValue()).toArray();
+    }
+}

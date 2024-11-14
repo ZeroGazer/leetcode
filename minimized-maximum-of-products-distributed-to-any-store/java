@@ -1,0 +1,32 @@
+class Solution {
+    public int minimizedMaximum(int n, int[] quantities) {
+        int left = 0;
+        int right = Arrays.stream(quantities).max().getAsInt();
+        while (left < right) {
+            int middle = left + (right - left) / 2;
+            if (!canDistribute(n, Arrays.copyOf(quantities, quantities.length), middle)) {
+                left = middle + 1;
+            } else {
+                right = middle;
+            }
+        }
+        return left;
+    }
+
+    private boolean canDistribute(int n, int[] quantities, int k) {
+        int i = 0, remaining = quantities[0];
+        for (int j = 0; j < n; j++) {
+            if (remaining <= k) {
+                i++;
+                if (i < quantities.length) {
+                    remaining = quantities[i];
+                } else {
+                    return true;
+                }
+            } else {
+                remaining -= k;
+            }
+        }
+        return false;
+    }
+}

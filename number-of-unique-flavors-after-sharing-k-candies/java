@@ -1,0 +1,30 @@
+class Solution {
+    public int shareCandies(int[] candies, int k) {
+        int[] flavors = new int[100001];
+        for (int candy : candies) {
+            flavors[candy]++;
+        }
+        int unique = 0;
+        for (int flavor : flavors) {
+            if (flavor > 0) {
+                unique++;
+            }
+        }
+        for (int i = 0; i < k; i++) {
+            if (--flavors[candies[i]] == 0) {
+                unique--;
+            }
+        }
+        int max = unique;
+        for (int i = 0; i < candies.length - k; i++) {
+            if (++flavors[candies[i]] == 1) {
+                unique++;
+            }
+            if (--flavors[candies[i + k]] == 0) {
+                unique--;
+            }
+            max = Math.max(max, unique);
+        }
+        return max;
+    }
+}

@@ -10,7 +10,7 @@ class Solution {
                 visited.remove(nums[i - k]);
             }
             if (visited.contains(num)) {
-                for (int j = Math.min(visited.size(), i); j > 0; j--) {
+                for (int j = visited.size(); j > 0; j--) {
                     int prev = nums[i - j];
                     if (prev == num) {
                         break;

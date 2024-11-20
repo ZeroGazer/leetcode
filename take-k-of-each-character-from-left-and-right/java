@@ -1,0 +1,23 @@
+class Solution {
+    public int takeCharacters(String s, int k) {
+        int[] freqs = new int[3];
+        for (char c : s.toCharArray()) {
+            freqs[c - 'a']++;
+        }
+        if (Arrays.stream(freqs).min().getAsInt() < k) {
+            return -1;
+        }
+        int[] counts = new int[3];
+        int i = 0;
+        int max = 0;
+        for (int j = 0; j < s.length(); j++) {
+            counts[s.charAt(j) - 'a']++;
+            while (i <= j && (freqs[0] - counts[0] < k || freqs[1] - counts[1] < k || freqs[2] - counts[2] < k )) {
+                counts[s.charAt(i++) - 'a']--;
+            }
+            max = Math.max(max, j - i + 1);
+        }
+        return s.length() - max;
+    }
+
+}

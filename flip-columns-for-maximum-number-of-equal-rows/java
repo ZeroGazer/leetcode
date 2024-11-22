@@ -1,0 +1,17 @@
+class Solution {
+    public int maxEqualRowsAfterFlips(int[][] matrix) {
+        Map<String, Integer> freqs = new HashMap<>();
+        for (int[] row : matrix) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < row.length; i++) {
+                sb.append(row[0] == row[i] ? 0 : 1);
+            }
+            freqs.put(sb.toString(), freqs.getOrDefault(sb.toString(), 0) + 1);
+        }
+        int max = 0;
+        for (int freq : freqs.values()) {
+            max = Math.max(max, freq);
+        }
+        return max;
+    }
+}

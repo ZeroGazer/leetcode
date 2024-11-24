@@ -1,0 +1,20 @@
+class Solution {
+    public long maxMatrixSum(int[][] matrix) {
+        long sum = 0;
+        int min = Integer.MAX_VALUE;
+        int negativeCount = 0;
+        for (int[] is : matrix) {
+            for (int n : is) {
+                sum += Math.abs(n);
+                if (n < 0) {
+                    negativeCount++;
+                }
+                min = Math.min(min, Math.abs(n));
+            }
+        }
+        if (negativeCount % 2 != 0) {
+            sum -= 2 * min;
+        }
+        return sum;
+    }
+}

@@ -1,0 +1,50 @@
+class Solution {
+    public int[] shortestDistanceAfterQueries(int n, int[][] queries) {
+        Map<Integer, List<Integer>> edges = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            edges.put(i, new ArrayList<>());
+        }
+        for (int i = 0; i < n - 1; i++) {
+            edges.get(i).add(i + 1);
+        }
+        int[] costs = new int[n];
+        Arrays.fill(costs, Integer.MAX_VALUE);
+        costs[0] = 0;
+        Queue<Pair<Integer, Integer>> pq = new PriorityQueue<>(Comparator.comparingInt(Pair::getValue));
+        pq.add(new Pair<>(0, 0));
+        dijkstra(edges, costs, pq);
+        int[] results = new int[queries.length];
+        for (int i = 0; i < queries.length; i++) {
+            int[] query = queries[i];
+            edges.get(query[0]).add(query[1]);
+            if (costs[query[1]] > costs[query[0]] + 1) {
+                costs[query[1]] = costs[query[0]] + 1;
+                pq.add(new Pair<>(query[1], costs[query[1]]));
+                results[i] = dijkstra(edges, costs, pq);
+            } else {
+                results[i] = costs[n - 1];
+            }
+        }
+        return results;
+    }
+
+    private int dijkstra(Map<Integer, List<Integer>> edges, int[] costs, Queue<Pair<Integer, Integer>> pq) {
+        while (!pq.isEmpty()) {
+            Pair<Integer, Integer> curr = pq.poll();
+            int node = curr.getKey(), cost = curr.getValue();
+            if (costs[node] < cost) {
+                continue;
+            }
+            if (node == edges.size() - 1) {
+                break;
+            }
+            for (int next : edges.get(node)) {
+                if (costs[next] > cost + 1) {
+                    costs[next] = cost + 1;
+                    pq.add(new Pair<>(next, costs[next]));
+                }
+            }
+        }
+        return costs[costs.length - 1];
+    }
+}

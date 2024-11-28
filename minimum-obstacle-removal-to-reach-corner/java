@@ -1,0 +1,32 @@
+class Solution {
+    private final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public int minimumObstacles(int[][] grid) {
+        int[][] costs = new int[grid.length][grid[0].length];
+        for (int[] is : costs) {
+            Arrays.fill(is, Integer.MAX_VALUE);
+        }
+        costs[0][0] = 0;
+        Queue<Pair<int[], Integer>> pq = new PriorityQueue<>(Comparator.comparingInt(Pair::getValue));
+        pq.add(new Pair<>(new int[] {0, 0}, 0));
+        while (!pq.isEmpty()) {
+            Pair<int[], Integer> curr = pq.poll();
+            int[] node = curr.getKey();
+            int cost = curr.getValue();
+            if (costs[node[0]][node[1]] < cost) {
+                continue;
+            }
+            int newCost = cost + grid[node[0]][node[1]];
+            for (int[] direction : DIRECTIONS) {
+                int x = direction[0] + node[0], y = direction[1] + node[1];
+                if (x > -1 && x < grid.length && y > -1 && y < grid[0].length) {
+                    if (costs[x][y] > newCost) {
+                        costs[x][y] = newCost;
+                        pq.add(new Pair<>(new int[] {x, y}, newCost));
+                    }
+                }
+            }
+        }
+        return costs[grid.length - 1][grid[0].length - 1];
+    }
+}

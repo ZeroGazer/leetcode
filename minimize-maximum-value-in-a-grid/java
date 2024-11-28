@@ -1,0 +1,24 @@
+class Solution {
+    public int[][] minScore(int[][] grid) {
+        int[] row = new int[grid.length], col = new int[grid[0].length];
+        Arrays.fill(row, 1);
+        Arrays.fill(col, 1);
+        int[][] nums = new int[grid.length * grid[0].length][3];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                nums[i * grid[0].length + j][0] = grid[i][j];
+                nums[i * grid[0].length + j][1] = i;
+                nums[i * grid[0].length + j][2] = j;
+            }
+        }
+        Arrays.sort(nums, Comparator.comparingInt(x -> x[0]));
+        for (int[] num : nums) {
+            int x = num[1], y = num[2];
+            int rank = Math.max(row[x], col[y]);
+            grid[x][y] = rank;
+            row[x] = rank + 1;
+            col[y] = rank + 1;
+        }
+        return grid;
+    }
+}

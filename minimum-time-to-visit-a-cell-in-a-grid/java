@@ -1,0 +1,31 @@
+class Solution {
+
+    private final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public int minimumTime(int[][] grid) {
+        if (grid[0][1] > 1 && grid[1][0] > 1) {
+            return -1;
+        }
+        Queue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(x -> x[2]));
+        queue.add(new int[] {0, 0, 0});
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        while (!queue.isEmpty()) {
+            int[] curr = queue.poll();
+            int x = curr[0], y = curr[1], t = curr[2];
+            if (x == grid.length - 1 && y == grid[0].length - 1) {
+                return t;
+            }
+            if (visited[x][y]) {
+                continue;
+            }
+            visited[x][y] = true;
+            for (int[] direction : DIRECTIONS) {
+                int p = curr[0] + direction[0], q = curr[1] + direction[1];
+                if (p > -1 && p < grid.length && q > -1 && q < grid[0].length) {
+                    queue.add(new int[] {p, q, Math.max(t + 1, grid[p][q] + ((grid[p][q] - t) % 2 == 1 ? 0 : 1))});
+                }
+            }
+        }
+        return -1;
+    }
+}

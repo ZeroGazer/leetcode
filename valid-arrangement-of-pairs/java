@@ -1,0 +1,36 @@
+class Solution {
+    public int[][] validArrangement(int[][] pairs) {
+        Map<Integer, Queue<Integer>> edges = new HashMap<>();
+        Map<Integer, Integer> inDegree = new HashMap<>(), outDegree = new HashMap<>();
+        for (int[] pair : pairs) {
+            edges.computeIfAbsent(pair[0], k -> new LinkedList<>()).add(pair[1]);
+            outDegree.put(pair[0], outDegree.getOrDefault(pair[0], 0) + 1);
+            inDegree.put(pair[1], inDegree.getOrDefault(pair[1], 0) + 1);
+        }
+
+        int startNode = pairs[0][0];
+        for (int node : outDegree.keySet()) {
+            if (outDegree.get(node) == inDegree.getOrDefault(node, 0) + 1) {
+                startNode = node;
+                break;
+            }
+        }
+
+        List<Integer> results = new ArrayList<>();
+        dfs(startNode, edges, results);
+        Collections.reverse(results);
+        int[][] pairedResults = new int[results.size() - 1][2];
+        for (int i = 1; i < results.size(); i++) {
+            pairedResults[i - 1] = new int[] {results.get(i - 1), results.get(i)};
+        }
+        return pairedResults;
+    }
+
+    private void dfs(int node, Map<Integer, Queue<Integer>> edges, List<Integer> results) {
+        Queue<Integer> neighbors = edges.getOrDefault(node, new LinkedList<>());
+        while (!neighbors.isEmpty()) {
+            dfs(neighbors.poll(), edges, results);
+        }
+        results.add(node);
+    }
+}

@@ -1,18 +1,13 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-
 class Solution {
     public boolean checkIfExist(int[] arr) {
-        Map<Integer, List<Integer>> s = new HashMap<>();
-        for (int i = 0; i < arr.length; i++) {
-            if (s.containsKey(arr[i])) {
-                s.get(arr[i]).add(i);
-            } else {
-                s.put(arr[i], new ArrayList<Integer>(i));
+        Set<Integer> s1 = new HashSet<>(), s2 = new HashSet<>();
+        for (int n : arr) {
+            if (s1.contains(n * 2) || s2.contains(n)) {
+                return true;
             }
+            s1.add(n);
+            s2.add(n * 2);
         }
-        return s.keySet().stream().filter(v -> s.containsKey(v * 2)).anyMatch(k -> k != 0 || s.get(k).size() > 0);
+        return false;
     }
 }

@@ -1,0 +1,25 @@
+class Solution {
+    public int maxTwoEvents(int[][] events) {
+        List<int[]> e = new ArrayList<>();
+        for (int[] event : events) {
+            e.add(new int[] {event[0], 1, event[2]});
+            e.add(new int[] {event[1] + 1, 0, event[2]});
+        }
+        Collections.sort(e, (a, b) -> {
+            if (a[0] == b[0]) {
+                return Integer.compare(a[1], b[1]);
+            } else {
+                return Integer.compare(a[0], b[0]);
+            }
+        });
+        int max = 0, maxFirst = 0;
+        for (int[] event : e) {
+            if (event[1] == 0) {
+                maxFirst = Math.max(maxFirst, event[2]);
+            } else {
+                max = Math.max(max, maxFirst + event[2]);
+            }
+        }
+        return max;
+    }
+}

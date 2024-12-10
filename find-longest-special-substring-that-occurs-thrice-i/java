@@ -1,0 +1,20 @@
+class Solution {
+    public int maximumLength(String s) {
+        Map<Pair<Character, Integer>, Integer> freqs = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            int length = 0;
+            for (int j = i; j < s.length() && s.charAt(i) == s.charAt(j); j++) {
+                Pair<Character, Integer> pair = new Pair<>(s.charAt(i), ++length);
+                freqs.put(pair, freqs.getOrDefault(pair, 0) + 1);
+            }
+        }
+        
+        int max = 0;
+        for (Map.Entry<Pair<Character, Integer>, Integer> e : freqs.entrySet()) {
+            if (e.getValue() >= 3) {
+                max = Math.max(max, e.getKey().getValue());
+            }
+        }
+        return max == 0 ? -1 : max;
+    }
+}

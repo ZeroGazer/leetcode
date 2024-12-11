@@ -1,0 +1,15 @@
+class Solution {
+    public int maximumBeauty(int[] nums, int k) {
+        Arrays.sort(nums);
+        int max = 0;
+        int i = 0;
+        for (int j = 0; j < nums.length; j++) {
+            if (nums[j] - nums[i] <= k * 2) {
+                max = Math.max(max, j - i + 1);
+            } else {
+                i++;
+            }
+        }
+        return max;
+    }
+}

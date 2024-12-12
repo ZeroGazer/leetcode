@@ -1,0 +1,22 @@
+class Solution {
+    public int maxLength(int[] ribbons, int k) {
+        int left = 0, right = Arrays.stream(ribbons).max().getAsInt();
+        while (left < right) {
+            int middle = (left + right + 1) / 2;
+            if (validate(ribbons, k, middle)) {
+                left = middle;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return left;
+    }
+
+    private boolean validate(int[] ribbons, int k, int max) {
+        int count = 0;
+        for (int ribbon : ribbons) {
+            count += ribbon / max;
+        }
+        return count >= k;
+    }
+}

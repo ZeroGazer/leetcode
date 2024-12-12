@@ -1,0 +1,10 @@
+class Solution {
+    public long pickGifts(int[] gifts, int k) {
+        Queue<Long> queue = new PriorityQueue<>(Comparator.reverseOrder());
+        Arrays.stream(gifts).mapToLong(x -> x).forEach(queue::add);
+        while (k-- > 0) {
+            queue.offer((long) Math.sqrt(queue.poll()));
+        }
+        return queue.stream().mapToLong(x -> x).sum();
+    }
+}

@@ -1,0 +1,28 @@
+import java.math.BigDecimal;
+import java.math.MathContext;
+
+class Solution {
+    public double maxAverageRatio(int[][] classes, int extraStudents) {
+        Queue<double[]> queue = new PriorityQueue<>((a, b) -> Double.compare(b[2], a[2]));
+        for (int[] c : classes) {
+            queue.add(new double[] {c[0], c[1], getChangeInAssign(c[0], c[1])});
+        }
+        while (extraStudents-- > 0) {
+            double[] curr = queue.poll();
+            curr[0]++;
+            curr[1]++;
+            curr[2] = getChangeInAssign(curr[0], curr[1]);
+            queue.add(curr);
+        }
+        double sum = 0;
+        while (!queue.isEmpty()) {
+            double[] curr = queue.poll();
+            sum += curr[0] / curr[1];
+        }
+        return sum / classes.length;
+    }
+
+    private double getChangeInAssign(double pass, double total) {
+        return (pass + 1) / (total + 1) - pass / total;
+    }
+}

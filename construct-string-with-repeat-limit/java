@@ -1,0 +1,29 @@
+class Solution {
+    public String repeatLimitedString(String s, int repeatLimit) {
+        TreeMap<Character, Integer> freqs = new TreeMap<>();
+        for (char c : s.toCharArray()) {
+            freqs.put(c, freqs.getOrDefault(c, 0) + 1);
+        }
+        int limit = 0;
+        StringBuilder sb = new StringBuilder();
+        while (!freqs.isEmpty()) {
+            char c = freqs.lastKey();
+            if (limit < repeatLimit) {
+                limit++;
+            } else {
+                if (freqs.lowerKey(c) == null) {
+                    break;
+                }
+                c = freqs.lowerKey(c);
+                limit = 0;
+            }
+            sb.append(c);
+            freqs.put(c, freqs.get(c) - 1);
+            if (freqs.get(c) == 0) {
+                freqs.remove(c);
+                limit = 0;
+            }
+        }
+        return sb.toString();
+    }
+}

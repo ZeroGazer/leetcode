@@ -1,0 +1,31 @@
+class Solution {
+    public int[] maximumLengthOfRanges(int[] nums) {
+        int[] results = new int[nums.length];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < nums.length; i++) {
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i]) {
+                stack.pop();
+            }
+            if (stack.isEmpty()) {
+                results[i] = -1;
+            } else {
+                results[i] = stack.peek();
+            }
+            System.out.println(results[i]);
+            stack.push(i);
+        }
+        stack.clear();
+        for (int i = nums.length - 1; i > -1; i--) {
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i]) {
+                stack.pop();
+            }
+            if (stack.isEmpty()) {
+                results[i] = nums.length - results[i] - 1;
+            } else {
+                results[i] = stack.peek() - results[i] - 1;
+            }
+            stack.push(i);
+        }
+        return results;
+    }
+}

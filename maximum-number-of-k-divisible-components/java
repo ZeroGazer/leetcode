@@ -1,0 +1,31 @@
+class Solution {
+    private int count = 0;
+
+    public int maxKDivisibleComponents(int n, int[][] edges, int[] values, int k) {
+        Map<Integer, List<Integer>> adjacenciesMap = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adjacenciesMap.put(i, new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            adjacenciesMap.get(edge[0]).add(edge[1]);
+            adjacenciesMap.get(edge[1]).add(edge[0]);
+        }
+        dfs(adjacenciesMap, values, k, 0, -1);
+        return count;
+    }
+
+    private int dfs(Map<Integer, List<Integer>> adjacenciesMap, int[] values, int k, int node, int parent) {
+        int sum = 0;
+        for (int leaf : adjacenciesMap.get(node)) {
+            if (leaf == parent) {
+                continue;
+            }
+            sum = (sum + dfs(adjacenciesMap, values, k, leaf, node)) % k;
+        }
+        sum = (sum + values[node]) % k;
+        if (sum == 0) {
+            count++;
+        }
+        return sum;
+    }
+}

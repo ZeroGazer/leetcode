@@ -1,0 +1,42 @@
+class Solution {
+    public int minimumDiameterAfterMerge(int[][] edges1, int[][] edges2) {
+        int diameter1 = getDiameterh(edges1), diameter2 = getDiameterh(edges2);
+        return Math.max(Math.max(diameter1, diameter2), Math.ceilDiv(diameter1, 2) + Math.ceilDiv(diameter2, 2) + 1);
+    }
+
+    private int getDiameterh(int[][] edges) {
+        Map<Integer, Set<Integer>> adjacenciesMap = new HashMap<>();
+        for (int i = 0; i <= edges.length; i++) {
+            adjacenciesMap.put(i, new HashSet<>());
+        }
+        for (int[] edge : edges) {
+            adjacenciesMap.get(edge[0]).add(edge[1]);
+            adjacenciesMap.get(edge[1]).add(edge[0]);
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for (Map.Entry<Integer, Set<Integer>> e : adjacenciesMap.entrySet()) {
+            if (e.getValue().size() == 1) {
+                queue.add(e.getKey());
+            }
+        }
+        int length = 0;
+        while (adjacenciesMap.size() > 2) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int node = queue.poll();
+                for (int neighbour : adjacenciesMap.get(node)) {
+                    adjacenciesMap.get(neighbour).remove(node);
+                    if (adjacenciesMap.get(neighbour).size() == 1) {
+                        queue.add(neighbour);
+                    }
+                }
+                adjacenciesMap.remove(node);
+            }
+            length++;
+        }
+        if (adjacenciesMap.size() == 2) {
+            return length * 2 + 1;
+        }
+        return length * 2;
+    }
+}

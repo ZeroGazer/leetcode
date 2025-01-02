@@ -1,0 +1,21 @@
+class Solution {
+    private final Set<Character> vowels = Set.of('a', 'e', 'i', 'o', 'u');
+
+    public int[] vowelStrings(String[] words, int[][] queries) {
+        int[] prefixSum = new int[words.length + 1];
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            if (vowels.contains(word.charAt(0)) && vowels.contains(word.charAt(word.length() - 1))) {
+                prefixSum[i + 1] = prefixSum[i] + 1;
+            } else {
+                prefixSum[i + 1] = prefixSum[i];
+            }
+        }
+        int[] results = new int[queries.length];
+        for (int i = 0; i < queries.length; i++) {
+            int[] query = queries[i];
+            results[i] = prefixSum[query[1] + 1] - prefixSum[query[0]];
+        }
+        return results;
+    }
+}

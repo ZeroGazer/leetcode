@@ -1,0 +1,21 @@
+class Solution {
+    public int minimumLength(String s) {
+        int[] freqs = new int[26];
+        for (char c : s.toCharArray()) {
+            freqs[c - 'a']++;
+        }
+        int length = 0;
+        for (int freq : freqs) {
+            if (freq > 2) {
+                if (freq % 2 == 1) {
+                    length++;
+                } else {
+                    length += 2;
+                }
+            } else {
+                length += freq;
+            }
+        }
+        return length;
+    }
+}

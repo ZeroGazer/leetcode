@@ -1,0 +1,15 @@
+class Solution {
+    public long gridGame(int[][] grid) {
+        long row1Sum = 0, row2Sum = 0;
+        for (int num : grid[0]) {
+            row1Sum += num;
+        }
+        long points = Long.MAX_VALUE;
+        for (int down = 0; down < grid[0].length; down++) {
+            row1Sum -= grid[0][down];
+            points = Math.min(points, Math.max(row1Sum, row2Sum));
+            row2Sum += grid[1][down];
+        }
+        return points;
+    }
+}

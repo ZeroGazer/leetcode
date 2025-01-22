@@ -1,0 +1,41 @@
+class Solution {
+    private final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public long sumRemoteness(int[][] grid) {
+        int n = grid.length;
+        long cellSum = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] > 0) {
+                    cellSum += grid[i][j];
+                }
+            }
+        }
+        long sum = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] > 0) {
+                    long value = grid[i][j];
+                    grid[i][j] = 0;
+                    long[] shared = new long[2];
+                    dfs(grid, i, j, n, value, shared);
+                    sum += (cellSum - shared[0]) * shared[1];
+                }
+            }
+        }
+        return sum;
+    }
+
+    private void dfs(int[][] grid, int i, int j, int n, long value, long[] shared) {
+        shared[0] += value;
+        shared[1]++;
+        for (int[] direction : DIRECTIONS) {
+            int x = i + direction[0], y = j + direction[1];
+            if (x > -1 && x < n && y > -1 && y < n && grid[x][y] > 0) {
+                long nextValue = grid[x][y];
+                grid[x][y] = 0;
+                dfs(grid, x, y, n, nextValue, shared);
+            }
+        }
+    }
+}

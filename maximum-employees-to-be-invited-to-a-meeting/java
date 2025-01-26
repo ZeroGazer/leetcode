@@ -1,0 +1,42 @@
+class Solution {
+    public int maximumInvitations(int[] favorite) {
+        int n = favorite.length;
+        int[] indegree = new int[n];
+        for (int f : favorite) {
+            indegree[f]++;
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < indegree.length; i++) {
+            if (indegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+        int[] lengths = new int[n];
+        Arrays.fill(lengths, 1);
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            lengths[favorite[node]] = Math.max(lengths[favorite[node]], lengths[node] + 1);
+            if (--indegree[favorite[node]] == 0) {
+                queue.add(favorite[node]);
+            }
+        }
+        int cycle = 0, cycle2 = 0;
+        for (int i = 0; i < indegree.length; i++) {
+            if (indegree[i] == 0) {
+                continue;
+            }
+            int currCycle = 0, currPerson = i;
+            while (indegree[currPerson] != 0) {
+                currCycle++;
+                indegree[currPerson] = 0;
+                currPerson = favorite[currPerson];
+            }
+            if (currCycle == 2) {
+                cycle2 += lengths[i] + lengths[favorite[i]];
+            } else {
+                cycle = Math.max(cycle, currCycle);
+            }
+        }
+        return Math.max(cycle, cycle2);
+    }
+}

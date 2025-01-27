@@ -1,0 +1,38 @@
+class Solution {
+    public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
+        List<Integer>[] adjacencLists = new List[numCourses];
+        int[] indegree = new int[numCourses];
+        for (int i = 0; i < adjacencLists.length; i++) {
+            adjacencLists[i] = new ArrayList<>();
+        }
+        for (int[] prerequisite : prerequisites) {
+            adjacencLists[prerequisite[0]].add(prerequisite[1]);
+            indegree[prerequisite[1]]++;
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        Set<Integer>[] prereq = new Set[numCourses];
+        for (int i = 0; i < prereq.length; i++) {
+            prereq[i] = new HashSet<>();
+        }
+        while (!queue.isEmpty()) {
+            int curr = queue.poll();
+            for (int next : adjacencLists[curr]) {
+                prereq[next].add(curr);
+                prereq[next].addAll(prereq[curr]);
+                if (--indegree[next] == 0) {
+                    queue.add(next);
+                }
+            }
+        }
+        List<Boolean> result = new ArrayList<>();
+        for (int[] query : queries) {
+            result.add(prereq[query[1]].contains(query[0]));
+        }
+        return result;
+    }
+}

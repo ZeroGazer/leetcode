@@ -1,0 +1,23 @@
+class Solution {
+    public int[] queryResults(int limit, int[][] queries) {
+        Map<Integer, Integer> balls = new HashMap<>(), freqs = new HashMap<>();
+        int[] result = new int[queries.length];
+        int count = 0;
+        for (int i = 0; i < queries.length; i++) {
+            int[] query = queries[i];
+            if (balls.containsKey(query[0])) {
+                freqs.put(balls.get(query[0]), freqs.get(balls.get(query[0])) - 1);
+                if (freqs.get(balls.get(query[0])) == 0) {
+                    count--;
+                }
+            }
+            balls.put(query[0], query[1]);
+            freqs.put(query[1], freqs.getOrDefault(query[1], 0) + 1);
+            if (freqs.get(query[1]) == 1) {
+                count++;
+            }
+            result[i] = count;
+        }
+        return result;
+    }
+}

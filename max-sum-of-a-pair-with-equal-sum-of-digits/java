@@ -1,0 +1,17 @@
+class Solution {
+    public int maximumSum(int[] nums) {
+        int[] arr = new int[82];
+        int max = -1;
+        for (int num : nums) {
+            int sum = 0;
+            for (int n = num; n > 0; n /= 10) {
+                sum += n % 10;
+            }
+            if (arr[sum] > 0) {
+                max = Math.max(max, arr[sum] + num);
+            }
+            arr[sum] = Math.max(arr[sum], num);
+        }
+        return max;
+    }
+}

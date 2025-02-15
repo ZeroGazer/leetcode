@@ -1,0 +1,24 @@
+class Solution {
+    public int punishmentNumber(int n) {
+        int num = 0;
+        for (int i = 1; i <= n; i++) {
+            int square = i * i;
+            if (canPartition(i, square)) {
+                num += square;
+            }
+        }
+        return num;
+    }
+
+    private boolean canPartition(int i, int square) {
+        if (i < 0 || square < i) {
+            return false;
+        }
+        if (i == square) {
+            return true;
+        }
+        return canPartition(i - (square % 10), square / 10) ||
+            canPartition(i - (square % 100), square / 100) ||
+            canPartition(i - (square % 1000), square / 1000);
+    }
+}

@@ -1,0 +1,42 @@
+class MRUQueue {
+
+    private ListNode head = new ListNode(0);
+    private ListNode tail;
+
+    public MRUQueue(int n) {
+        ListNode curr = head;
+        for (int i = 1; i <= n; i++) {
+            curr.next = new ListNode(i);
+            curr = curr.next;
+        }
+        tail = curr;
+    }
+    
+    public int fetch(int k) {
+        ListNode curr = head;
+        for (int i = 1; i < k; i++) {
+            curr = curr.next;
+        }
+        tail.next = curr.next;
+        tail = tail.next;
+        curr.next = tail.next;
+        tail.next = null;
+        return tail.val;
+    }
+}
+
+class ListNode {
+
+    int val;
+    ListNode next;
+
+    public ListNode(int val) {
+        this.val = val;
+    }
+}
+
+/**
+ * Your MRUQueue object will be instantiated and called as such:
+ * MRUQueue obj = new MRUQueue(n);
+ * int param_1 = obj.fetch(k);
+ */

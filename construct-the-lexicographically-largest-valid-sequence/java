@@ -1,0 +1,42 @@
+
+
+import static java.lang.System.in;
+
+class Solution {
+    public int[] constructDistancedSequence(int n) {
+        boolean[] visited = new boolean[n + 1];
+        int[] results = new int[n * 2 - 1];
+        backtracking(visited, results, 0);
+        return results;
+    }
+
+    private boolean backtracking(boolean[] visited, int[] results, int index) {
+        if (index == results.length) {
+            return true;
+        }
+        if (results[index] > 0) {
+            return backtracking(visited, results, index + 1);
+        }
+        for (int i = visited.length - 1; i > 0; i--) {
+            if (visited[i]) {
+                continue;
+            }
+            results[index] = i;
+            visited[i] = true;
+            if (i == 1) {
+                if (backtracking(visited, results, index + 1)) {
+                    return true;
+                }
+            } else if (index + i < results.length && results[index + i] == 0) {
+                results[index + i] = i;
+                if (backtracking(visited, results, index + 1)) {
+                    return true;
+                }
+                results[index + i] = 0;
+            }
+            results[index] = 0;
+            visited[i] = false;
+        }
+        return false;
+    }
+}

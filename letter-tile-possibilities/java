@@ -1,0 +1,23 @@
+class Solution {
+    private int count = 0;
+
+    public int numTilePossibilities(String tiles) {
+        int[] freqs = new int[26];
+        for (char c : tiles.toCharArray()) {
+            freqs[c - 'A']++;
+        }
+        dfs(freqs);
+        return count;
+    }
+
+    private void dfs(int[] freqs) {
+        for (int i = 0; i < freqs.length; i++) {
+            if (freqs[i] > 0) {
+                count++;
+                freqs[i]--;
+                dfs(freqs);
+                freqs[i]++;
+            }
+        }
+    }
+}

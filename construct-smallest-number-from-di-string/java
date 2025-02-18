@@ -1,0 +1,34 @@
+class Solution {
+    public String smallestNumber(String pattern) {
+        int n = pattern.length();
+        int[] result = new int[n + 1];
+        Stack<Integer> stack = new Stack<>();
+        int num = 1;
+        for (int i = 0; i < n; i++) {
+            if (pattern.charAt(i) == 'I') {
+                result[i] = num++;
+                while (!stack.isEmpty()) {
+                    result[stack.pop()] = num++;
+                }
+            } else {
+                stack.add(i);
+            }
+        }
+        if (pattern.charAt(n - 1) == 'I') {
+            while (!stack.isEmpty()) {
+                result[stack.pop()] = num++;
+            }
+            result[n] = num;
+        } else {
+            result[n] = num++;
+            while (!stack.isEmpty()) {
+                result[stack.pop()] = num++;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i : result) {
+            sb.append(i);
+        }
+        return sb.toString();
+    }
+}

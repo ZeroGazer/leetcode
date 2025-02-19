@@ -1,0 +1,21 @@
+class Solution {
+    private char[][] ch = {{'b', 'c'}, {'a', 'c'}, {'a', 'b'}};
+    public String getHappyString(int n, int k) {
+        int combination = 3 * (1 << (n - 1));
+        if (combination < k) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        char c = (char) ('a' + (k - 1) / (combination / 3));
+        combination /= 3;
+        k %= combination;
+        sb.append(c);
+        for (int i = 1; i < n; i++) {
+            c = ch[c - 'a'][((Math.floorDiv(k - 1, combination / 2)) + 2) % 2];
+            combination /= 2;
+            k %= combination;
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+}

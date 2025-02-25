@@ -1,0 +1,18 @@
+class Solution {
+    private final int MOD = ((int) 1e9) + 7;
+
+    public int numOfSubarrays(int[] arr) {
+        int count = 0, sum = 0, odd = 0, even = 1;
+        for (int i : arr) {
+            sum += i;
+            if ((sum & 1) == 0) {
+                count = (count + odd) % MOD;
+                even++;
+            } else {
+                count = (count + even) % MOD;
+                odd++;
+            }
+        }
+        return count;
+    }
+}

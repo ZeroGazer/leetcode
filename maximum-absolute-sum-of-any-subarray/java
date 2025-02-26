@@ -1,0 +1,15 @@
+class Solution {
+    public int maxAbsoluteSum(int[] nums) {
+        int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE, sum = 0;
+        for (int num : nums) {
+            sum = Math.max(sum + num, num);
+            max = Math.max(max, sum);
+        }
+        sum = 0;
+        for (int num : nums) {
+            sum = Math.min(sum + num, num);
+            min = Math.min(min, sum);
+        }
+        return Math.max(max, Math.abs(min));
+    }
+}

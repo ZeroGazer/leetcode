@@ -1,0 +1,10 @@
+class Solution {
+    public int sumOfMultiples(int n) {
+        int d3 = n / 3, d5 = n / 5, d7 = n / 7, d15 = n / 15, d21 = n / 21, d35 = n / 35, d105 = n / 105;
+        return sumPartial(3, d3) + sumPartial(5, d5) + sumPartial(7, d7) - sumPartial(15, d15) - sumPartial(21, d21) - sumPartial(35, d35) + sumPartial(105, d105);
+    }
+
+    private int sumPartial(int i, int d) {
+        return (1 + d) * d / 2 * i;
+    }
+}

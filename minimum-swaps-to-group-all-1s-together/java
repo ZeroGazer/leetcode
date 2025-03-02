@@ -1,0 +1,21 @@
+class Solution {
+    public int minSwaps(int[] data) {
+        int total1 = 0;
+        for (int num : data) {
+            if (num == 1) {
+                total1++;
+            }
+        }
+        int min = Integer.MAX_VALUE, count1 = 0;
+        for (int i = 0; i < data.length; i++) {
+            if (i >= total1 && data[i - total1] == 1) {
+                count1--;
+            }
+            if (data[i] == 1) {
+                count1++;
+            }
+            min = Math.min(min, total1 - count1);
+        }
+        return min;
+    }
+}

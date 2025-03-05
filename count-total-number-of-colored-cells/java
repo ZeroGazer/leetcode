@@ -1,0 +1,6 @@
+class Solution {
+    public long coloredCells(int n) {
+        long term = n;
+        return 2 * term * term - 2 * term + 1;
+    }
+}

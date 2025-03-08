@@ -1,0 +1,29 @@
+class Solution {
+    public int numKLenSubstrNoRepeats(String s, int k) {
+        if (k > 26) {
+            return 0;
+        }
+        int[] freqs = new int[26];
+        int unique = 0, count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int freq = ++freqs[s.charAt(i) - 'a'];
+            if (freq == 1) {
+                unique++;
+            } else if (freq == 2) {
+                unique--;
+            }
+            if (i + 1 >= k) {
+                if (unique == k) {
+                    count++;
+                }
+                freq = --freqs[s.charAt(i + 1 - k) - 'a'];
+                if (freq == 1) {
+                    unique++;
+                } else if (freq == 0) {
+                    unique--;
+                }
+            }
+        }
+        return count;
+    }
+}

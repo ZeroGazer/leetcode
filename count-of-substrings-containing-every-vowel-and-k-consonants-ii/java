@@ -1,0 +1,40 @@
+class Solution {
+    public long countOfSubstrings(String word, int k) {
+        return countAtLeast(word, k) - countAtLeast(word, k + 1);
+    }
+
+    private long countAtLeast(String word, int k) {
+        Map<Character, Integer> freqs = new HashMap<>();
+        freqs.put('a', 0);
+        freqs.put('e', 0);
+        freqs.put('i', 0);
+        freqs.put('o', 0);
+        freqs.put('u', 0);
+        int consonants = 0, unique = 0;
+        long count = 0;
+        for (int left = 0, right = 0; right < word.length(); right++) {
+            char c = word.charAt(right);
+            if (freqs.containsKey(c)) {
+                if (freqs.get(c) == 0) {
+                    unique++;
+                }
+                freqs.put(c, freqs.get(c) + 1);
+            } else {
+                consonants++;
+            }
+            while (consonants >= k && unique == 5) {
+                count += word.length() - right;
+                c = word.charAt(left++);
+                if (freqs.containsKey(c)) {
+                    if (freqs.get(c) == 1) {
+                        unique--;
+                    }
+                    freqs.put(c, freqs.get(c) - 1);
+                } else {
+                    consonants--;
+                }
+            }
+        }
+        return count;
+    }
+}

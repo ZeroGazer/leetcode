@@ -1,0 +1,20 @@
+class Solution {
+    public int numberOfSubstrings(String s) {
+        int n = s.length(), unique = 0, count = 0;
+        int[] freqs = new int[3];
+        for (int left = 0, right = 0; right < n; right++) {
+            char c = s.charAt(right);
+            if (freqs[c - 'a']++ == 0) {
+                unique++;
+            }
+            while (unique == 3) {
+                count += n - right;
+                c = s.charAt(left++);
+                if (--freqs[c - 'a'] == 0) {
+                    unique--;
+                }
+            }
+        }
+        return count;
+    }
+}

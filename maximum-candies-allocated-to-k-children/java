@@ -1,0 +1,24 @@
+class Solution {
+    public int maximumCandies(int[] candies, long k) {
+        int left = 0, right = Arrays.stream(candies).max().getAsInt();
+        while (left < right) {
+            int middle = right - (right - left) / 2;
+            if (canAllocate(candies, middle, k)) {
+                left = middle;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return right;
+    }
+
+    private boolean canAllocate(int[] candies, int size, long k) {
+        for (int candy : candies) {
+            k -= candy / size;
+            if (k <= 0) {
+                return true;
+            }
+        }
+        return false;
+    } 
+}

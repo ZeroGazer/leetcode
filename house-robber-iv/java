@@ -1,0 +1,21 @@
+class Solution {
+    public int minCapability(int[] nums, int k) {
+        int left = 1, right = Arrays.stream(nums).max().getAsInt();
+        while (left < right) {
+            int middle = left + (right - left) / 2;
+            int stealCount = 0;
+            for (int i = 0; i < nums.length; i++) {
+                if (nums[i] <= middle) {
+                    stealCount++;
+                    i++;
+                }
+            }
+            if (stealCount >= k) {
+                right = middle;
+            } else {
+                left = middle + 1;
+            }
+        }
+        return left;
+    }
+}

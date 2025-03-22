@@ -1,0 +1,40 @@
+class Solution {
+    public int countCompleteComponents(int n, int[][] edges) {
+        Map<Integer, List<Integer>> adjacency = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adjacency.put(i, new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            adjacency.get(edge[0]).add(edge[1]);
+            adjacency.get(edge[1]).add(edge[0]);
+        }
+        boolean[] visited = new boolean[n];
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                Set<Integer> nodes = new HashSet<>();
+                nodes.add(i);
+                dfs(adjacency, i, nodes, visited);
+                int edgesCount = 0;
+                for (int node : nodes) {
+                    edgesCount += adjacency.get(node).size();
+                }
+                if (edgesCount == nodes.size() * (nodes.size() - 1)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private void dfs(Map<Integer, List<Integer>> adjacency, int node, Set<Integer> nodes, boolean[] visited) {
+        for (int next : adjacency.get(node)) {
+            if (!visited[next]) {
+                visited[next] = true;
+                nodes.add(next);
+                dfs(adjacency, next, nodes, visited);
+            }
+        }
+    }
+}

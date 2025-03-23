@@ -1,0 +1,40 @@
+class Solution {
+    private final int MOD = (int) 1e9 + 7;
+
+    public int countPaths(int n, int[][] roads) {
+        Map<Integer, List<int[]>> adjacency = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adjacency.put(i, new ArrayList<>());            
+        }
+        for (int[] road : roads) {
+            adjacency.get(road[0]).add(new int[] {road[1], road[2]});
+            adjacency.get(road[1]).add(new int[] {road[0], road[2]});
+        }
+        long[] cost = new long[n];
+        Arrays.fill(cost, Long.MAX_VALUE);
+        cost[0] = 0;
+        int[] count = new int[n];
+        count[0] = 1;
+        Queue<long[]> pq = new PriorityQueue<>(Comparator.comparingLong(x -> x[1]));
+        pq.add(new long[] {0, 0});
+        while (!pq.isEmpty()) {
+            long[] curr = pq.poll();
+            int node = (int) curr[0];
+            long time = curr[1];
+            if (time > cost[node]) {
+                continue;
+            }
+            for (int[] neighbour : adjacency.get(node)) {
+                int neighbourNode = neighbour[0], neighbourTime = neighbour[1];
+                if (time + neighbourTime < cost[neighbourNode]) {
+                    cost[neighbourNode] = time + neighbourTime;
+                    count[neighbourNode] = count[node];
+                    pq.add(new long[] {neighbourNode, cost[neighbourNode]});
+                } else if (time + neighbourTime == cost[neighbourNode]) {
+                    count[neighbourNode] = (count[neighbourNode] + count[node]) % MOD;
+                }
+            }
+        }
+        return count[n - 1];
+    }
+}

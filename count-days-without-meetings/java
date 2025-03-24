@@ -1,0 +1,20 @@
+class Solution {
+    public int countDays(int days, int[][] meetings) {
+        Arrays.sort(meetings, (a, b) -> {
+            if (Integer.compare(a[0], b[0]) == 0) {
+                return Integer.compare(a[1], b[1]);
+            }
+            return Integer.compare(a[0], b[0]);
+        });
+        int count = 0, curr = 1;
+        for (int[] meeting : meetings) {
+            count += Math.max(0, meeting[0] - curr);
+            if (meeting[1] >= curr) {
+                curr = meeting[1] + 1;
+            }
+        }
+        System.out.println(count);
+        count += Math.max(0, days - curr + 1);
+        return count;
+    }
+}

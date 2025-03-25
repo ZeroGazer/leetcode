@@ -1,0 +1,18 @@
+class Solution {
+    public boolean checkValidCuts(int n, int[][] rectangles) {
+        return check(rectangles, 0) || check(rectangles, 1);
+    }
+
+    private boolean check(int[][] rectangles, int index) {
+        Arrays.sort(rectangles, (a, b) -> Integer.compare(a[index], b[index]));
+        int count = 0, currEnd = rectangles[0][index + 2];
+        for (int i = 1; i < rectangles.length; i++) {
+            int[] next = rectangles[i];
+            if (currEnd <= next[index]) {
+                count++;
+            }
+            currEnd = Math.max(currEnd, next[index + 2]);
+        }
+        return count >= 2;
+    }
+}

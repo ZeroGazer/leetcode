@@ -1,0 +1,38 @@
+class Solution {
+    public int minimumDistance(int n, List<List<Integer>> edges, int s, int[] marked) {
+        Map<Integer, List<int[]>> adjacency = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adjacency.put(i, new ArrayList<>());
+        }
+        for (List<Integer> edge : edges) {
+            adjacency.get(edge.get(0)).add(new int[] {edge.get(1), edge.get(2)});
+        }
+        int[] costs = new int[n];
+        Arrays.fill(costs, Integer.MAX_VALUE);
+        costs[s] = 0;
+        Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(x -> x[1]));
+        pq.add(new int[] {s, 0});
+        Set<Integer> dest = new HashSet<>();
+        for (int d : marked) {
+            dest.add(d);
+        }
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int node = curr[0], cost = curr[1];
+            if (dest.contains(node)) {
+                return cost;
+            }
+            if (cost > costs[node]) {
+                continue;
+            }
+            for (int[] neighbour : adjacency.get(node)) {
+                int neighbourNode = neighbour[0], neighbourCost = neighbour[1];
+                if (costs[neighbourNode] > cost + neighbourCost) {
+                    costs[neighbourNode] = cost + neighbourCost;
+                    pq.add(new int[] {neighbourNode, costs[neighbourNode]});
+                }
+            }
+        }
+        return -1;
+    }
+}

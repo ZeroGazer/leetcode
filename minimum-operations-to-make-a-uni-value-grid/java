@@ -1,0 +1,19 @@
+class Solution {
+    public int minOperations(int[][] grid, int x) {
+        int[] nums = new int[grid.length * grid[0].length];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                nums[i * grid[i].length + j] = grid[i][j];
+            }
+        }
+        Arrays.sort(nums);
+        int median = nums[nums.length / 2], count = 0;
+        for (int num : nums) {
+            if (Math.abs(median - num) % x != 0) {
+                return -1;
+            }
+            count += Math.abs(median - num) / x;
+        }
+        return count;
+    }
+}

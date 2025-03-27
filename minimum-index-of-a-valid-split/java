@@ -1,0 +1,31 @@
+class Solution {
+    public int minimumIndex(List<Integer> nums) {
+        int count = 0, dominant = 0;
+        for (int num : nums) {
+            if (count == 0) {
+                dominant = num;
+            }
+            if (dominant == num) {
+                count++;
+            } else {
+                count--;
+            }
+        }
+        count = 0;
+        for (int num : nums) {
+            if (dominant == num) {
+                count++;
+            }
+        }
+        int n = nums.size(), currCount = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums.get(i) == dominant) {
+                currCount++;
+            }
+            if (currCount * 2 > i + 1 && (count - currCount) * 2 > n - (i + 1)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}

@@ -1,0 +1,37 @@
+class Solution {
+    private int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public int[] maxPoints(int[][] grid, int[] queries) {
+
+        int n = grid.length, m = grid[0].length, k = queries.length;
+        int[][] sortedQueries = new int[k][2];
+        for (int i = 0; i < k; i++) {
+            sortedQueries[i][0] = queries[i];
+            sortedQueries[i][1] = i;
+        }
+        Arrays.sort(sortedQueries, Comparator.comparingInt(x -> x[0]));
+        
+        boolean[][] visited = new boolean[n][m];
+        visited[0][0] = true;
+        Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(x -> x[2]));
+        pq.add(new int[] {0, 0, grid[0][0]});
+        int points = 0;
+        int[] result = new int[k];
+        for (int i = 0; i < k; i++) {
+            while (!pq.isEmpty() && pq.peek()[2] < sortedQueries[i][0]) {
+                points++;
+                int[] curr = pq.poll();
+                int x = curr[0], y = curr[1];
+                for (int[] direction : DIRECTIONS) {
+                    int p = x + direction[0], q = y + direction[1];
+                    if (p > -1 && p < n && q > -1 && q < m && !visited[p][q]) {
+                        visited[p][q] = true;
+                        pq.add(new int[] {p, q, grid[p][q]});
+                    }
+                }
+            }
+            result[sortedQueries[i][1]] = points;
+        }
+        return result;
+    }
+}

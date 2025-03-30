@@ -10,18 +10,14 @@ class Solution {
         }
 
         List<int[]> ranges = new ArrayList<>(map.values());
-        Collections.sort(ranges, (int[] o1, int[] o2) -> o1[0] - o2[0]);
+        Collections.sort(ranges, (a, b) -> Integer.compare(a[0], b[0]));
 
         List<Integer> result = new ArrayList<>();
-        int i = 0;
-        while (i < ranges.size()) {
-            int[] next = ranges.get(i);
-            int start = next[0];
-            int end = next[1];
-            i++;
+        for (int i = 0; i < ranges.size();) {
+            int[] next = ranges.get(i++);
+            int start = next[0], end = next[1];
             while (i < ranges.size() && ranges.get(i)[0] < end) {
-                end = Math.max(end, ranges.get(i)[1]);
-                i++;
+                end = Math.max(end, ranges.get(i++)[1]);
             }
             result.add(end - start + 1);
         }

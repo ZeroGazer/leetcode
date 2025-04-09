@@ -1,0 +1,19 @@
+class Solution {
+    public int minOperations(int[] nums, int k) {
+        int min = Arrays.stream(nums).min().getAsInt();
+        if (min < k) {
+            return -1;
+        }
+        int[] freqs = new int[101];
+        for (int num : nums) {
+            freqs[num]++;
+        }
+        int operation = 0;
+        for (int i = 100; i > k; i--) {
+            if (freqs[i] > 0) {
+                operation++;
+            }
+        }
+        return operation;
+    }
+}

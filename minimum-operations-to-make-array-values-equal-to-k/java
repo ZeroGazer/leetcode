@@ -1,19 +1,13 @@
 class Solution {
     public int minOperations(int[] nums, int k) {
-        int min = Arrays.stream(nums).min().getAsInt();
-        if (min < k) {
-            return -1;
-        }
-        int[] freqs = new int[101];
+        Set<Integer> set = new HashSet<>();
         for (int num : nums) {
-            freqs[num]++;
-        }
-        int operation = 0;
-        for (int i = 100; i > k; i--) {
-            if (freqs[i] > 0) {
-                operation++;
+            if (num > k) {
+                set.add(num);
+            } else if (num < k) {
+                return -1;
             }
         }
-        return operation;
+        return set.size();
     }
 }

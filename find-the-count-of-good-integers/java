@@ -1,0 +1,37 @@
+class Solution {
+    public long countGoodIntegers(int n, int k) {
+        int start = (int) Math.pow(10, (n - 1) / 2);
+        int end = start * 10;
+        Set<String> candidates = new HashSet<>();
+        for (int i = start; i < end; i++) {
+            String candidate = Integer.toString(i);
+            candidate += new StringBuilder(candidate).reverse().substring(n & 1);
+            if (Long.parseLong(candidate) % k == 0) {
+                char[] digits = candidate.toCharArray();
+                Arrays.sort(digits);
+                candidates.add(new String(digits));
+            }
+        }
+
+        long[] factorial = new long[n + 1];
+        factorial[0] = 1;
+        for (int i = 1; i < factorial.length; i++) {
+            factorial[i] = factorial[i - 1] * i;
+        }
+
+        long count = 0;
+        for (String candidate : candidates) {
+            int[] freqs = new int[10];
+            for (char c : candidate.toCharArray()) {
+                freqs[c - '0']++;
+            }
+            long currCount = (n - freqs[0]) * factorial[n - 1];
+            for (int freq : freqs) {
+                currCount /= factorial[freq];
+            }
+            count += currCount;
+        }
+
+        return count;
+    }
+}

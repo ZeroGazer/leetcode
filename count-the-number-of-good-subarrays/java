@@ -1,0 +1,21 @@
+class Solution {
+    public long countGood(int[] nums, int k) {
+        int n = nums.length;
+        Map<Integer, Integer> freqs = new HashMap<>();
+        long count = 0, same = 0;
+        for (int left = 0, right = 0; left < n; left++) {
+            while (k > same && right  < n) {
+                int rightFreq = freqs.getOrDefault(nums[right], 0);
+                same += rightFreq;
+                freqs.put(nums[right++], rightFreq + 1);
+            }
+            if (same >= k) {
+                count += n - right + 1;
+            }
+            int leftFreq = freqs.get(nums[left]) - 1;
+            freqs.put(nums[left], leftFreq);
+            same -= leftFreq;
+        }
+        return count;
+    }
+}

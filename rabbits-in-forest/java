@@ -1,0 +1,15 @@
+class Solution {
+    public int numRabbits(int[] answers) {
+        int[] freqs = new int[1000];
+        for (int answer : answers) {
+            freqs[answer]++;
+        }
+        int count = freqs[0];
+        for (int i = 1; i < freqs.length; i++) {
+            if (freqs[i] > 0) {
+                count += Math.ceilDiv(freqs[i], i + 1) * (i + 1);
+            }
+        }
+        return count;
+    }
+}

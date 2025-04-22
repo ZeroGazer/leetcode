@@ -1,0 +1,30 @@
+class Solution {
+    private final int MOD = (int) 1e9 + 7;
+
+    public int idealArrays(int n, int maxValue) {
+        int[][] combinations = new int[n][16];
+        for (int i = 0; i < combinations.length; i++) {
+            for (int j = 0; j <= i && j < combinations[i].length; j++) {
+                combinations[i][j] = j == 0 ? 1 : (combinations[i - 1][j] + combinations[i - 1][j - 1]) % MOD;
+            }
+        }
+        long[][] sequences = new long[maxValue + 1][16];
+        for (int i = 1; i < sequences.length; i++) {
+            sequences[i][1] = 1;
+        }
+        for (int j = 1; j < sequences[0].length - 1; j++) {
+            for (int i = 1; i < sequences.length; i++) {
+                for (int k = 2; k * i < sequences.length; k++) {
+                    sequences[k * i][j + 1] = (sequences[k * i][j + 1] + sequences[i][j]) % MOD;
+                }
+            }
+        }
+        long count = 0;
+        for (int i = 1; i < sequences.length; i++) {
+            for (int j = 1; j < sequences[i].length; j++) {
+                count = (count + sequences[i][j] * combinations[n - 1][j - 1]) % MOD;
+            }
+        }
+        return (int) count;
+    }
+}

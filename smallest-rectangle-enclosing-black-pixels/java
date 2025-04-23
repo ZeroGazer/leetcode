@@ -1,0 +1,32 @@
+class Solution {
+    private int minX;
+    private int maxX;
+    private int minY;
+    private int maxY;
+
+    private final int[][] DIRECTIONS = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
+
+    public int minArea(char[][] image, int x, int y) {
+        minX = x;
+        maxX = x;
+        minY = y;
+        maxY = y;
+        image[x][y] = '2';
+        dfs(image, x, y);
+        return (maxX - minX + 1) * (maxY - minY + 1);        
+    }
+
+    private void dfs(char[][] image, int x, int y) {
+        for (int[] direction : DIRECTIONS) {
+            int p = x + direction[0], q = y + direction[1];
+            if (p > -1 && p < image.length && q > -1 && q < image[0].length && image[p][q] == '1') {
+                minX = Math.min(minX, p);
+                maxX = Math.max(maxX, p);
+                minY = Math.min(minY, q);
+                maxY = Math.max(maxY, q);
+                image[p][q] = '2';
+                dfs(image, p, q);
+            }
+        }
+    }
+}

@@ -1,18 +1,17 @@
 class Solution {
     public long countSubarrays(int[] nums, int k) {
         int max = Arrays.stream(nums).max().getAsInt();
-        long count = 0, size = 0;
-
-        for (int i = 0, j = 0; j < nums.length; j++) {
-            if (nums[j] == max) {
-                size++;
+        long count = 0, freq = 0;
+        for (int left = 0, right = 0; right < nums.length; right++) {
+            if (nums[right] == max) {
+                freq++;
             }
-            while (size == k) {
-                if (nums[i++] == max) {
-                    size--;
+            while (freq == k) {
+                if (nums[left++] == max) {
+                    freq--;
                 }
             }
-            count += i;
+            count += left;
         }
         return count;
     }

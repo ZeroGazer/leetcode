@@ -1,0 +1,40 @@
+class Solution {
+    public int maxTaskAssign(int[] tasks, int[] workers, int pills, int strength) {
+        int n = tasks.length, m = workers.length;
+        Arrays.sort(tasks);
+        Arrays.sort(workers);
+        int left = 0, right = Math.min(n, m);
+        while (left < right) {
+            int middle = left + Math.ceilDiv(right - left, 2);
+            if (canAssign(tasks, workers, pills, strength, middle)) {
+                left = middle;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return left;
+    }
+
+    private boolean canAssign(int[] tasks, int[] workers, int pills, int strength, int completed) {
+        int m = workers.length;
+        Deque<Integer> workerQueue = new ArrayDeque<>();
+        for (int i = completed - 1, w = m - 1; i > -1; i--) {
+            int task = tasks[i];
+            while (w >= m - completed && workers[w] + strength >= task) {
+                workerQueue.addFirst(workers[w--]);
+            }
+            if (workerQueue.isEmpty()) {
+                return false;
+            } else if (workerQueue.getLast() >= task) {
+                workerQueue.pollLast();
+            } else {
+                if (pills == 0) {
+                    return false;
+                }
+                pills--;
+                workerQueue.pollFirst();
+            }
+        }
+        return true;
+    }
+}

@@ -1,0 +1,40 @@
+class Solution {
+    public String pushDominoes(String dominoes) {
+        int n = dominoes.length();
+        char[] d = dominoes.toCharArray();
+        int[] counts = new int[n];
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (d[i] == 'R') {
+                count = n;
+            } else if (d[i] == 'L') {
+                count = 0;
+            } else {
+                count = Math.max(count - 1, 0);
+            }
+            counts[i] += count;
+        }
+        count = 0;
+        for (int i = n - 1; i > -1; i--) {
+            if (d[i] == 'L') {
+                count = n;
+            } else if (d[i] == 'R') {
+                count = 0;
+            } else {
+                count = Math.max(count - 1, 0);
+            }
+            counts[i] -= count;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int c : counts) {
+            if (c > 0) {
+                sb.append('R');
+            } else if (c < 0) {
+                sb.append('L');
+            } else {
+                sb.append('.');
+            }
+        }
+        return sb.toString();
+    }
+}

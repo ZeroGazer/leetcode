@@ -1,0 +1,25 @@
+class Solution {
+    public int minDominoRotations(int[] tops, int[] bottoms) {
+        int n = tops.length;
+        int topCount = count(tops, bottoms, tops[0], n);
+        if (topCount != -1 || tops[0] == bottoms[0]) {
+            return topCount;
+        }
+        return count(tops, bottoms, bottoms[0], n);
+    }
+
+    private int count(int[] tops, int[] bottoms, int candidate, int n) {
+        int rotateTop = 0, rotateBottom = 0;
+        for (int i = 0; i < n; i++) {
+            if (tops[i] != candidate && bottoms[i] != candidate) {
+                return -1;
+            }
+            if (tops[i] != candidate) {
+                rotateTop++;
+            } else if (bottoms[i] != candidate) {
+                rotateBottom++;
+            }
+        }
+        return Math.min(rotateTop, rotateBottom);
+    }
+}

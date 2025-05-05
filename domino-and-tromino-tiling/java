@@ -1,0 +1,37 @@
+class Solution {
+
+    private final int MOD = (int) 1e9 + 7;
+
+    private Map<Integer, Long> type1 = new HashMap<>();
+    private Map<Integer, Long> type2 = new HashMap<>();
+    
+    public int numTilings(int n) {
+        return (int) countType1(n);
+    }
+
+    private long countType1(int n) {
+        if (type1.containsKey(n)) {
+            return type1.get(n);
+        }
+        long count = 1;
+        if (n == 2) {
+            count = 2;
+        } else if (n > 2) {
+            count = (countType1(n - 1) + countType1(n - 2) + 2 * countType2(n - 1)) % MOD;
+        }
+        type1.put(n, count);
+        return count;
+    }
+
+    private long countType2(int n) {
+        if (type2.containsKey(n)) {
+            return type2.get(n);
+        }
+        long count = 1;
+        if (n > 2) {
+            count = (countType1(n - 2) + countType2(n - 1)) % MOD;
+        }
+        type2.put(n, count);
+        return count;
+    }
+}

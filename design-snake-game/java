@@ -1,0 +1,59 @@
+class SnakeGame {
+
+    private Set<List<Integer>> snakeSet = new HashSet<>();
+    private Deque<List<Integer>> snake = new ArrayDeque<>();
+    private int width;
+    private int height;
+    private Queue<List<Integer>> food = new LinkedList<>();
+
+    public SnakeGame(int width, int height, int[][] food) {
+        this.width = width;
+        this.height = height;
+        for (int[] f : food) {
+            this.food.offer(List.of(f[0], f[1]));
+        }
+        this.snake.offerLast(List.of(0, 0));
+        this.snakeSet.add(List.of(0, 0));
+    }
+    
+    public int move(String direction) {
+        List<Integer> snakeHead = this.snake.peekFirst();
+        int row = snakeHead.get(0), col = snakeHead.get(1);
+        switch (direction) {
+            case "U":
+                row--;
+                break;
+            case "D":
+                row++;
+                break;
+            case "L":
+                col--;
+                break;
+            case "R":
+                col++;
+                break;
+        }
+        List<Integer> newSnakeHead = List.of(row, col);
+        if (row < 0 || row >= this.height || col < 0 || col >= this.width || (snakeSet.contains(newSnakeHead) && !newSnakeHead.equals(snake.peekLast()))) {
+            return -1;
+        }
+
+        if (!this.food.isEmpty() && newSnakeHead.equals(this.food.peek())) {
+            this.food.poll();
+        } else {
+            this.snakeSet.remove(this.snake.pollLast());
+        }
+
+        this.snake.offerFirst(newSnakeHead);
+        this.snakeSet.add(newSnakeHead);
+        return this.snake.size() - 1;
+    }
+
+
+}
+
+/**
+ * Your SnakeGame object will be instantiated and called as such:
+ * SnakeGame obj = new SnakeGame(width, height, food);
+ * int param_1 = obj.move(direction);
+ */

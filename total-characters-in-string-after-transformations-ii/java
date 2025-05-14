@@ -1,0 +1,51 @@
+class Solution {
+    private final int MOD = (int) 1e9 + 7;
+
+    public int lengthAfterTransformations(String s, int t, List<Integer> nums) {
+        long[][] matrix = new long[26][26];
+        for (int i = 0; i < 26; i++) {
+            for (int j = 1; j <= nums.get(i); j++) {
+                matrix[(i + j) % 26][i] = 1;
+            }
+        }
+        matrix = pow(matrix, t);
+        long[] freqs = new long[26];
+        for (char c : s.toCharArray()) {
+            freqs[c - 'a']++;
+        }
+        long result = 0;
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < 26; j++) {
+                result = (result + matrix[i][j] * freqs[j]) % MOD;        
+            }
+        }
+        return (int) result;
+    }
+
+    private long[][] pow(long[][] matrix, int power) {
+        long[][] result = new long[26][26];
+        for (int i = 0; i < 26; i++) {
+            result[i][i] = 1;
+        }
+        while (power > 0) {
+            if ((power & 1) == 1) {
+                result = multiply(result, matrix);
+            }
+            matrix = multiply(matrix, matrix);
+            power >>= 1;
+        }
+        return result;
+    }
+
+    private long[][] multiply(long[][] matrix1, long[][] matrix2) {
+        long[][] result = new long[26][26];
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < 26; j++) {
+                for (int k = 0; k < 26; k++) {
+                    result[i][j] = (result[i][j] + matrix1[i][k] * matrix2[k][j]) % MOD;
+                }
+            }
+        }
+        return result;
+    }
+}

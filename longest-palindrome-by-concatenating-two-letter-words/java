@@ -1,0 +1,31 @@
+class Solution {
+    public int longestPalindrome(String[] words) {
+        Map<String, Integer> freqs = new HashMap<>();
+        for (String word : words) {
+            freqs.put(word, freqs.getOrDefault(word, 0) + 1);
+        }
+        int count = 0;
+        boolean hasMiddle = false;
+        for (Map.Entry<String, Integer> e : freqs.entrySet()) {
+            String word = e.getKey();
+            int freq = e.getValue();
+            if (word.charAt(0) == word.charAt(1)) {
+                if ((freq & 1) == 0) {
+                    count += freq;
+                } else {
+                    count += freq - 1;
+                    hasMiddle = true;
+                }
+            } else if (word.charAt(0) < word.charAt(1)) {
+                String reversed = "" + word.charAt(1) + word.charAt(0);
+                if (freqs.containsKey(reversed)) {
+                    count += Math.min(freqs.get(word), freqs.get(reversed)) * 2;
+                }
+            }
+        }
+        if (hasMiddle) {
+            count++;
+        }
+        return count * 2;
+    }
+}

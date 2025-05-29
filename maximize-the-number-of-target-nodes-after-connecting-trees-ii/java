@@ -1,0 +1,49 @@
+class Solution {
+    public int[] maxTargetNodes(int[][] edges1, int[][] edges2) {
+        int n = edges1.length + 1, m = edges2.length + 1;
+        int[] bits1 = new int[n], bits2 = new int[m];
+        int[] count1 = countNodes(edges1, n, bits1), count2 = countNodes(edges2, m, bits2);
+        int[] result = new int[n];
+        for (int i = 0; i < n; i++) {
+            result[i] = count1[bits1[i]] + Math.max(count2[0], count2[1]);
+        }
+        return result;
+    }
+
+    private int[] countNodes(int[][] edges, int n, int[] bits) {
+        Map<Integer, List<Integer>> adjacency = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adjacency.put(i, new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            adjacency.get(edge[0]).add(edge[1]);
+            adjacency.get(edge[1]).add(edge[0]);
+        }
+        int count0 = bfs(adjacency, n, bits);
+        return new int[] {count0, n - count0};
+    }
+
+    private int bfs(Map<Integer, List<Integer>> adjacency, int n, int[] bits) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[] {0, -1});
+        int level = 0, count0 = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int[] curr = queue.poll();
+                bits[curr[0]] = level & 1;
+                if ((level & 1) == 0) {
+                    count0++;
+                }
+                for (int next : adjacency.get(curr[0])) {
+                    if (next == curr[1]) {
+                        continue;
+                    }
+                    queue.add(new int[] {next, curr[0]});
+                }
+            }
+            level++;
+        }
+        return count0;
+    }
+}

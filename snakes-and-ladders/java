@@ -1,0 +1,29 @@
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        int n = board.length;
+        int[] cost = new int[n * n + 1];
+        Arrays.fill(cost, -1);
+        cost[1] = 0;
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(1);
+        while (!queue.isEmpty()) {
+            int curr = queue.poll();
+            for (int i = curr + 1; i <= Math.min(curr + 6, n * n); i++) {
+                int next = i;
+                int nextRow = n - 1 - (i - 1) / n;
+                int nextCol = (i - 1) % n;
+                if (n % 2 == 0 && nextRow % 2 == 0 || n % 2 == 1 && nextRow % 2 == 1) {
+                    nextCol = n - 1 - nextCol;
+                }
+                if (board[nextRow][nextCol] != -1) {
+                    next = board[nextRow][nextCol];
+                }
+                if (cost[next] == -1) {
+                    cost[next] = cost[curr] + 1;
+                    queue.add(next);
+                }
+            }
+        }
+        return cost[n * n];
+    }
+}

@@ -1,0 +1,40 @@
+class Solution {
+    public int maxCandies(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes) {
+        int n = status.length, count = 0;
+        Set<Integer> boxes = new HashSet<>(), availableKeys = new HashSet<>(), usedKeys = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            if (status[i] == 1) {          
+                availableKeys.add(i);
+            }
+        }
+        for (int box : initialBoxes) {
+            boxes.add(box);
+            if (availableKeys.contains(box)) {
+                usedKeys.add(box);
+                count += candies[box];
+                queue.add(box);
+            }
+        }
+        while (!queue.isEmpty()) {
+            int bigBox = queue.poll();
+            for (int key : keys[bigBox]) {
+                availableKeys.add(key);
+                if (boxes.contains(key) && !usedKeys.contains(key)) {
+                    usedKeys.add(key);
+                    count += candies[key];
+                    queue.add(key);
+                }
+            }
+            for (int box : containedBoxes[bigBox]) {
+                boxes.add(box);
+                if (availableKeys.contains(box) && !usedKeys.contains(box)) {
+                    usedKeys.add(box);
+                    count += candies[box];
+                    queue.add(box);
+                }
+            }
+        }
+        return count;
+    }
+}

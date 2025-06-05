@@ -1,0 +1,47 @@
+class Solution {
+    public String smallestEquivalentString(String s1, String s2, String baseStr) {
+        UnionFind uf = new UnionFind();
+        for (int i = 0; i < s1.length(); i++) {
+            int a = s1.charAt(i) - 'a', b = s2.charAt(i) - 'a';
+            uf.union(a, b);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < baseStr.length(); i++) {
+            int c = baseStr.charAt(i) - 'a';
+            sb.append((char) (uf.find(c) + 'a'));
+        }
+        return sb.toString();
+    }
+}
+
+class UnionFind {
+    private int[] root = new int[26];
+
+    public UnionFind() {
+        for (int i = 0; i < 26; i++) {
+            root[i] = i;
+        }
+    }
+
+    public int find(int a) {
+        if (root[a] != a) {
+            root[a] = find(root[a]);
+        }
+        return root[a];
+    }
+
+    public void union(int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
+        if (rootA == rootB) {
+            return;
+        }
+
+        if (rootA < rootB) {
+            root[rootB] = rootA;
+        } else {
+            root[rootA] = rootB;
+        }
+    }
+}

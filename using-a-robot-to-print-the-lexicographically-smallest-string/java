@@ -1,0 +1,23 @@
+class Solution {
+    public String robotWithString(String s) {
+        int n = s.length();
+        int[] freqs = new int[26];
+        for (char c : s.toCharArray()) {
+            freqs[c - 'a']++;
+        }
+        Stack<Character> stack = new Stack<>();
+        StringBuilder sb = new StringBuilder();
+        char min = 'a';
+        for (char c : s.toCharArray()) {
+            stack.push(c);
+            freqs[c - 'a']--;
+            while (min != 'z' && freqs[min - 'a'] == 0) {
+                min++;
+            }
+            while (!stack.isEmpty() && stack.peek() <= min) {
+                sb.append(stack.pop());
+            }
+        }
+        return sb.toString();
+    }
+}

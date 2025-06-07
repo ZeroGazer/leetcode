@@ -1,0 +1,30 @@
+class Solution {
+    public String clearStars(String s) {
+        int n = s.length();
+        List<Stack<Integer>> stacks = new ArrayList<>();
+        for (int i = 0; i < 26; i++) {
+            stacks.add(new Stack<>());
+        }
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < n; i++) {
+            char c = chars[i];
+            if (c != '*') {
+                stacks.get(c - 'a').push(i);
+            } else {
+                for (int j = 0; j < 26; j++) {
+                    if (!stacks.get(j).isEmpty()) {
+                        chars[stacks.get(j).pop()] = '*';
+                        break;
+                    }
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            if (chars[i] != '*') {
+                sb.append(chars[i]);
+            }
+        }
+        return sb.toString();
+    }
+}

@@ -1,0 +1,27 @@
+class Solution {
+    public int minimizeMax(int[] nums, int p) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        int left = 0, right = nums[n - 1] - nums[0];
+        while (left < right) {
+            int middle = left + (right - left) / 2;
+            if (search(nums, middle, n) >= p) {
+                right = middle;
+            } else {
+                left = middle + 1;
+            }
+        }
+        return left;
+    }
+
+    private int search(int[] nums, int max, int n) {
+        int count = 0;
+        for (int i = 1; i < n; i++) {
+            if (nums[i] - nums[i - 1] <= max) {
+                count++;
+                i++;
+            }
+        }
+        return count;
+    }
+}

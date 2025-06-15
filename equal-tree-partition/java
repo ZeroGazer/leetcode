@@ -1,0 +1,42 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    private List<Integer> list = new ArrayList<>();
+
+    public boolean checkEqualTree(TreeNode root) {
+        partition(root);
+        int total = list.removeLast();
+        if ((total & 1) == 1) {
+            return false;
+        }
+        int half = total / 2;
+        for (int partialSum : list) {
+            if (partialSum == half) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int partition(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        list.add(partition(root.left) + partition(root.right) + root.val);
+        return list.getLast();
+    }
+}

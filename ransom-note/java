@@ -1,38 +1,17 @@
-import java.util.Map;
-import java.util.HashMap;
-
 class Solution {
     public boolean canConstruct(String ransomNote, String magazine) {
-        Map<Character, Integer> r = new HashMap<>();
-        Map<Character, Integer> m = new HashMap<>();
-        
-        for (int i = 0; i < ransomNote.length(); i++) {
-            char c = ransomNote.charAt(i);
-            if (r.containsKey(c)) {
-                r.put(c, r.get(c) + 1);
-            } else {
-                r.put(c, 1);
-            }
+        int[] freqs1 = new int[26], freqs2 = new int[26];
+        for (char c : ransomNote.toCharArray()) {
+            freqs1[c - 'a']++;
         }
-        
-        for (int i = 0; i < magazine.length(); i++) {
-            char c = magazine.charAt(i);
-            if (m.containsKey(c)) {
-                m.put(c, m.get(c) + 1);
-            } else {
-                m.put(c, 1);
-            }
+        for (char c : magazine.toCharArray()) {
+            freqs2[c - 'a']++;
         }
-        
-        for (Map.Entry<Character, Integer> e: r.entrySet()) {
-            char key = e.getKey();
-            if (!m.containsKey(key)) {
-                return false;
-            } else if (e.getValue() > m.get(key)) {
+        for (int i = 0; i < 26; i++) {
+            if (freqs1[i] > freqs2[i]) {
                 return false;
             }
         }
-        
         return true;
     }
 }

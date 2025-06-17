@@ -1,19 +1,15 @@
 class Solution {
     public boolean isIsomorphic(String s, String t) {
-        int[] as = new int[256];
-        int[] at = new int[256];
-        Arrays.fill(as, -1);
-        Arrays.fill(at, -1);
+        int[] arrs = new int[256], arrt = new int[256];
+        Arrays.fill(arrs, -1);
+        Arrays.fill(arrt, -1);
         for (int i = 0; i < s.length(); i++) {
-            char cs = s.charAt(i);
-            char ct = t.charAt(i);
-            if (as[cs] != -1 || at[ct] != -1) {
-                if (as[cs] != ct || at[ct] != cs) {
-                    return false;
-                }
-            } else {
-                as[cs] = ct;
-                at[ct] = cs;
+            char sc = s.charAt(i), tc = t.charAt(i);
+            if (arrs[sc] == -1 && arrt[tc] == -1) {
+                arrs[sc] = tc;
+                arrt[tc] = sc;
+            } else if (arrs[sc] != tc || arrt[tc] != sc) {
+                return false;
             }
         }
         return true;

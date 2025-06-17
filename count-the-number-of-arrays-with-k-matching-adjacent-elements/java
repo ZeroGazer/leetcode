@@ -1,0 +1,36 @@
+class Solution {
+    private final int MOD = (int) 1e9 + 7;
+    private final int N = (int) 1e5;
+    private final long[] factorials = new long[N], inverseFactorials = new long[N];
+
+    public Solution() {
+        factorials[0] = factorials[1] = 1;
+        for (int i = 2; i < N; i++) {
+            factorials[i] = (i * factorials[i - 1]) % MOD;
+        }
+        inverseFactorials[N - 1] = pow(factorials[N - 1], MOD - 2);
+        for (int i = N - 1; i > 0; i--) {
+            inverseFactorials[i - 1] = (inverseFactorials[i] * i) % MOD;
+        }
+    }
+
+    public int countGoodArrays(int n, int m, int k) {
+        return (int) ((((m * pow(m - 1, n - 1 - k)) % MOD) * ncr(n - 1, k)) % MOD);
+    }
+
+    private long ncr(int n, int r) {
+        return ((factorials[n] * inverseFactorials[r]) % MOD * inverseFactorials[n - r]) % MOD;
+    }
+
+    long pow(long x, int n) {
+        long res = 1;
+        while (n > 0) {
+            if ((n & 1) == 1) {
+                res = (res * x) % MOD;
+            }
+            x = (x * x) % MOD;
+            n >>= 1;
+        }
+        return res;
+    }
+}

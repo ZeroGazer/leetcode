@@ -1,0 +1,33 @@
+class ValidWordAbbr {
+    
+    private Map<String, Set<String>> dict = new HashMap<>();
+
+    public ValidWordAbbr(String[] dictionary) {
+        for (String word : dictionary) {
+            String key = getKey(word);
+            if (!dict.containsKey(key)) {
+                dict.put(key, new HashSet<>());
+            }
+            dict.get(key).add(word);
+        }
+    }
+    
+    public boolean isUnique(String word) {
+        String key = getKey(word);
+        return !dict.containsKey(key) || (dict.get(key).size() == 1 && dict.get(key).contains(word));
+    }
+    
+    private String getKey(String word) {
+        if (word.length() <= 2) {
+            return word;
+        }
+        int length = word.length();
+        return word.charAt(0) + Integer.toString(length - 2) + word.charAt(length - 1);
+    }
+}
+
+/**
+ * Your ValidWordAbbr object will be instantiated and called as such:
+ * ValidWordAbbr obj = new ValidWordAbbr(dictionary);
+ * boolean param_1 = obj.isUnique(word);
+ */

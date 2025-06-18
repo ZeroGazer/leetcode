@@ -1,20 +1,20 @@
 class TwoSum {
-
-    private Map<Integer, Integer> m = new HashMap<>();
+    
+    private Map<Integer, Integer> freqs = new HashMap<>();
 
     public TwoSum() {
         
     }
     
     public void add(int number) {
-        m.computeIfPresent(number, (k, v) -> ++v);
-        m.putIfAbsent(number, 1);
+        freqs.put(number, freqs.getOrDefault(number, 0) + 1);
     }
     
     public boolean find(int value) {
-        for (Map.Entry<Integer, Integer> e : m.entrySet()) {
-            if (m.containsKey(value - e.getKey())) {
-                if (value - e.getKey() == e.getKey()) {
+        for (Map.Entry<Integer, Integer> e : freqs.entrySet()) {
+            int pair = value - e.getKey();
+            if (freqs.containsKey(pair)) {
+                if (pair == e.getKey()) {
                     if (e.getValue() > 1) {
                         return true;
                     }

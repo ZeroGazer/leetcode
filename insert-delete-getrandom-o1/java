@@ -1,5 +1,5 @@
 class RandomizedSet {
-
+    
     private Map<Integer, Integer> map = new HashMap<>();
     private List<Integer> list = new ArrayList<>();
     private Random random = new Random();

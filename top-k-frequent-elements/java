@@ -1,28 +1,22 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
-        Map<Integer, Integer> numToFreq = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            if (numToFreq.containsKey(nums[i])) {
-                numToFreq.put(nums[i], numToFreq.get(nums[i]) + 1);
-            } else {
-                numToFreq.put(nums[i], 1);
+        Map<Integer, Integer> freqs = new HashMap<>();
+        for (int num : nums) {
+            freqs.put(num, freqs.getOrDefault(num, 0) + 1);
+        }
+        Queue<Pair<Integer, Integer>> queue = new PriorityQueue<>(k, Comparator.comparingInt(Pair::getValue));
+        for (Map.Entry<Integer, Integer> e : freqs.entrySet()) {
+            if (queue.size() < k) {
+                queue.add(new Pair<>(e.getKey(), e.getValue()));
+            } else if (queue.peek().getValue() < e.getValue()) {
+                queue.poll();
+                queue.add(new Pair<>(e.getKey(), e.getValue()));
             }
         }
-
-        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(k, (x, y) -> numToFreq.get(y) - numToFreq.get(x));
-        numToFreq.keySet().forEach(num -> priorityQueue.add(num));
-
-        List<Integer> result = new ArrayList<>();
-        for (int i = 0; i < k && !priorityQueue.isEmpty(); i++) {
-            result.add(priorityQueue.poll());
+        int[] result = new int[queue.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = queue.poll().getKey();
         }
-
-        return result.stream().mapToInt(Integer::intValue).toArray();
+        return result;
     }
 }

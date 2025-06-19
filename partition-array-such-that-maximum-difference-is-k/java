@@ -1,0 +1,13 @@
+class Solution {
+    public int partitionArray(int[] nums, int k) {
+        Arrays.sort(nums);
+        int count = 1;
+        for (int left = 0, right = 0; right < nums.length; right++) {
+            if (nums[right] - nums[left] > k) {
+                left = right;
+                count++;
+            }
+        }
+        return count;
+    }
+}

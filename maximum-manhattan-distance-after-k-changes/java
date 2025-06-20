@@ -1,0 +1,23 @@
+class Solution {
+    public int maxDistance(String s, int k) {
+        int vertical = 0, horizontal = 0, max = 0;
+        for (int i = 0; i < s.length(); i++) {
+            switch (s.charAt(i)) {
+                case 'N':
+                    vertical++;
+                    break;
+                case 'S':
+                    vertical--;
+                    break;
+                case 'E':
+                    horizontal++;
+                    break;
+                case 'W':
+                    horizontal--;
+                    break;
+            }
+            max = Math.max(max, Math.min(i + 1, Math.abs(vertical) + Math.abs(horizontal) + k * 2));
+        }
+        return max;
+    }
+}

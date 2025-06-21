@@ -1,0 +1,21 @@
+class Solution {
+    public int minimumDeletions(String word, int k) {
+        int[] freqs = new int[26];
+        for (char c : word.toCharArray()) {
+            freqs[c - 'a']++;
+        }
+        int minDelete = word.length();
+        for (int candidate : freqs) {
+            int delete = 0;
+            for (int freq : freqs) {
+                if (candidate + k < freq) {
+                    delete += freq - candidate - k;
+                } else if (candidate > freq) {
+                    delete += freq;
+                }
+            }
+            minDelete = Math.min(minDelete, delete);
+        }
+        return minDelete;
+    }
+}

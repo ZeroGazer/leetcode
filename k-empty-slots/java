@@ -1,0 +1,15 @@
+class Solution {
+    public int kEmptySlots(int[] bulbs, int k) {
+        int n = bulbs.length;
+        TreeSet<Integer> turnedOn = new TreeSet<>();
+        for (int i = 0; i < n; i++) {
+            int bulb = bulbs[i];
+            Integer prev = turnedOn.lower(bulb), next = turnedOn.higher(bulb);
+            if (prev != null && bulb - prev - 1 == k || next != null && next - bulb - 1 == k) {
+                return i + 1;
+            }
+            turnedOn.add(bulb);
+        }
+        return -1;
+    }
+}

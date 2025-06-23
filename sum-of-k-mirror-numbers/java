@@ -1,0 +1,40 @@
+class Solution {
+    public long kMirror(int k, int n) {
+        long sum = 0;
+        int count = 0, start = 1;
+        while (count < n) {
+            int end = 10 * start;
+            for (int parity = 0; parity < 2; parity++) {
+                for (int i = start; i < end && count < n; i++) {
+                    long candidate = i;
+                    int half = (parity & 1) == 1 ? i : i / 10;
+                    while (half > 0) {
+                        candidate *= 10;
+                        candidate += half % 10;
+                        half /= 10;
+                    }
+                    if (isKMirror(candidate, k)) {
+                        sum += candidate;
+                        count++;
+                    }
+                }
+            }
+            start = end;
+        }
+        return sum;
+    }
+
+    private boolean isKMirror(long candidate, int k) {
+        List<Long> digits = new ArrayList<>();
+        while (candidate > 0) {
+            digits.add(candidate % k);
+            candidate /= k;
+        }
+        for (int i = 0, j = digits.size() - 1; i < j; i++, j--) {
+            if (digits.get(i) != digits.get(j)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

@@ -1,25 +1,24 @@
 class Solution {
-
     public int smallestDistancePair(int[] nums, int k) {
+        int n = nums.length;
         Arrays.sort(nums);
-        int low = 0, high = nums[nums.length - 1] - nums[0];
-        while (low < high) {
-            int mid = low + (high - low) / 2;
-            int count = countPairs(nums, mid);
-            if (count < k) {
-                low = mid + 1;
+        int left = 0, right = nums[n - 1] - nums[0];
+        while (left < right) {
+            int middle = left + (right - left) / 2;
+            if (countPair(nums, n, middle) >= k) {
+                right = middle;
             } else {
-                high = mid;
+                left = middle + 1;
             }
         }
-        return low;
+        return left;
     }
-
-    private int countPairs(int[] nums, int max) {
+    
+    private int countPair(int[] nums, int n, int x) {
         int count = 0;
-        for (int left = 0, right = 0; right < nums.length; ++right) {
-            while (nums[right] - nums[left] > max) {
-                ++left;
+        for (int left = 0, right = 0; right < n; right++) {
+            while (nums[right] - nums[left] > x) {
+                left++;
             }
             count += right - left;
         }

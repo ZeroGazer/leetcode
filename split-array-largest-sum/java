@@ -1,0 +1,32 @@
+class Solution {
+    public int splitArray(int[] nums, int k) {
+        int max = 0, sum = 0;
+        for (int num : nums) {
+            max = Math.max(max, num);
+            sum += num;
+        }
+        int left = max, right = sum;
+        while (left < right) {
+            int middle = left + (right - left) / 2;
+            if (countSplit(nums, middle) <= k) {
+                right = middle;
+            } else {
+                left = middle + 1;
+            }
+        }
+        return left;
+    }
+
+    private int countSplit(int[] nums, int max) {
+        int split = 1, sum = 0;
+        for (int num : nums) {
+            if (sum + num > max) {
+                sum = num;
+                split++;
+            } else {
+                sum += num;
+            }
+        }
+        return split;
+    }
+}

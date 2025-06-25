@@ -1,0 +1,49 @@
+class Solution {
+    public long kthSmallestProduct(int[] nums1, int[] nums2, long k) {
+        int n1 = nums1.length, n2 = nums2.length;
+        if (n1 > n2) {
+            return kthSmallestProduct(nums2, nums1, k);
+        }
+        long left = -10000000000L, right = 10000000000L;
+        while (left < right) {
+            long middle = left + (right - left) / 2;
+            long count = 0;
+            for (int i = 0; i < n1; i++) {
+                count += countSmaller(nums1[i], nums2, n2, middle);
+            }
+            if (count < k) {
+                left = middle + 1;
+            } else {
+                right = middle;
+            }
+        }
+        return left;
+    }
+
+    private long countSmaller(long num1, int[] nums2, int n2, long x) {
+        int left = 0, right = n2 - 1;
+        if (num1 >= 0) {
+            while (left <= right) {
+                int middle = left + (right - left) / 2;
+                long product = num1 * nums2[middle];
+                if (product <= x) {
+                    left = middle + 1;
+                } else {
+                    right = middle - 1;
+                }
+            }
+            return left;
+        } else {
+            while (left <= right) {
+                int middle = left + (right - left) / 2;
+                long product = num1 * nums2[middle];
+                if (product <= x) {
+                    right = middle - 1;
+                } else {
+                    left = middle + 1;
+                }
+            }
+            return n2 - left;
+        }
+    }
+}

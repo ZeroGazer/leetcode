@@ -1,0 +1,47 @@
+class Solution {
+    public String longestSubsequenceRepeatedK(String s, int k) {
+        int[] freqs = new int[26];
+        for (char c : s.toCharArray()) {
+            freqs[c - 'a']++;
+        }
+        List<Character> characters = new ArrayList<>();
+        Queue<String> queue = new LinkedList<>();
+        for (int i = 25; i > -1; i--) {
+            char c = (char) (i + 'a');
+            if (freqs[i] >= k) {
+                characters.add(c);
+                queue.add(Character.toString(c));
+            }
+        }
+        String result = "";
+        while (!queue.isEmpty()) {
+            String curr = queue.poll();
+            if (curr.length() > result.length()) {
+                result = curr;
+            }
+            for (char c : characters) {
+                String candidate = curr + c;
+                if (isValid(candidate, s, k)) {
+                    queue.add(candidate);
+                }
+            }
+        }
+        return result;
+    }
+
+    private boolean isValid(String candidate, String s, int k) {
+        int index = 0, repeated = 0;
+        for (char c : s.toCharArray()) {
+            if (c == candidate.charAt(index)) {
+                if (++index == candidate.length()) {
+                    index = 0;
+                    if (++repeated == k) {
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        return false;
+    }
+}

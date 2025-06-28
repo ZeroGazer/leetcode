@@ -1,0 +1,17 @@
+class Solution {
+    public int[] maxSubsequence(int[] nums, int k) {
+        int n = nums.length;
+        int[][] arr = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            arr[i][0] = i;
+            arr[i][1] = nums[i];
+        }
+        Arrays.sort(arr, (x, y) -> Integer.compare(y[1], x[1]));
+        Arrays.sort(arr, 0, k, Comparator.comparingInt(x -> x[0]));
+        int[] result = new int[k];
+        for (int i = 0; i < k; i++) {
+            result[i] = arr[i][1];
+        }
+        return result;
+    }
+}

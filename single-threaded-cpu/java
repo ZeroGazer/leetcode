@@ -1,0 +1,27 @@
+class Solution {
+    public int[] getOrder(int[][] tasks) {
+        int n = tasks.length;
+        int[][] sortedTasks = new int[n][3];
+        for (int i = 0; i < n; i++) {
+            sortedTasks[i][0] = tasks[i][0];
+            sortedTasks[i][1] = tasks[i][1];
+            sortedTasks[i][2] = i;
+        }
+        Arrays.sort(sortedTasks, Comparator.comparingInt(x -> x[0]));
+        Queue<int[]> queue = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]) != 0 ? Integer.compare(a[1], b[1]) : Integer.compare(a[2], b[2]));
+        int[] result = new int[n];
+        long time = 0;
+        for (int i = 0, taskIndex = 0; taskIndex < n || !queue.isEmpty(); i++) {
+            if (queue.isEmpty() && time < sortedTasks[taskIndex][0]) {
+                time = sortedTasks[taskIndex][0];
+            }
+            while (taskIndex < n && time >= sortedTasks[taskIndex][0]) {
+                queue.add(sortedTasks[taskIndex++]);
+            }
+            int[] newTask = queue.poll();
+            result[i] = newTask[2];
+            time += newTask[1];
+        }
+        return result;
+    }
+}

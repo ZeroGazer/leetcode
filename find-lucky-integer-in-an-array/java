@@ -1,0 +1,15 @@
+class Solution {
+    private final int MAX_LENGTH = 501;
+    public int findLucky(int[] arr) {
+        int[] freqs = new int[MAX_LENGTH];
+        for (int num : arr) {
+            freqs[num]++;
+        }
+        for (int i = MAX_LENGTH - 1; i > 0; i--) {
+            if (i == freqs[i]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}

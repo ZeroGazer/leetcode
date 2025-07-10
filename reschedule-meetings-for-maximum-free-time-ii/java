@@ -1,0 +1,27 @@
+class Solution {
+    public int maxFreeTime(int eventTime, int[] startTime, int[] endTime) {
+        int n = startTime.length;
+        boolean[] canMove = new boolean[n];
+        for (int i = 0, emptyTimeLeft = 0, emptyTimeRight = 0; i < n; i++) {
+            if (endTime[i] - startTime[i] <= emptyTimeLeft) {
+                canMove[i] = true;
+            }
+            emptyTimeLeft = Math.max(emptyTimeLeft, startTime[i] - (i == 0 ? 0 : endTime[i - 1]));
+
+            if (endTime[n - 1 - i] - startTime[n - 1 - i] <= emptyTimeRight) {
+                canMove[n - 1 - i] = true;
+            }
+            emptyTimeRight = Math.max(emptyTimeRight, (i == 0 ? eventTime : startTime[n - i]) - endTime[n - 1 - i]);
+        }
+        int result = 0;
+        for (int i = 0; i < n; i++) {
+            int leftBoundary = (i == 0 ? 0 : endTime[i - 1]), rightBoundary = (i == n - 1 ? eventTime : startTime[i + 1]);
+            if (canMove[i]) {
+                result = Math.max(result, rightBoundary - leftBoundary);
+            } else {
+                result = Math.max(result, rightBoundary - leftBoundary - (endTime[i] - startTime[i]));
+            }
+        }
+        return result;
+    }
+}

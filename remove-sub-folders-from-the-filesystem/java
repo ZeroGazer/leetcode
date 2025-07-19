@@ -13,9 +13,6 @@ class Solution {
     }
 
     private void insert(Folder root, String[] segment, int index) {
-        if (index == 0) {
-            System.out.println(segment[index]);
-        }
         if (index == segment.length) {
             root.end = true;
         } else {

@@ -1,0 +1,18 @@
+class Solution {
+    public int countHillValley(int[] nums) {
+        List<Integer> list = new ArrayList<>();
+        for (int num : nums) {
+            if (list.isEmpty() || list.getLast() != num) {
+                list.add(num);
+            }
+        }
+        int count = 0;
+        for (int i = 1; i < list.size() - 1; i++) {
+            int prev = list.get(i - 1), curr = list.get(i), next = list.get(i + 1);
+            if (prev > curr && next > curr || curr > prev && curr > next) {
+                count++;
+            }
+        }
+        return count;
+    }
+}

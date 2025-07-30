@@ -7,13 +7,11 @@ class Solution {
                 streak = 0;
                 count = 0;
             }
-
             if (num == max) {
                 streak++;
             } else {
                 streak = 0;
             }
-
             count = Math.max(count, streak);
         }
         return count;

@@ -1,0 +1,30 @@
+class Solution {
+    public long minCost(int[] basket1, int[] basket2) {
+        int min = Integer.MAX_VALUE;
+        Map<Integer, Integer> freqs = new HashMap<>();
+        for (int num : basket1) {
+            min = Math.min(min, num);
+            freqs.put(num, freqs.getOrDefault(num, 0) + 1);
+        }
+        for (int num : basket2) {
+            min = Math.min(min, num);
+            freqs.put(num, freqs.getOrDefault(num, 0) - 1);
+        }
+        List<Integer> swap = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> e : freqs.entrySet()) {
+            int freq = e.getValue();
+            if ((freq & 1) == 1) {
+                return -1;
+            }
+            for (int i = 0; i < Math.abs(freq) / 2; i++) {
+                swap.add(e.getKey());
+            }
+        }
+        Collections.sort(swap);
+        long cost = 0;
+        for (int i = 0; i < swap.size() / 2; i++) {
+            cost += Math.min(min * 2, swap.get(i));
+        }
+        return cost;
+    }
+}

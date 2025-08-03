@@ -1,0 +1,14 @@
+class Solution {
+    public int maxTotalFruits(int[][] fruits, int startPos, int k) {
+        int max = 0;
+        for (int left = 0, right = 0, count = 0; right < fruits.length; right++) {
+            count += fruits[right][1];
+            while (left <= right &&
+                k < fruits[right][0] - fruits[left][0] + Math.min(Math.abs(fruits[left][0] - startPos), Math.abs(fruits[right][0] - startPos))) {
+                count -= fruits[left++][1];
+            }
+            max = Math.max(max, count);
+        }
+        return max;
+    }
+}

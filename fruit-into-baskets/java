@@ -1,0 +1,18 @@
+class Solution {
+    public int totalFruit(int[] fruits) {
+        int max = 0;
+        Map<Integer, Integer> basket = new HashMap<>();
+        for (int left = 0, right = 0; right < fruits.length; right++) {
+            int fruit = fruits[right];
+            basket.put(fruit, basket.getOrDefault(fruit, 0) + 1);
+            while (basket.size() > 2) {
+                int prevFruit = fruits[left++];
+                if (basket.put(prevFruit, basket.get(prevFruit) - 1) == 1) {
+                    basket.remove(prevFruit);
+                }
+            }
+            max = Math.max(max, right - left + 1);
+        }
+        return max;
+    }
+}

@@ -1,0 +1,38 @@
+class Solution {
+    public int maxCollectedFruits(int[][] fruits) {
+        int n = fruits.length, count = 0;
+        for (int i = 0; i < n; i++) {
+            count += fruits[i][i];
+        }
+        count += getMax(fruits, n);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                int temp = fruits[i][j];
+                fruits[i][j] = fruits[j][i];
+                fruits[j][i] = temp;
+            }
+        }
+        count += getMax(fruits, n);
+        return count;
+    }
+
+    private int getMax(int[][] fruits, int n) {
+        int[] prev = new int[n], curr = new int[n];
+        prev[n - 1] = fruits[0][n - 1];
+        for (int i = 1; i < n - 1; i++) {
+            for (int j = Math.max(i + 1, n - 1 - i); j < n; j++) {
+                curr[j] = prev[j];
+                if (j - 1 > -1) {
+                    curr[j] = Math.max(curr[j], prev[j - 1]);
+                }
+                if (j + 1 < n) {
+                    curr[j] = Math.max(curr[j], prev[j + 1]);
+                }
+                curr[j] += fruits[i][j];
+            }
+            prev = curr;
+            curr = new int[n];
+        }
+        return prev[n - 1];
+    }
+}

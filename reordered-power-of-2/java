@@ -1,0 +1,21 @@
+class Solution {
+    public boolean reorderedPowerOf2(int n) {
+        int[] freqs = countFreq(n);
+        for (int i = 0; i < 31; i++) {
+            int[] freqs2 = countFreq(1 << i);
+            if (Arrays.equals(freqs, freqs2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int[] countFreq(int n) {
+        int[] freqs = new int[10];
+        while (n > 0) {
+            freqs[n % 10]++;
+            n /= 10;
+        }
+        return freqs;
+    }
+}

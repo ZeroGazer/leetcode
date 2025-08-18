@@ -1,0 +1,49 @@
+import java.math.BigDecimal;
+import java.math.MathContext;
+
+class Solution {
+    public boolean judgePoint24(int[] cards) {
+        return backtracking(Arrays.stream(cards).mapToObj(BigDecimal::new).toList());
+    }
+
+    private boolean backtracking(List<BigDecimal> cards) {
+        if (cards.size() == 1) {
+            return cards.getFirst().subtract(new BigDecimal(24)).abs().compareTo(new BigDecimal(0.001)) < 0;
+        }
+
+        for (int i = 0; i < cards.size(); i++) {
+            for (int j = i + 1; j < cards.size(); j++) {
+                List<BigDecimal> candidates = new ArrayList<>();
+                for (int k = 0; k < cards.size(); k++) {
+                    if (k != i && k != j) {
+                        candidates.add(cards.get(k));
+                    }
+                }
+                List<BigDecimal> combinations = generateCombinations(cards.get(i), cards.get(j));
+                for (BigDecimal combination : combinations) {
+                    candidates.add(combination);
+                    if (backtracking(candidates)) {
+                        return true;
+                    }
+                    candidates.removeLast();
+                }
+            }
+        }
+        return false;
+    }
+
+    private List<BigDecimal> generateCombinations(BigDecimal a, BigDecimal b) {
+        List<BigDecimal> combinations = new ArrayList<>();
+        combinations.add(a.add(b));
+        combinations.add(a.subtract(b));
+        combinations.add(b.subtract(a));
+        combinations.add(a.multiply(b));
+        if (!a.equals(BigDecimal.ZERO)) {
+            combinations.add(b.divide(a, MathContext.DECIMAL128));
+        }
+        if (!b.equals(BigDecimal.ZERO)) {
+            combinations.add(a.divide(b, MathContext.DECIMAL128));
+        }
+        return combinations;
+    }
+}

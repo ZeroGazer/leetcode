@@ -1,0 +1,56 @@
+class FileSystem {
+
+    private File root = new File();
+
+    public FileSystem() {
+        
+    }
+    
+    public boolean createPath(String path, int value) {
+        String[] folders = path.split("/");
+        File curr = root;
+        for (int i = 1; i < folders.length - 1; i++) {
+            if (curr.folder.containsKey(folders[i])) {
+                curr = curr.folder.get(folders[i]);
+            } else {
+                return false;
+            }
+        }
+        if (curr.folder.containsKey(folders[folders.length - 1])) {
+            return false;
+        }
+        curr.folder.put(folders[folders.length - 1], new File(value));
+        return true;
+    }
+    
+    public int get(String path) {
+        String[] folders = path.split("/");
+        File curr = root;
+        for (int i = 1; i < folders.length; i++) {
+            if (curr.folder.containsKey(folders[i])) {
+                curr = curr.folder.get(folders[i]);
+            } else {
+                return -1;
+            }
+        }
+        return curr.value;
+    }
+}
+
+class File {
+    Map<String, File> folder = new HashMap<>();
+    int value = -1;
+
+    public File() {}
+
+    public File(int value) {
+        this.value = value;
+    }
+}
+
+/**
+ * Your FileSystem object will be instantiated and called as such:
+ * FileSystem obj = new FileSystem();
+ * boolean param_1 = obj.createPath(path,value);
+ * int param_2 = obj.get(path);
+ */

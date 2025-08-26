@@ -1,0 +1,15 @@
+class Solution {
+    public int areaOfMaxDiagonal(int[][] dimensions) {
+        int maxDiagonal = 0, maxArea = 0;
+        for (int[] dimension : dimensions) {
+            int diagonal = dimension[0] * dimension[0] + dimension[1] * dimension[1], area = dimension[0] * dimension[1];
+            if (diagonal > maxDiagonal) {
+                maxDiagonal = diagonal;
+                maxArea = area;
+            } else if (diagonal == maxDiagonal) {
+                maxArea = Math.max(maxArea, area);
+            }
+        }
+        return maxArea;
+    }
+}

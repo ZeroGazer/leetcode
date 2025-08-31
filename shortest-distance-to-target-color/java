@@ -1,0 +1,32 @@
+class Solution {
+    public List<Integer> shortestDistanceColor(int[] colors, int[][] queries) {
+        int n = colors.length;
+        int[][] computed = new int[n][3];
+        for (int[] is : computed) {
+            Arrays.fill(is, -1);
+        }
+        int[] prevColors = new int[3];
+        for (int i = 0; i < n; i++) {
+            int color = colors[i] - 1;
+            for (int j = prevColors[color]; j < i + 1; j++) {
+                computed[j][color] = i - j;
+            }
+            prevColors[color] = i + 1;
+        }
+        Arrays.fill(prevColors, n - 1);
+        for (int i = n - 1; i > -1; i--) {
+            int color = colors[i] - 1;
+            for (int j = prevColors[color]; j > i - 1; j--) {
+                if (computed[j][color] == -1 || computed[j][color] > j - i) {
+                    computed[j][color] = j - i;
+                }
+            }
+            prevColors[color] = i - 1;
+        }
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < queries.length; i++) {
+            result.add(computed[queries[i][0]][queries[i][1] - 1]);
+        }
+        return result;
+    }
+}

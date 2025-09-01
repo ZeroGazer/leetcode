@@ -1,6 +1,3 @@
-import java.math.BigDecimal;
-import java.math.MathContext;
-
 class Solution {
     public double maxAverageRatio(int[][] classes, int extraStudents) {
         Queue<double[]> queue = new PriorityQueue<>((a, b) -> Double.compare(b[2], a[2]));

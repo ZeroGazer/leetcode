@@ -1,0 +1,25 @@
+class Solution {
+    public int numberOfPairs(int[][] points) {
+        int n = points.length, count = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int[] pointA = points[i], pointB = points[j];
+                if (i == j || pointA[0] > pointB[0] || pointA[1] < pointB[1]) {
+                    continue;
+                }
+                count++;
+                for (int k = 0; k < n; k++) {
+                    if (i == k || j == k) {
+                        continue;
+                    }
+                    int[] candidate = points[k];
+                    if (candidate[0] >= pointA[0] && candidate[0] <= pointB[0] && candidate[1] <= pointA[1] && candidate[1] >= pointB[1]) {
+                        count--;
+                        break;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+}

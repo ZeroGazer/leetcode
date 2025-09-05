@@ -1,0 +1,12 @@
+class Solution {
+    public int makeTheIntegerZero(int num1, int num2) {
+        for (long op = 1; true; op++) {
+            long diff = num1 - num2 * op;
+            if (diff < op) {
+                return -1;
+            } else if (op >= Long.bitCount(diff)) {
+                return (int) op;
+            }
+        }
+    }
+}

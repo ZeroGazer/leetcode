@@ -1,0 +1,18 @@
+class Solution {
+    public long minOperations(int[][] queries) {
+        long op = 0;
+        for (int[] query : queries) {
+            op += Math.ceilDiv(countOp(query[1]) - countOp(query[0] - 1), 2);
+        }
+        return op;
+    }
+
+    private long countOp(int num) {
+        long count = 0;
+        for (long power = 1, start = 1; start <= num; power++, start *= 4) {
+            long end = Math.min(num, start * 4 - 1);
+            count += (end - start + 1) * power;
+        }
+        return count;
+    }
+}

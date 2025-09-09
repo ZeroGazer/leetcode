@@ -1,0 +1,23 @@
+class Solution {
+    private final int MOD = (int) 1e9 + 7;
+
+    public int peopleAwareOfSecret(int n, int delay, int forget) {
+        Queue<int[]> delayQueue = new LinkedList<>(), forgetQueue = new LinkedList<>();
+        int count = 1, share = 0;
+        delayQueue.add(new int[] {1 + delay, 1});
+        forgetQueue.add(new int[] {1 + forget, 1});
+        for (int day = 1; day <= n; day++) {
+            while (!delayQueue.isEmpty() && delayQueue.peek()[0] == day) {
+                share = (share + delayQueue.poll()[1]) % MOD;
+            }
+            while (!forgetQueue.isEmpty() && forgetQueue.peek()[0] == day) {
+                share = (share - forgetQueue.peek()[1] + MOD) % MOD;
+                count = (count - forgetQueue.poll()[1] + MOD) % MOD;
+            }
+            count = (count + share) % MOD;
+            delayQueue.add(new int[] {day + delay, share});
+            forgetQueue.add(new int[] {day + forget, share});
+        }
+        return (int) count;
+    }
+}

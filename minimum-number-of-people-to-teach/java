@@ -1,0 +1,22 @@
+class Solution {
+    public int minimumTeachings(int n, int[][] languages, int[][] friendships) {
+        Set<Integer> cannotCommunicate = new HashSet<>();
+        for (int[] friendship : friendships) {
+            Set<Integer> lang1 = new HashSet<>(Arrays.stream(languages[friendship[0] - 1]).boxed().toList());
+            Set<Integer> lang2 = new HashSet<>(Arrays.stream(languages[friendship[1] - 1]).boxed().toList());
+            lang1.retainAll(lang2);
+            if (lang1.isEmpty()) {
+                cannotCommunicate.add(friendship[0] - 1);
+                cannotCommunicate.add(friendship[1] - 1);
+            }
+        }
+        int maxCommonLang = 0;
+        int[] commonLang = new int[n];
+        for (int person : cannotCommunicate) {
+            for (int lang : languages[person]) {
+                maxCommonLang = Math.max(maxCommonLang, ++commonLang[lang - 1]);
+            }
+        }
+        return cannotCommunicate.size() - maxCommonLang;
+    }
+}

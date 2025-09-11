@@ -1,0 +1,28 @@
+class Solution {
+    private final Set<Character> VOWELS = Set.of('A', 'E', 'I', 'O', 'U', 'a', 'e', 'i', 'o', 'u');
+    private final String SORTED_VOWELS = "AEIOUaeiou";
+
+    public String sortVowels(String s) {
+        int[] freqs = new int[256];
+        for (char c : s.toCharArray()) {
+            if (VOWELS.contains(c)) {
+                freqs[c]++;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0, j = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (!VOWELS.contains(c)) {
+                sb.append(c);
+            } else {
+                c = SORTED_VOWELS.charAt(j);
+                while (freqs[c] == 0) {
+                    c = SORTED_VOWELS.charAt(++j);
+                }
+                sb.append(c);
+                freqs[c]--;
+            }
+        }
+        return sb.toString();
+    }
+}

@@ -1,0 +1,15 @@
+class Solution {
+    public boolean doesAliceWin(String s) {
+        for (char c : s.toCharArray()) {
+            switch (c) {
+                case 'a':
+                case 'e':
+                case 'i':
+                case 'o':
+                case 'u':
+                    return true;
+            }
+        }
+        return false;
+    }
+}

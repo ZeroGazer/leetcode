@@ -1,0 +1,18 @@
+class Solution {
+    private final Set<Character> VOWELS = Set.of('a', 'e', 'i', 'o', 'u');
+    public int maxFreqSum(String s) {
+        int[] freqs = new int[26];
+        for (char c : s.toCharArray()) {
+            freqs[c - 'a']++;
+        }
+        int maxVowel = 0, maxConsonant = 0;
+        for (char c = 'a'; c <= 'z'; c++) {
+            if (VOWELS.contains(c)) {
+                maxVowel = Math.max(maxVowel, freqs[c  - 'a']);
+            } else {
+                maxConsonant = Math.max(maxConsonant, freqs[c - 'a']);
+            }
+        }
+        return maxVowel + maxConsonant;
+    }
+}

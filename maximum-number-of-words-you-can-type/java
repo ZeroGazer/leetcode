@@ -1,0 +1,25 @@
+class Solution {
+    public int canBeTypedWords(String text, String brokenLetters) {
+        int n = text.length(), count = 0;
+        Set<Character> broken = new HashSet<>();
+        for (char c : brokenLetters.toCharArray()) {
+            broken.add(c);
+        }
+        boolean hasBroken = false;
+        for (int i = 0; i < n; i++) {
+            char c = text.charAt(i);
+            if (c == ' ') {
+                if (!hasBroken) {
+                    count++;
+                }
+                hasBroken = false;
+            } else if (broken.contains(c)) {
+                hasBroken = true;
+            }
+        }
+        if (!hasBroken) {
+            count++;
+        }
+        return count;
+    }
+}

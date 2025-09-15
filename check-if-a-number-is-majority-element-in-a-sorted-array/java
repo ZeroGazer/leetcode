@@ -1,0 +1,15 @@
+class Solution {
+    public boolean isMajorityElement(int[] nums, int target) {
+        int n = nums.length, minFreq = n / 2, freq = 0;
+        for (int num : nums) {
+            if (num == target) {
+                if (++freq > minFreq) {
+                    return true;
+                }
+            } else if (num > target) {
+                return false;
+            }
+        }
+        return false;
+    }
+}

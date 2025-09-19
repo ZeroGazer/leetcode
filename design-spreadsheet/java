@@ -1,0 +1,72 @@
+class Spreadsheet {
+
+    private Map<Pair<Character, Integer>, Cell> map = new HashMap<>();
+
+    public Spreadsheet(int rows) {
+        
+    }
+    
+    public void setCell(String cell, int value) {
+        Pair<Character, Integer> index = getIndex(cell);
+        Cell c = getCell(index);
+        c.cell1 = null;
+        c.cell2 = null;
+        c.value = value;
+        map.put(index, c);
+    }
+    
+    public void resetCell(String cell) {
+        map.remove(getIndex(cell));
+    }
+    
+    public int getValue(String formula) {
+        String[] cells = formula.substring(1).split("\\+");
+        return evaluate(cells[0]) + evaluate(cells[1]);
+    }
+
+    private Pair<Character, Integer> getIndex(String cell) {
+        return new Pair<>(cell.charAt(0), Integer.parseInt(cell.substring(1)));
+    }
+
+    private Cell getCell(Pair<Character, Integer> index) {
+        if (!map.containsKey(index)) {
+            Cell cell = new Cell();
+            cell.index = index;
+            return cell;
+        }
+        return map.get(index);
+    }
+
+    private int evaluate(String cell) {
+        if (cell == null) {
+            return 0;
+        }
+        if (Character.isAlphabetic(cell.charAt(0))) {
+            return evaluate(getCell(getIndex(cell)));
+        } else {
+            return Integer.parseInt(cell);
+        }
+    }
+
+    private int evaluate(Cell cell) {
+        if (cell == null) {
+            return 0;
+        }
+        return evaluate(cell.cell1) + evaluate(cell.cell2) + cell.value;
+    }
+}
+
+class Cell {
+    Pair<Character, Integer> index;
+    Cell cell1;
+    Cell cell2;
+    int value;
+}
+
+/**
+ * Your Spreadsheet object will be instantiated and called as such:
+ * Spreadsheet obj = new Spreadsheet(rows);
+ * obj.setCell(cell,value);
+ * obj.resetCell(cell);
+ * int param_3 = obj.getValue(formula);
+ */

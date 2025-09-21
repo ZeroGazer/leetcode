@@ -1,0 +1,74 @@
+class MovieRentingSystem {
+
+    private static final Comparator<List<Integer>> COMPARATOR = (a, b) ->  {
+            int compare = Integer.compare(a.get(2), b.get(2));
+            if (compare == 0) {
+                compare = Integer.compare(a.get(0), b.get(0));
+            }
+            if (compare == 0) {
+                compare = Integer.compare(a.get(1), b.get(1));
+            }
+            return compare;
+        };
+    private Map<Integer, TreeSet<List<Integer>>> unrented = new HashMap<>();
+    private TreeSet<List<Integer>> rented = new TreeSet<>(COMPARATOR);
+    private Map<List<Integer>, List<Integer>> prices = new HashMap<>();
+
+    public MovieRentingSystem(int n, int[][] entries) {
+        for (int[] e : entries) {
+            List<Integer> entry = List.of(e[0], e[1], e[2]);
+            unrented.putIfAbsent(e[1], new TreeSet<>(COMPARATOR));
+            unrented.get(e[1]).add(entry);
+            prices.put(List.of(e[0], e[1]), entry);
+        }
+    }
+    
+    public List<Integer> search(int movie) {
+        List<Integer> result = new ArrayList<>();
+        if (!unrented.containsKey(movie) || unrented.get(movie).isEmpty()) {
+            return result;
+        }
+        Iterator<List<Integer>> it = unrented.get(movie).iterator();
+        for (int i = 0; i < 5 && it.hasNext(); i++) {
+            result.add(it.next().get(0));
+        }
+        return result;
+    }
+    
+    public void rent(int shop, int movie) {
+        List<Integer> entry = prices.get(List.of(shop, movie));
+        if (entry == null || !unrented.containsKey(movie) || !unrented.get(movie).contains(entry)) {
+            return;
+        }
+        unrented.get(movie).remove(entry);
+        rented.add(entry);
+    }
+    
+    public void drop(int shop, int movie) {
+        List<Integer> entry = prices.get(List.of(shop, movie));
+        if (entry == null || !rented.contains(entry)) {
+            return;
+        }
+        rented.remove(entry);
+        unrented.get(movie).add(entry);
+    }
+    
+    public List<List<Integer>> report() {
+        List<List<Integer>> result = new ArrayList<>();
+        Iterator<List<Integer>> it = rented.iterator();
+        for (int i = 0; i < 5 && it.hasNext(); i++) {
+            List<Integer> entry = it.next();
+            result.add(List.of(entry.get(0), entry.get(1)));
+        }
+        return result;
+    }
+}
+
+/**
+ * Your MovieRentingSystem object will be instantiated and called as such:
+ * MovieRentingSystem obj = new MovieRentingSystem(n, entries);
+ * List<Integer> param_1 = obj.search(movie);
+ * obj.rent(shop,movie);
+ * obj.drop(shop,movie);
+ * List<List<Integer>> param_4 = obj.report();
+ */

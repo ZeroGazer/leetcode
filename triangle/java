@@ -1,0 +1,20 @@
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        List<Integer> prev = triangle.get(0);
+        for (int i = 1; i < triangle.size(); i++) {
+            List<Integer> curr = new ArrayList<>();
+            for (int j = 0; j <= i; j++) {
+                int minSum = Integer.MAX_VALUE;
+                if (j > 0) {
+                    minSum = prev.get(j - 1);
+                }
+                if (j < i) {
+                    minSum = Math.min(minSum, prev.get(j));
+                }
+                curr.add(minSum + triangle.get(i).get(j));
+            }
+            prev = curr;
+        }
+        return Collections.min(prev);
+    }
+}

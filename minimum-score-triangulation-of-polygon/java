@@ -1,0 +1,25 @@
+class Solution {
+    private Map<Integer, Integer> memo = new HashMap<>();
+
+    public int minScoreTriangulation(int[] values) {
+        return dp(values, 0, values.length - 1);
+    }
+
+    private int dp(int[] values, int start, int end) {
+        if (start + 2 > end) {
+            return 0;
+        }
+        if (start + 2 == end) {
+            return values[start] * values[start + 1] * values[start + 2];
+        }
+        int key = start * 50 + end;
+        if (!memo.containsKey(key)) {
+            int min = Integer.MAX_VALUE;
+            for (int i = start + 1; i < end; i++) {
+                min = Math.min(min, values[start] * values[i] * values[end] + dp(values, start, i) + dp(values, i, end));
+            }
+            memo.put(key, min);
+        }
+        return memo.get(key);
+    }
+}

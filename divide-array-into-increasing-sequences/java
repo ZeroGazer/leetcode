@@ -1,0 +1,17 @@
+class Solution {
+    public boolean canDivideIntoSubsequences(int[] nums, int k) {
+        int n = nums.length, count = 0, prev = nums[0];
+        for (int num : nums) {
+            if (prev != num) {
+                prev = num;
+                count = 1;
+            } else {
+                count++;
+            }
+            if (count * k > n) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

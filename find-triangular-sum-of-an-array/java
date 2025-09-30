@@ -1,0 +1,13 @@
+class Solution {
+    public int triangularSum(int[] nums) {
+        List<Integer> row = Arrays.stream(nums).boxed().toList();
+        while (row.size() > 1) {
+            List<Integer> newRow = new ArrayList<>();
+            for (int i = 1; i < row.size(); i++) {
+                newRow.add((row.get(i) + row.get(i - 1)) % 10);
+            }
+            row = newRow;
+        }
+        return row.getFirst();
+    }
+}

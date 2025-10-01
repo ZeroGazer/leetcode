@@ -1,0 +1,53 @@
+class Solution {
+    public int minimumCost(int n, int[][] connections) {
+        Arrays.sort(connections, Comparator.comparingInt(x -> x[2]));
+        UnionFind uf = new UnionFind(n + 1);
+        int connectedEdgesCount = 0, cost = 0;
+        for (int[] connection : connections) {
+            if (uf.union(connection[0], connection[1])) {
+                cost += connection[2];
+                connectedEdgesCount++;
+            }
+        }
+        if (connectedEdgesCount != n - 1) {
+            return -1;
+        }
+        return cost;
+    }
+}
+
+class UnionFind {
+    int[] root;
+    int[] rank;
+
+    public UnionFind(int size) {
+        root = new int[size];
+        rank = new int[size];
+        for (int i = 0; i < size; i++) {
+            root[i] = i;
+        }
+    }
+
+    public int find(int a) {
+        if (root[a] != a) {
+            root[a] = find(root[a]);
+        }
+        return root[a];
+    }
+
+    public boolean union(int a, int b) {
+        int rootA = find(a), rootB = find(b);
+        if (rootA == rootB) {
+            return false;
+        }
+        if (rank[rootA] > rank[rootB]) {
+            root[rootB] = rootA;
+        } else if (rank[rootA] < rank[rootB]) {
+            root[rootA] = rootB;
+        } else {
+            root[rootB] = rootA;
+            rank[rootA]++;
+        }
+        return true;
+    }
+}

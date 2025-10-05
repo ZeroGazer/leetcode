@@ -1,0 +1,44 @@
+class Solution {
+    private static final int[][] DIRECTIONS = new int[][] {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        int m = heights.length, n = heights[0].length;
+        Queue<int[]> pacificQueue = new LinkedList<>();
+        Queue<int[]> atlanticQueue = new LinkedList<>();
+        for (int i = 0; i < m; i++) {
+            pacificQueue.offer(new int[] {i, 0});
+            atlanticQueue.offer(new int[] {i, n - 1});
+        }
+        for (int i = 0; i < n; i++) {
+            pacificQueue.offer(new int[] {0, i});
+            atlanticQueue.offer(new int[] {m - 1, i});
+        }
+        boolean[][] pacificVisited = bfs(heights, m, n, pacificQueue), atlanticVisited = bfs(heights, m, n, atlanticQueue);
+        List<List<Integer>> result = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (pacificVisited[i][j] && atlanticVisited[i][j]) {
+                    result.add(List.of(i, j));
+                }
+            }
+        }
+        return result;
+    }
+
+    private boolean[][] bfs(int[][] heights, int m, int n, Queue<int[]> queue) {
+        boolean[][] visited = new boolean[m][n];
+        while (!queue.isEmpty()) {
+            int[] curr = queue.poll();
+            visited[curr[0]][curr[1]] = true;
+            for (int[] direction : DIRECTIONS) {
+                int x = curr[0] + direction[0], y = curr[1] + direction[1];
+                if (x > -1 && x < m && y > -1 && y < n && !visited[x][y]) {
+                    if (heights[curr[0]][curr[1]] <= heights[x][y]) {
+                        queue.offer(new int[] {x, y});
+                    }
+                }
+            }
+        }
+        return visited;
+    }
+}

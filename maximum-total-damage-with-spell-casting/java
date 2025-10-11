@@ -1,0 +1,20 @@
+class Solution {
+    public long maximumTotalDamage(int[] power) {
+        TreeMap<Integer, Long> freqs = new TreeMap<>();
+        for (int p : power) {
+            freqs.put(p, freqs.getOrDefault(p, 0L) + 1);
+        }
+        List<Pair<Integer, Long>> candidates = new ArrayList<>();
+        int i = 0;
+        long max = 0, prevMax = 0;
+        for (Map.Entry<Integer, Long> e : freqs.entrySet()) {
+            while (i < candidates.size() && candidates.get(i).getKey() < e.getKey() - 2) {
+                prevMax = Math.max(prevMax, candidates.get(i++).getValue());
+            }
+            long damage = prevMax + e.getKey() * e.getValue();
+            candidates.add(new Pair<>(e.getKey(), damage));
+            max = Math.max(max, damage);
+        }
+        return max;
+    }
+}

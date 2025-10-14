@@ -1,0 +1,15 @@
+class Solution {
+    public boolean hasIncreasingSubarrays(List<Integer> nums, int k) {
+        int prevInc = 0, currInc = 1, maxK = 0;
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums.get(i) > nums.get(i - 1)) {
+                currInc++;
+            } else {
+                prevInc = currInc;
+                currInc = 1;
+            }
+            maxK = Math.max(maxK, Math.max(currInc / 2, Math.min(prevInc, currInc)));
+        }
+        return maxK >= k;
+    }
+}

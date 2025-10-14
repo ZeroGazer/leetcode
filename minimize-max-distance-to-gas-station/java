@@ -1,0 +1,22 @@
+class Solution {
+    public double minmaxGasDist(int[] stations, int k) {
+        double left = 0, right = 1e8;
+        while (right - left > 1e-6) {
+            double middle = left + (right - left) / 2;
+            if (canAchieve(stations, k, middle)) {
+                right = middle;
+            } else {
+                left = middle + 1e-6;
+            }
+        }
+        return left;
+    }
+
+    private boolean canAchieve(int[] stations, int k, double distance) {
+        int added = 0;
+        for (int i = 1; i < stations.length; i++) {
+            added += (stations[i] - stations[i - 1]) / distance;
+        }
+        return added <= k;
+    }
+}

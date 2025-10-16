@@ -1,0 +1,13 @@
+class Solution {
+    public int findSmallestInteger(int[] nums, int value) {
+        int[] freqs = new int[value];
+        for (int num : nums) {
+            freqs[(num % value + value) % value]++;
+        }
+        int mex = 0;
+        while (freqs[mex % value] > 0) {
+            freqs[mex++ % value]--;
+        }
+        return mex;
+    }
+}

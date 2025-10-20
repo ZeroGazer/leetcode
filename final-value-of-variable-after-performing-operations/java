@@ -1,0 +1,13 @@
+class Solution {
+    public int finalValueAfterOperations(String[] operations) {
+        int value = 0;
+        for (String operation : operations) {
+            if (operation.startsWith("++") || operation.endsWith("++")) {
+                value++;
+            } else if (operation.startsWith("--") || operation.endsWith("--")) {
+                value--;
+            }
+        }
+        return value;
+    }
+}

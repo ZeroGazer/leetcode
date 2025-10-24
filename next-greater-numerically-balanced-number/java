@@ -1,0 +1,24 @@
+class Solution {
+    public int nextBeautifulNumber(int n) {
+        for (int i = n + 1; i <= 1224444; ++i) {
+            if (isBalanced(i)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private boolean isBalanced(int x) {
+        int[] freqs = new int[10];
+        while (x > 0) {
+            freqs[x % 10]++;
+            x /= 10;
+        }
+        for (int i = 0; i < 10; i++) {
+            if (freqs[i] > 0 && freqs[i] != i) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

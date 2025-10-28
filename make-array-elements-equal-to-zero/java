@@ -1,0 +1,18 @@
+class Solution {
+    public int countValidSelections(int[] nums) {
+        int n = nums.length, count = 0;
+        for (int i = 0, leftSum = 0, rightSum = Arrays.stream(nums).sum(); i < n; i++) {
+            if (nums[i] != 0) {
+                leftSum += nums[i];
+                rightSum -= nums[i];
+            } else {
+                if (leftSum == rightSum) {
+                    count += 2;
+                } else if (leftSum == rightSum + 1 || leftSum + 1 == rightSum) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}

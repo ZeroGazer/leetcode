@@ -1,0 +1,15 @@
+class Solution {
+    public int[] getSneakyNumbers(int[] nums) {
+        int[] result = new int[2], freqs = new int[nums.length - 2];
+        int index = 0;
+        for (int num : nums) {
+            if (freqs[num]++ > 0) {
+                result[index++] = num;
+                if (index == 2) {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+}

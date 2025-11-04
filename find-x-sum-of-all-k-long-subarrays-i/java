@@ -1,0 +1,25 @@
+class Solution {
+    public int[] findXSum(int[] nums, int k, int x) {
+        int n = nums.length;
+        int[] result = new int[n - k + 1];
+        for (int i = 0; i < n - k + 1; i++) {
+            int[][] freqs = new int[51][2];
+            for (int j = 0; j < 51; j++) {
+                freqs[j][0] = j;
+            }
+            for (int j = i; j < i + k; j++) {
+                freqs[nums[j]][1]++;
+            }
+            Arrays.sort(freqs, (a, b) -> {
+                if (Integer.compare(a[1], b[1]) == 0) {
+                    return Integer.compare(b[0], a[0]);
+                }
+                return Integer.compare(b[1], a[1]);
+            });
+            for (int j = 0; j < x; j++) {
+                result[i] += freqs[j][0] * freqs[j][1];
+            }
+        }
+        return result;
+    }
+}

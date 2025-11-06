@@ -1,0 +1,82 @@
+class Solution {
+    public int[] processQueries(int c, int[][] connections, int[][] queries) {
+        UnionFind uf = new UnionFind(c + 1);
+        for (int[] connection : connections) {
+            uf.union(connection[0], connection[1]);
+        }
+
+        int[] offlineCountNodes = new int[c + 1];
+        for (int[] query : queries) {
+            if (query[0] == 2) {
+                offlineCountNodes[query[1]]++;
+            }
+        }
+        int[] onlineNodes = new int[c + 1];
+        Arrays.fill(onlineNodes, -1);
+        for (int i = 1; i <= c; i++) {
+            int root = uf.find(i);
+            int onlineNode = onlineNodes[root];
+            if (offlineCountNodes[i] == 0 && (onlineNode == -1 || i < onlineNode)) {
+                onlineNodes[root] = i;
+            }
+        }
+
+        List<Integer> result = new ArrayList<>();
+        for (int i = queries.length - 1; i > -1; i--) {
+            int[] query = queries[i];
+            int root = uf.find(query[1]);
+            int onlineNode = onlineNodes[root];
+            if (query[0] == 1) {
+                if (offlineCountNodes[query[1]] == 0) {
+                    result.add(query[1]);
+                } else {
+                    result.add(onlineNode);
+                }
+            } else if (query[0] == 2) {
+                if (offlineCountNodes[query[1]] > 0) {
+                    offlineCountNodes[query[1]]--;
+                }
+                if (offlineCountNodes[query[1]] == 0 && (onlineNode == -1 || query[1] < onlineNode)) {
+                    onlineNodes[root] = query[1];
+                }
+            }
+        }
+        Collections.reverse(result);
+        return result.stream().mapToInt(Integer::intValue).toArray();
+    }
+}
+
+class UnionFind {
+    int[] root;
+    int[] rank;
+
+    public UnionFind(int n) {
+        root = new int[n];
+        rank = new int[n];
+        for (int i = 0; i < n; i++) {
+            root[i] = i;
+        }
+    }
+
+    public int find(int a) {
+        if (root[a] != a) {
+            root[a] = find(root[a]);
+        }
+        return root[a];
+    }
+
+    public void union(int a, int b) {
+        int rootA = find(a), rootB = find(b);
+        if (rootA == rootB) {
+            return;
+        }
+        if (rank[rootA] > rank[rootB]) {
+            root[rootB] = rootA;
+        } else if (rank[rootB] < rank[rootB]) {
+            root[rootA] = rootB;
+        } else {
+            root[rootB] = rootA;
+            rank[rootA]++;
+        }
+    }
+}

@@ -1,0 +1,22 @@
+class Solution {
+    public int threeSumSmaller(int[] nums, int target) {
+        Arrays.sort(nums);
+        int n = nums.length, count = 0;
+        for (int i = 0; i < n - 2; i++) {
+            count += twoSumSmaller(nums, target - nums[i], i + 1, n - 1);
+        }
+        return count;
+    }
+
+    private int twoSumSmaller(int[] nums, int target, int left, int right) {
+        int count = 0;
+        while (left < right) {
+            if (nums[left] + nums[right] < target) {
+                count += right - left++;
+            } else {
+                right--;
+            }
+        }
+        return count;
+    }
+}

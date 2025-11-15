@@ -1,0 +1,26 @@
+class Solution {
+    public int numberOfSubstrings(String s) {
+        int n = s.length();
+        int[] prev0index = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            if (i == 0 || s.charAt(i - 1) == '0') {
+                prev0index[i + 1] = i;
+            } else {
+                prev0index[i + 1] = prev0index[i];
+            }
+        }
+
+        int count = 0;
+        for (int right = 1; right <= n; right++) {
+            int count0 = s.charAt(right - 1) == '0' ? 1 : 0;
+            for (int left = right; left > 0 && count0 * count0 <= n; left = prev0index[left]) {
+                int count1 = right - prev0index[left] - count0;
+                if (count0 * count0 <= count1) {
+                    count += Math.min(left - prev0index[left], count1 - count0 * count0 + 1);
+                }
+                count0++;
+            } 
+        }
+        return count;
+    }
+}

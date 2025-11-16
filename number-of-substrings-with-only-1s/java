@@ -1,0 +1,15 @@
+class Solution {
+    private static final int MOD = (int) 1e9 + 7;
+
+    public int numSub(String s) {
+        long count = 0, consecutive1 = 0;
+        for (char c : s.toCharArray()) {
+            if (c == '1') {
+                count = (count + ++consecutive1) % MOD;
+            } else {
+                consecutive1 = 0;
+            }
+        }
+        return (int) count;
+    }
+}

@@ -1,0 +1,9 @@
+class Solution {
+    public boolean isOneBitCharacter(int[] bits) {
+        int n = bits.length, index = 0;
+        while (index < n - 1) {
+            index += bits[index] + 1;
+        }
+        return index == n - 1;
+    }
+}

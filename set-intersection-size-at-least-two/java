@@ -1,0 +1,21 @@
+class Solution {
+    public int intersectionSizeTwo(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> a[0] != b[0] ? Integer.compare(a[0], b[0]) : Integer.compare(b[1], a[1]));
+        int n = intervals.length, size = 0;
+        int[] quotas = new int[n];
+        Arrays.fill(quotas, 2);
+        for (int i = n - 1; i > -1; i--) {
+            int start = intervals[i][0], quota = quotas[i];
+            for (int time = start; time < start + quota; time++) {
+                for (int j = 0; j <= i; j++) {
+                    if (quotas[j] > 0 && time <= intervals[j][1]) {
+                        quotas[j]--;
+                    }
+                }
+                System.out.println(time);
+                size++;
+            }
+        }
+        return size;
+    }
+}

@@ -12,7 +12,6 @@ class Solution {
                         quotas[j]--;
                     }
                 }
-                System.out.println(time);
                 size++;
             }
         }

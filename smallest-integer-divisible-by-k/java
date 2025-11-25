@@ -1,0 +1,11 @@
+class Solution {
+    public int smallestRepunitDivByK(int k) {
+        for (int length = 1, mod = 0; length <= k; length++) {
+            mod = (mod * 10 + 1) % k;
+            if (mod == 0) {
+                return length;
+            }
+        }
+        return -1;
+    }
+}

@@ -1,0 +1,14 @@
+class Solution {
+    public long maxSubarraySum(int[] nums, int k) {
+        long[] minPrefixKSum = new long[k];
+        Arrays.fill(minPrefixKSum, (long) 1e15);
+        minPrefixKSum[k - 1] = 0;
+        long max = Long.MIN_VALUE, prefixSum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            prefixSum += nums[i];
+            max = Math.max(max, prefixSum - minPrefixKSum[i % k]);
+            minPrefixKSum[i % k] = Math.min(minPrefixKSum[i % k], prefixSum);
+        }
+        return max;
+    }
+}

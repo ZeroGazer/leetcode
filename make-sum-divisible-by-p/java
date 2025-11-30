@@ -1,6 +1,6 @@
 class Solution {
     public int minSubarray(int[] nums, int p) {
-        int sum = 0;
+        int n = nums.length, sum = 0;
         for (int i : nums) {
             sum = (i + sum) % p;
         }
@@ -8,11 +8,11 @@ class Solution {
         if (rem == 0) {
             return 0;
         }
-        int min = nums.length;
+        int min = n;
         Map<Integer, Integer> map = new HashMap<>();
         map.put(0, -1);
         sum = 0;
-        for (int i = 0; i < nums.length; i++) {
+        for (int i = 0; i < n; i++) {
             sum = (nums[i] + sum) % p;
             int target = (sum - rem + p) % p;
             if (map.containsKey(target)) {
@@ -20,6 +20,6 @@ class Solution {
             }
             map.put(sum, i);
         }
-        return min == nums.length ? -1 : min;
+        return min == n ? -1 : min;
     }
 }

@@ -1,0 +1,21 @@
+class Solution {
+    public long maxRunTime(int n, int[] batteries) {
+        long totalPower = 0;
+        for (int battery : batteries) {
+            totalPower += battery;
+        }
+        long left = 1, right = totalPower / n;
+        while (left < right) {
+            long middle = left + (right - left + 1) / 2, consume = 0;
+            for (int battery : batteries) {
+                consume += Math.min(battery, middle);
+            }
+            if (consume >= middle * n) {
+                left = middle;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return left;
+    }
+}

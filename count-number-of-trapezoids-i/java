@@ -1,0 +1,17 @@
+class Solution {
+    private static final int MOD = (int) 1e9 + 7;
+
+    public int countTrapezoids(int[][] points) {
+        Map<Integer, Long> groupByY = new HashMap<>();
+        for (int[] point : points) {
+            groupByY.put(point[1], groupByY.getOrDefault(point[1], 0L) + 1);
+        }
+        long count = 0, prevEdgeSum = 0;
+        for (long xCount : groupByY.values()) {
+            long edgeCount = xCount * (xCount - 1) / 2;
+            count = (count + edgeCount * prevEdgeSum) % MOD;
+            prevEdgeSum = (prevEdgeSum + edgeCount) % MOD;
+        }
+        return (int) count;
+    }
+}

@@ -1,0 +1,19 @@
+class Solution {
+    private static final int MOD = (int) 1e9 + 7;
+
+    public int specialTriplets(int[] nums) {
+        Map<Integer, Long> prevFreqs = new HashMap<>(), freqs = new HashMap<>();
+        for (int num : nums) {
+            freqs.put(num, freqs.getOrDefault(num, 0L) + 1);
+        }
+        long count = 0;
+        for (int num : nums) {
+            int dou = num * 2;
+            long prev = prevFreqs.getOrDefault(dou, 0L);
+            prevFreqs.put(num, prevFreqs.getOrDefault(num, 0L) + 1);
+            long next = freqs.getOrDefault(dou, 0L) - prevFreqs.getOrDefault(dou, 0L);
+            count = (count + prev * next) % MOD;
+        }
+        return (int) count;
+    }
+}

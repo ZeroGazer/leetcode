@@ -1,0 +1,21 @@
+class Solution {
+    public int countCoveredBuildings(int n, int[][] buildings) {
+        int[] minX = new int[n + 1], maxX = new int[n + 1], minY = new int[n + 1], maxY = new int[n + 1];
+        Arrays.fill(minX, n + 1);
+        Arrays.fill(minY, n + 1);
+        for (int[] building : buildings) {
+            minX[building[1]] = Math.min(minX[building[1]], building[0]);
+            maxX[building[1]] = Math.max(maxX[building[1]], building[0]);
+            minY[building[0]] = Math.min(minY[building[0]], building[1]);
+            maxY[building[0]] = Math.max(maxY[building[0]], building[1]);
+        }
+        int count = 0;
+        for (int[] building : buildings) {
+            if (building[0] > minX[building[1]] && building[0] < maxX[building[1]] &&
+                    building[1] > minY[building[0]] && building[1] < maxY[building[0]]) {
+                count++;
+            }
+        }
+        return count;
+    }
+}

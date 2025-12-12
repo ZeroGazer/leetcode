@@ -1,0 +1,39 @@
+class Solution {
+    public int[] countMentions(int numberOfUsers, List<List<String>> events) {
+        Collections.sort(events, (a, b) -> {
+            if (!a.get(1).equals(b.get(1))) {
+                return Integer.compare(Integer.parseInt(a.get(1)), Integer.parseInt(b.get(1)));
+            }
+            return Boolean.compare(a.get(0).equals("MESSAGE"), b.get(0).equals("MESSAGE"));
+        });
+        int[] count = new int[numberOfUsers], onlineTime = new int[numberOfUsers];
+        for (List<String> event : events) {
+            int time = Integer.parseInt(event.get(1));
+            if (event.get(0).equals("OFFLINE")) {
+                onlineTime[Integer.parseInt(event.get(2))] = time + 60;
+            } else {
+                String mentions = event.get(2);
+                switch (mentions) {
+                    case "ALL":
+                        for (int i = 0; i < numberOfUsers; i++) {
+                            count[i]++;
+                        }
+                        break;
+                    case "HERE":
+                        for (int i = 0; i < numberOfUsers; i++) {
+                            if (onlineTime[i] <= time) {
+                                count[i]++;
+                            }
+                        }
+                        break;
+                    default:
+                        for (String user : mentions.split(" ")) {
+                            count[Integer.parseInt(user.substring(2))]++;
+                        }
+                        break;
+                }
+            }
+        }
+        return count;
+    }
+}

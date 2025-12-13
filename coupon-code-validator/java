@@ -1,0 +1,28 @@
+class Solution {
+    private Set<String> categories = Set.of("electronics", "grocery", "pharmacy", "restaurant");
+    public List<String> validateCoupons(String[] code, String[] businessLine, boolean[] isActive) {
+        List<Integer> valid = new ArrayList<>();
+        for (int i = 0; i < code.length; i++) {
+            if (!code[i].isEmpty() && isActive[i] && categories.contains(businessLine[i])) {
+                boolean isCodeValid = true;
+                for (char c : code[i].toCharArray()) {
+                    if (c != '_' && !Character.isLetterOrDigit(c)) {
+                        isCodeValid = false;
+                        break;
+                    }
+                }
+                if (isCodeValid) {
+                    valid.add(i);
+                }
+            }
+        }
+        Collections.sort(valid, (a, b) -> {
+            if (!businessLine[a].equals(businessLine[b])) {
+                return businessLine[a].compareTo(businessLine[b]);
+            } else {
+                return code[a].compareTo(code[b]);
+            }
+        });
+        return valid.stream().map(e -> code[e]).toList();
+    }
+}

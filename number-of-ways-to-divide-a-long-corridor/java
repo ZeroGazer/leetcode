@@ -1,0 +1,21 @@
+class Solution {
+    private static final int MOD = (int) 1e9 + 7;
+
+    public int numberOfWays(String corridor) {
+        long count = 1, prevDividerIndex = -1, currSectionSeatCount = 0;
+        for (int i = 0; i < corridor.length(); i++) {
+            if (corridor.charAt(i) == 'S') {
+                if (++currSectionSeatCount == 2) {
+                    currSectionSeatCount = 0;
+                    prevDividerIndex = i;
+                } else if (currSectionSeatCount == 1 && prevDividerIndex != -1) {
+                    count = (count * (i - prevDividerIndex)) % MOD;
+                }
+            }
+        }
+        if (currSectionSeatCount == 1 || prevDividerIndex == -1) {
+            return 0;
+        }
+        return (int) count;
+    }
+}

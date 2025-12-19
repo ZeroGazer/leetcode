@@ -1,18 +1,17 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        Map<Integer, List<int[]>> map = new TreeMap<>();
+        Map<Integer, List<int[]>> meetingsGroupByTime = new TreeMap<>();
         for (int[] meeting : meetings) {
-            map.putIfAbsent(meeting[2], new ArrayList<>());
-            map.get(meeting[2]).add(meeting);
+            meetingsGroupByTime.computeIfAbsent(meeting[2], k -> new ArrayList<>()).add(new int[] {meeting[0], meeting[1]});
         }
         UnionFind uf = new UnionFind(n);
         uf.union(0, firstPerson);
-        for (List<int[]> meetingsAtTheSameTime : map.values()) {
-            for (int[] meeting : meetingsAtTheSameTime) {
+        for (List<int[]> sameTimeMeetings : meetingsGroupByTime.values()) {
+            for (int[] meeting : sameTimeMeetings) {
                 uf.union(meeting[0], meeting[1]);
             }
-            for (int[] meeting : meetingsAtTheSameTime) {
-                if (!uf.connected(0, meeting[0])) {
+            for (int[] meeting : sameTimeMeetings) {
+                if (!uf.connected(meeting[0], 0)) {
                     uf.reset(meeting[0]);
                     uf.reset(meeting[1]);
                 }
@@ -20,7 +19,7 @@ class Solution {
         }
         List<Integer> result = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            if (uf.connected(0, i)) {
+            if (uf.connected(i, 0)) {
                 result.add(i);
             }
         }
@@ -29,13 +28,14 @@ class Solution {
 }
 
 class UnionFind {
-    int[] root;
-    int[] rank;
 
-    public UnionFind(int size) {
-        root = new int[size];
-        rank = new int[size];
-        for (int i = 0; i < rank.length; i++) {
+    private int[] root;
+    private int[] rank;
+
+    public UnionFind(int n) {
+        root = new int[n];
+        rank = new int[n];
+        for (int i = 0; i < n; ++i) {
             root[i] = i;
         }
     }
@@ -48,16 +48,15 @@ class UnionFind {
     }
 
     public void union(int a, int b) {
-        int rootA = find(a);
-        int rootB = find(b);
+        int rootA = find(a), rootB = find(b);
         if (rootA != rootB) {
             if (rank[rootA] > rank[rootB]) {
                 root[rootB] = rootA;
             } else if (rank[rootA] < rank[rootB]) {
                 root[rootA] = rootB;
             } else {
-                rank[rootA]++;
                 root[rootB] = rootA;
+                rank[rootA]++;
             }
         }
     }

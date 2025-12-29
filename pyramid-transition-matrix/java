@@ -1,0 +1,38 @@
+class Solution {
+    public boolean pyramidTransition(String bottom, List<String> allowed) {
+        Map<String, List<Character>> allowedMap = new HashMap<>();
+        for (String str : allowed) {
+            String key = str.substring(0, 2);
+            allowedMap.computeIfAbsent(key, k -> new ArrayList<>()).add(str.charAt(2));
+        }
+        return backtracking(bottom, allowedMap, new HashMap<>());
+    }
+
+    private boolean backtracking(String bottom, Map<String, List<Character>> allowed, Map<String, Boolean> memo) {
+        if (bottom.length() == 1) {
+            return true;
+        }
+        if (!memo.containsKey(bottom)) {
+            memo.put(bottom, backtracking(bottom, allowed, memo, 0, new StringBuilder()));
+        }
+        return memo.get(bottom);
+    }
+
+    private boolean backtracking(String bottom, Map<String, List<Character>> allowed, Map<String, Boolean> memo, int index, StringBuilder sb) {
+        if (index == bottom.length() - 1) {
+            return backtracking(sb.toString(), allowed, memo);
+        }
+        String key = bottom.substring(index, index + 2);
+        if (!allowed.containsKey(key)) {
+            return false;
+        }
+        for (char c : allowed.get(key)) {
+            sb.append(c);
+            if (backtracking(bottom, allowed, memo, index + 1, sb)) {
+                return true;
+            }
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return false;
+    }
+}

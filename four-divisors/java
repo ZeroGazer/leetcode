@@ -1,0 +1,27 @@
+class Solution {
+    public int sumFourDivisors(int[] nums) {
+        int sum = 0;
+        for (int num : nums) {
+            int count = 0, divisorSum = 0, sqrt = (int) Math.sqrt(num);
+            for (int i = 1; i <= sqrt; i++) {
+                if (num % i == 0) {
+                    int div = num / i;
+                    if (div != i) {
+                        count += 2;
+                        divisorSum += div + i;
+                    } else {
+                        count++;
+                        divisorSum += i;
+                    }
+                    if (count > 4) {
+                        break;
+                    }
+                }
+            }
+            if (count == 4) {
+                sum += divisorSum;
+            }
+        }
+        return sum;
+    }
+}

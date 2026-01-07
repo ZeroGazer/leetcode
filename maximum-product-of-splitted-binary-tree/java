@@ -1,0 +1,50 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private static final int MOD = (int) 1e9 + 7;
+    private long max = 0;
+
+    public int maxProduct(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        long sum = 0;
+        while (!queue.isEmpty()) {
+            TreeNode curr = queue.poll();
+            sum += curr.val;
+            if (curr.left != null) {
+                queue.offer(curr.left);
+            }
+            if (curr.right != null) {
+                queue.offer(curr.right);
+            }
+        }
+        findMax(root, sum);
+        return (int) (max % MOD);
+    }
+
+    private long findMax(TreeNode root, long sum) {
+        long left = 0, right = 0;
+        if (root.left != null) {
+            left = findMax(root.left, sum);
+            max = Math.max(max, (sum - left) * left);
+        }
+        if (root.right != null) {
+            right = findMax(root.right, sum);
+            max = Math.max(max, (sum - right) * right);
+        }
+        return left + right + root.val;       
+    }
+}

@@ -1,0 +1,32 @@
+class Solution {
+    private static final double EPSILON = 1e-5;
+
+    public double separateSquares(int[][] squares) {
+        double area = 0;
+        int maxY = 0;
+        for (int[] square : squares) {
+            area += (long) square[2] * square[2];
+            maxY = Math.max(maxY, square[1] + square[2]);
+        }
+        double left = 0, right = maxY;
+        while (Math.abs(right - left) > EPSILON) {
+            double middle = (left + right) / 2;
+            if (isValid(squares, area, middle)) {
+                right = middle;
+            } else {
+                left = middle;
+            }
+        }
+        return right;
+    }
+
+    private boolean isValid(int[][] squares, double area, double line) {
+        double areaBelow = 0;
+        for (int[] square : squares) {
+            if (square[1] < line) {
+                areaBelow += square[2] * Math.min(square[2], line - square[1]);
+            }
+        }
+        return areaBelow >= area / 2;
+    }
+}

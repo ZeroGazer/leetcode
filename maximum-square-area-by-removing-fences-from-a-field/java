@@ -1,0 +1,34 @@
+class Solution {
+    private static final int MOD = (int) 1e9 + 7;
+
+    public int maximizeSquareArea(int m, int n, int[] hFences, int[] vFences) {
+        Set<Integer> hLengths = getLengths(m, hFences), vLengths = getLengths(n, vFences);
+        long length = 0;
+        for (int hLength : hLengths) {
+            if (vLengths.contains(hLength)) {
+                length = Math.max(length, hLength);
+            }
+        }
+        if (length == 0) {
+            return -1;
+        }
+        return (int) ((length * length) % MOD);
+    }
+
+    private Set<Integer> getLengths(int end, int[] arr) {
+        Arrays.sort(arr);
+        List<Integer> fences = new ArrayList<>();
+        fences.add(1);
+        for (int i : arr) {
+            fences.add(i);
+        }
+        fences.add(end);
+        Set<Integer> lengths = new HashSet<>();
+        for (int i = 0; i < fences.size(); i++) {
+            for (int j = i + 1; j < fences.size(); j++) {
+                lengths.add(fences.get(j) - fences.get(i));
+            }
+        }
+        return lengths;
+    }
+}

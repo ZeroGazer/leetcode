@@ -1,0 +1,47 @@
+class Solution {
+    public int largestMagicSquare(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        int[][] rowPrefixSum = new int[m][n], columnPrefixSum = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            rowPrefixSum[i][0] = grid[i][0];
+            for (int j = 1; j < n; j++) {
+                rowPrefixSum[i][j] = rowPrefixSum[i][j - 1] + grid[i][j];
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            columnPrefixSum[0][i] = grid[0][i];
+            for (int j = 1; j < m; j++) {
+                columnPrefixSum[j][i] = columnPrefixSum[j - 1][i] + grid[j][i];
+            }
+        }
+        for (int i = Math.min(m, n); i > 1; i--) {
+            for (int j = 0; i + j <= m; j++) {
+                for (int k = 0; i + k <= n; k++) {
+                    int sum = rowPrefixSum[j][k + i - 1] - (k == 0 ? 0 : rowPrefixSum[j][k - 1]);
+                    boolean isValid = true;
+                    for (int it = j + 1; it < i + j; it++) {
+                        if (rowPrefixSum[it][k + i - 1] - (k == 0 ? 0 : rowPrefixSum[it][k - 1]) != sum) {
+                            isValid = false;
+                            break;
+                        }
+                    }
+                    for (int it = k; isValid && it < i + k; it++) {
+                        if (columnPrefixSum[j + i - 1][it] - (j == 0 ? 0 : columnPrefixSum[j - 1][it]) != sum) {
+                            isValid = false;
+                            break;
+                        }
+                    }
+                    int diagonal1Sum = 0, diagonal2Sum = 0;
+                    for (int it = 0; isValid && it < i; it++) {
+                        diagonal1Sum += grid[j + it][k + it];
+                        diagonal2Sum += grid[j + it][k + i - 1 - it];
+                    }
+                    if (isValid && diagonal1Sum == sum && diagonal2Sum == sum) {
+                        return i;
+                    }
+                }
+            }
+        }
+        return 1;
+    }
+}

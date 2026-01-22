@@ -1,0 +1,30 @@
+class Solution {
+    public int minimumPairRemoval(int[] nums) {
+        List<Integer> list = new ArrayList<>();
+        for (int num : nums) {
+            list.add(num);
+        }
+        int operations = 0;
+        while (list.size() > 1) {
+            int min = Integer.MAX_VALUE, minIndex = -1;
+            boolean isSorted = true;
+            for (int i = 0; i < list.size() - 1; i++) {
+                if (list.get(i) > list.get(i + 1)) {
+                    isSorted = false;
+                }
+                int sum = list.get(i) + list.get(i + 1);
+                if (sum < min) {
+                    min = sum;
+                    minIndex = i;
+                }
+            }
+            if (isSorted) {
+                break;
+            }
+            list.remove(minIndex);
+            list.set(minIndex, min);
+            operations++;
+        }
+        return operations;
+    }
+}

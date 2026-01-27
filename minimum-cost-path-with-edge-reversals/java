@@ -1,0 +1,36 @@
+class Solution {
+    public int minCost(int n, int[][] edges) {
+        Map<Integer, List<int[]>> adjacencies = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            adjacencies.put(i, new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            adjacencies.get(edge[0]).add(new int[] {edge[1], edge[2]});
+            adjacencies.get(edge[1]).add(new int[] {edge[0], edge[2] * 2});
+        }
+        int[] costs = new int[n];
+        Arrays.fill(costs, Integer.MAX_VALUE);
+        costs[0] = 0;
+        boolean[] visited = new boolean[n];
+        Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(x -> x[1]));
+        pq.offer(new int[] {0, 0});
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            if (curr[0] == (n - 1)) {
+                return curr[1];
+            }
+            if (visited[curr[0]]) {
+                continue;
+            }
+            visited[curr[0]] = true;
+            for (int[] neighbour : adjacencies.get(curr[0])) {
+                int cost = curr[1] + neighbour[1];
+                if (cost < costs[neighbour[0]]) {
+                    costs[neighbour[0]] = cost;
+                    pq.offer(new int[] {neighbour[0], cost});
+                } 
+            }
+        }
+        return -1;
+    }
+}

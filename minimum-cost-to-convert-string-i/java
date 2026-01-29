@@ -1,54 +1,46 @@
 class Solution {
     public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
-        List<List<int[]>> adjacencyList = new ArrayList<>();
-        for (int i = 0; i < 26; i++) {
-            adjacencyList.add(new ArrayList<>());
-        }
+        Map<Integer, Map<Integer, Integer>> adjacencies = new HashMap<>();
         for (int i = 0; i < original.length; i++) {
-            adjacencyList.get(original[i] - 'a').add(new int[] {changed[i] - 'a', cost[i]});
+            adjacencies.computeIfAbsent(original[i] - 'a', (k) -> new HashMap<>());
+            if (!adjacencies.get(original[i] - 'a').containsKey(changed[i] - 'a') || adjacencies.get(original[i] - 'a').get(changed[i] - 'a') > cost[i]) {
+                adjacencies.get(original[i] - 'a').put(changed[i] - 'a', cost[i]);
+            }
         }
         long[][] costs = new long[26][26];
-        for (int i = 0; i < 26; i++) {
-            costs[i] = dijkstra(i, adjacencyList);
+        for (long[] it : costs) {
+            Arrays.fill(it, Long.MAX_VALUE);
         }
-        long totalCost = 0;
+        for (Map.Entry<Integer, Map<Integer, Integer>> e : adjacencies.entrySet()) {
+            Queue<long[]> pq = new PriorityQueue<>(Comparator.comparingLong(x -> x[1]));
+            pq.offer(new long[] {e.getKey(), 0});
+            long[] currCosts = costs[e.getKey()];
+            while (!pq.isEmpty()) {
+                long[] curr = pq.poll();
+                int currChar = (int) curr[0];
+                long currCost = curr[1];
+                if (currCosts[currChar] < currCost || !adjacencies.containsKey(currChar)) {
+                    continue;
+                }
+                for (Map.Entry<Integer, Integer> neighbour : adjacencies.get(currChar).entrySet()) {
+                    long oldCost = currCosts[neighbour.getKey()], newCost = currCost + neighbour.getValue();
+                    if (newCost < oldCost) {
+                        currCosts[neighbour.getKey()] = newCost;
+                        pq.offer(new long[] {neighbour.getKey(), newCost});
+                    }
+                }
+            }
+        }
+        long minCost = 0;
         for (int i = 0; i < source.length(); i++) {
             if (source.charAt(i) != target.charAt(i)) {
-                long charConversionCost = costs[source.charAt(i) - 'a'][target.charAt(i) - 'a'];
-                if (charConversionCost == Long.MAX_VALUE) {
+                long currCost = costs[source.charAt(i) - 'a'][target.charAt(i) - 'a'];
+                if (currCost == Long.MAX_VALUE) {
                     return -1;
                 }
-                totalCost += charConversionCost;
+                minCost += currCost;
             }
         }
-        return totalCost;
-    }
-
-    private long[] dijkstra(int startChar, List<List<int[]>> adjacencyList) {
-        long[] costs = new long[26];
-        Arrays.fill(costs, Long.MAX_VALUE);
-        costs[startChar] = 0;
-
-        PriorityQueue<Pair<Long, Integer>> pq = new PriorityQueue<>(Comparator.comparingLong(e -> e.getKey()));
-        pq.add(new Pair<>(0L, startChar));
-        while (!pq.isEmpty()) {
-            Pair<Long, Integer> current = pq.poll();
-            long cost = current.getKey();
-            int currentChar = current.getValue();
-
-            if (costs[currentChar] < cost) {
-                continue;
-            }
-            for (int[] conversion : adjacencyList.get(currentChar)) {
-                int targetChar = conversion[0];
-                long conversionCost = conversion[1];
-                long newCost = cost + conversionCost;
-                if (newCost < costs[targetChar]) {
-                    costs[targetChar] = newCost;
-                    pq.add(new Pair<>(newCost, targetChar));
-                }
-            }
-        }
-        return costs;
+        return minCost;
     }
 }

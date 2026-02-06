@@ -1,0 +1,13 @@
+class Solution {
+    public int minRemoval(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n = nums.length, min = n - 1;
+        for (int left = 0, right = 0; left < n; left++) {
+            while (right < n && (long) nums[left] * k >= nums[right]) {
+                right++;
+            }
+            min = Math.min(min, n - (right - left));
+        }
+        return min;
+    }
+}

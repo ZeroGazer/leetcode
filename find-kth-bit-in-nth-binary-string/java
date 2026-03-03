@@ -4,12 +4,12 @@ class Solution {
             return '0';
         }
         int length = 1 << n;
-        if (k < length / 2) {
+        if (k < (length / 2)) {
             return findKthBit(n - 1, k);
-        } else if (k == length / 2) {
+        } else if (k == (length / 2)) {
             return '1';
         } else {
-            return findKthBit(n - 1, length - k) == '0' ? '1' : '0';
+            return (char) ('1' - findKthBit(n - 1, length - k) + '0');
         }
     }
 }

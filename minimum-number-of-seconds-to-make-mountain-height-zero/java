@@ -1,0 +1,17 @@
+class Solution {
+    public long minNumberOfSeconds(int mountainHeight, int[] workerTimes) {
+        int n = workerTimes.length;
+        Queue<long[]> pq = new PriorityQueue<>(Comparator.comparingLong(x -> x[1]));
+        for (int i = 0; i < n; i++) {
+            pq.offer(new long[] {i, workerTimes[i], 1});
+        }
+        long time = 0;
+        while (mountainHeight-- > 0) {
+            long[] worker = pq.poll();
+            time = worker[1];
+            worker[1] += workerTimes[(int) worker[0]] * ++worker[2];
+            pq.offer(worker);
+        }
+        return time;
+    }
+}

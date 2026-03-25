@@ -1,0 +1,31 @@
+class Solution {
+    public boolean canPartitionGrid(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        long[] row = new long[m], col = new long[n];
+        long total = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                row[i] += grid[i][j];
+                col[j] += grid[i][j];
+                total += grid[i][j];
+            }
+        }
+        if ((total & 1) == 1) {
+            return false;
+        }
+        return canPartitionGrid(row, total) || canPartitionGrid(col, total);
+    }
+
+    private boolean canPartitionGrid(long[] arr, long total) {
+        long section1 = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            if (section1 == (total - section1)) {
+                return true;
+            } else if (section1 > (total - section1)) {
+                return false;
+            }
+            section1 += arr[i];
+        }
+        return false;
+    }
+}

@@ -1,0 +1,71 @@
+class Solution {
+    public boolean canPartitionGrid(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        int[] top = new int[100001], bottom = new int[100001], left = new int[100001], right = new int[100001];
+        long total = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                total += grid[i][j];
+                bottom[grid[i][j]]++;
+                right[grid[i][j]]++;
+            }
+        }
+        long topSum = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                topSum += grid[i][j];
+                top[grid[i][j]]++;
+                bottom[grid[i][j]]--;
+            }
+            long bottomSum = total - topSum;
+            if (topSum == bottomSum) {
+                return true;
+            } else if (topSum > bottomSum) {
+                if (isEqual(grid, top, topSum - bottomSum, 0, i, 0, n - 1)) {
+                    return true;
+                }
+            } else {
+                if (isEqual(grid, bottom, bottomSum - topSum, i + 1, m - 1, 0, n - 1)) {
+                    return true;
+                }
+            }
+        }
+        long leftSum = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                leftSum += grid[j][i];
+                left[grid[j][i]]++;
+                right[grid[j][i]]--;
+            }
+            long rightSum = total - leftSum;
+            if (leftSum == rightSum) {
+                return true;
+            } else if (leftSum > rightSum) {
+                if (isEqual(grid, left, leftSum - rightSum, 0, m - 1, 0, i)) {
+                    return true;
+                }
+            } else {
+                if (isEqual(grid, right, rightSum - leftSum, 0, m - 1, i + 1, n - 1)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isEqual(int[][] grid, int[] arr, long diff, int top, int bottom, int left, int right) {
+        if (diff > 100001) {
+            return false;
+        }
+        int rowDiff = bottom - top + 1, colDiff = right - left + 1;
+        if (rowDiff == 1 && colDiff == 1) {
+            return false;
+        } else if (rowDiff == 1) {
+            return diff == grid[top][left] || diff == grid[top][right];
+        } else if (colDiff == 1) {
+            return diff == grid[top][left] || diff == grid[bottom][left];
+        } else {
+            return arr[(int) diff] > 0;
+        }
+    }
+}

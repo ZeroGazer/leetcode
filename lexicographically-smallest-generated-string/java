@@ -1,0 +1,42 @@
+class Solution {
+    public String generateString(String str1, String str2) {
+        int n = str1.length(), m = str2.length();
+        char[] arr = new char[n + m - 1];
+        Arrays.fill(arr, 'a');
+        boolean[] fixedCharacters = new boolean[n + m - 1];
+        for (int i = 0; i < n; i++) {
+            if (str1.charAt(i) == 'T') {
+                for (int j = i; j < i + m; j++) {
+                    if (fixedCharacters[j] && arr[j] != str2.charAt(j - i)) {
+                        return "";
+                    } else {
+                        arr[j] = str2.charAt(j - i);
+                        fixedCharacters[j] = true;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (str1.charAt(i) == 'F') {
+                boolean isFalse = false;
+                int smallestNonFixedCharacterIndex = -1;
+                for (int j = i + m - 1; j >= i; j--) {
+                    if (str2.charAt(j - i) != arr[j]) {
+                        isFalse = true;
+                        break;
+                    } else if (!fixedCharacters[j] && smallestNonFixedCharacterIndex == -1) {
+                        smallestNonFixedCharacterIndex = j;
+                    }
+                }
+                if (isFalse) {
+                    continue;
+                } else if (smallestNonFixedCharacterIndex > -1) {
+                    arr[smallestNonFixedCharacterIndex]++;
+                } else {
+                    return "";
+                }
+            }
+        }
+        return new String(arr);
+    }
+}

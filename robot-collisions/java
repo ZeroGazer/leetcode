@@ -1,0 +1,42 @@
+class Solution {
+    public List<Integer> survivedRobotsHealths(int[] positions, int[] healths, String directions) {
+        int n = positions.length;
+        Integer[] sortedPositions = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            sortedPositions[i] = i;
+        }
+        Arrays.sort(sortedPositions, Comparator.comparingInt(i -> positions[i]));
+        Stack<Integer> pendingToRightRobots = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            char direction = directions.charAt(sortedPositions[i]);
+            if (direction == 'R') {
+                pendingToRightRobots.push(sortedPositions[i]);
+            } else {
+                while (!pendingToRightRobots.isEmpty()) {
+                    if (healths[pendingToRightRobots.peek()] < healths[sortedPositions[i]]) {
+                        healths[pendingToRightRobots.pop()] = 0;
+                        healths[sortedPositions[i]]--;
+                    } else if (healths[pendingToRightRobots.peek()] == healths[sortedPositions[i]]) {
+                        healths[pendingToRightRobots.pop()] = 0;
+                        healths[sortedPositions[i]] = 0;
+                        break;
+                    } else {
+                        healths[pendingToRightRobots.peek()]--;
+                        healths[sortedPositions[i]] = 0;
+                        if (healths[pendingToRightRobots.peek()] == 0) {
+                            pendingToRightRobots.pop();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (healths[i] > 0) {
+                result.add(healths[i]);
+            }
+        }
+        return result;
+    }
+}

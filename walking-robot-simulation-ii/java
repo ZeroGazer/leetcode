@@ -1,0 +1,52 @@
+class Robot {
+
+    private static final String[] DIRECTIONS = new String[] {"East", "North", "West", "South"};
+    private List<Integer> path = new ArrayList<>();
+    private List<int[]> position = new ArrayList<>();
+    private int curr = 0;
+    private boolean isMoved = false;
+
+    public Robot(int width, int height) {
+        for (int i = 0; i < width; i++) {
+            path.add(0);
+            position.add(new int[] {i, 0});
+        }
+        for (int i = 1; i < height; i++) {
+            path.add(1);
+            position.add(new int[] {width - 1, i});
+        }
+        for (int i = width - 2; i > -1; i--) {
+            path.add(2);
+            position.add(new int[] {i, height - 1});
+        }
+        for (int i = height - 2; i > 0; i--) {
+            path.add(3);
+            position.add(new int[] {0, i});
+        }
+        path.set(0, 3);
+    }
+    
+    public void step(int num) {
+        isMoved = true;
+        curr = (curr + num) % path.size();
+    }
+    
+    public int[] getPos() {
+        return position.get(curr);
+    }
+    
+    public String getDir() {
+        if (!isMoved) {
+            return DIRECTIONS[0];
+        }
+        return DIRECTIONS[path.get(curr)];
+    }
+}
+
+/**
+ * Your Robot object will be instantiated and called as such:
+ * Robot obj = new Robot(width, height);
+ * obj.step(num);
+ * int[] param_2 = obj.getPos();
+ * String param_3 = obj.getDir();
+ */

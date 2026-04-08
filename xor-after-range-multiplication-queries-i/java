@@ -1,0 +1,18 @@
+class Solution {
+    private static final int MOD = (int) 1e9 + 7;
+
+    public int xorAfterQueries(int[] nums, int[][] queries) {
+        for (int[] query : queries) {
+            int l = query[0], r = query[1], k = query[2];
+            long v = query[3];
+            for (int idx = l; idx <= r; idx += k) {
+                nums[idx] = (int) ((nums[idx] * v) % MOD);
+            }
+        }
+        int result = 0;
+        for (int num : nums) {
+            result ^= num;
+        }
+        return result;
+    }
+}

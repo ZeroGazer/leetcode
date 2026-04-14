@@ -8,20 +8,22 @@ class Solution {
                 factories.add(f[0]);
             }
         }
-        Long[][] memo = new Long[robot.size()][factories.size()];
-        return dfs(0, 0, robot, factories, memo);
+        return backtracking(0, 0, robot, factories, new Long[robot.size()][factories.size()]);
     }
     
-    private long dfs(int r, int f, List<Integer> robots, List<Integer> factories, Long[][] memo) {
-        if (r == robots.size()) {
+    private long backtracking(int robot, int factory, List<Integer> robots, List<Integer> factories, Long[][] memo) {
+        if (robot == robots.size()) {
             return 0;
         }
-        if (f == factories.size()) {
-            return (long) 1e13;
+        if (factory == factories.size()) {
+            return (long) 1e12;
         }
-        if (memo[r][f] != null) {
-            return memo[r][f];
+        if (memo[robot][factory] != null) {
+            return memo[robot][factory];
         }
-        return memo[r][f] = Math.min(Math.abs(robots.get(r) - factories.get(f)) + dfs(r + 1, f + 1, robots, factories, memo), dfs(r, f + 1, robots, factories, memo));
+        return memo[robot][factory] = Math.min(
+            Math.abs(robots.get(robot) - factories.get(factory)) + backtracking(robot + 1, factory + 1, robots, factories, memo),
+            backtracking(robot, factory + 1, robots, factories, memo)
+        );
     }
 }

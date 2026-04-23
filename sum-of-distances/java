@@ -1,0 +1,19 @@
+class Solution {
+    public long[] distance(int[] nums) {
+        int n = nums.length;
+        Map<Integer, List<Integer>> groups = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            groups.computeIfAbsent(nums[i], k -> new ArrayList<>()).add(i);
+        }
+        long[] arr = new long[n];
+        for (List<Integer> group : groups.values()) {
+            long sum = group.stream().mapToLong(Integer::longValue).sum(), prefixSum = 0;
+            for (int i = 0; i < group.size(); i++) {
+                int index = group.get(i);
+                arr[index] = sum - 2 * prefixSum + index * (2L * i - group.size());
+                prefixSum += index;
+            }
+        }
+        return arr;
+    }
+}

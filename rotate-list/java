@@ -13,11 +13,11 @@ class Solution {
         if (head == null || head.next == null) {
             return head;
         }
-
         ListNode curr = head;
         int length = 1;
-        for (; curr.next != null; length++) {
+        while (curr.next != null) {
             curr = curr.next;
+            length++;
         }
         curr.next = head;
         curr = head;

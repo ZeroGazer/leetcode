@@ -1,0 +1,16 @@
+class Solution {
+    public int minimumEffort(int[][] tasks) {
+        Arrays.sort(tasks, (a, b) -> (b[1] - a[1]) - (b[0] - a[0]));
+        int min = 0, prevLeft = 0;
+        for (int[] task : tasks) {
+            if (task[1] >= prevLeft) {
+                min += task[1] - prevLeft;
+                prevLeft = task[1] - task[0];
+            } else {
+                prevLeft -= task[0];
+            }
+            System.out.println(min + " " + prevLeft);
+        }
+        return min;
+    }
+}

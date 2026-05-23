@@ -10,6 +10,6 @@ class Solution {
                 }
             }
         }
-        return !mayRotated || nums.length == 1 || nums[nums.length - 1] <= nums[0];
+        return !mayRotated || nums[nums.length - 1] <= nums[0];
     }
 }

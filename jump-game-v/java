@@ -1,0 +1,24 @@
+class Solution {
+    public int maxJumps(int[] arr, int d) {
+        int n = arr.length;
+        int[] memo = new int[n];
+        for (int i = 0; i < n; i++) {
+            dfs(arr, d, i, n, memo);
+        }
+        return Arrays.stream(memo).max().getAsInt();
+    }
+
+    private void dfs(int[] arr, int d, int index, int n, int[] memo) {
+        if (memo[index] == 0) {
+            memo[index] = 1;
+            for (int i = index - 1; i > -1 && index - i <= d && arr[index] > arr[i]; i--) {
+                dfs(arr, d, i, n, memo);
+                memo[index] = Math.max(memo[index], memo[i] + 1);
+            }
+            for (int i = index + 1; i < n && i - index <= d && arr[index] > arr[i]; i++) {
+                dfs(arr, d, i, n, memo);
+                memo[index] = Math.max(memo[index], memo[i] + 1);
+            }
+        }
+    }
+}

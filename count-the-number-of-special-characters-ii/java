@@ -1,0 +1,24 @@
+class Solution {
+    public int numberOfSpecialChars(String word) {
+        boolean[] condidates = new boolean[26], upper = new boolean[26], before = new boolean[26];
+        for (char c : word.toCharArray()) {
+            int index = c - 'a';
+            if (c >= 'a' && c <= 'z') {
+                if (!upper[index]) {
+                    condidates[index] = true;
+                } else {
+                    before[index] = true;
+                }
+            } else {
+                upper[c - 'A'] = true;
+            }
+        }
+        int count = 0;
+        for (int i = 0; i < 26; i++) {
+            if (condidates[i] && upper[i] && !before[i]) {
+                count++;
+            }
+        }
+        return count;
+    }
+}

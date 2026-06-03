@@ -1,0 +1,20 @@
+class Solution {
+    public int earliestFinishTime(int[] landStartTime, int[] landDuration, int[] waterStartTime, int[] waterDuration) {
+        return Math.min(
+                getMin(landStartTime, landDuration, waterStartTime, waterDuration),
+                getMin(waterStartTime, waterDuration, landStartTime, landDuration)
+        );
+    }
+
+    private int getMin(int[] activity1StartTime, int[] activity1Duration, int[] activity2StartTime, int[] activity2Duration) {
+        int m = activity1StartTime.length, n = activity2StartTime.length, activity1FinishTime = Integer.MAX_VALUE;
+        for (int i = 0; i < m; i++) {
+            activity1FinishTime = Math.min(activity1FinishTime, activity1StartTime[i] + activity1Duration[i]);
+        }
+        int activity2FinishTime = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            activity2FinishTime = Math.min(activity2FinishTime, Math.max(activity1FinishTime, activity2StartTime[i]) + activity2Duration[i]);
+        }
+        return activity2FinishTime;
+    }
+}

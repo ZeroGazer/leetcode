@@ -1,0 +1,43 @@
+class Solution {
+    public String processStr(String s) {
+        Deque<Character> deque = new LinkedList<>();
+        boolean isReversed = false;
+        for (char c : s.toCharArray()) {
+            switch(c) {
+                case '*':
+                    if (!deque.isEmpty()) {
+                        if (!isReversed) {
+                            deque.pollLast();
+                        } else {
+                            deque.pollFirst();
+                        }
+                    }
+                    break;
+                case '#':
+                    for (char e : deque.stream().toList()) {
+                        deque.offerLast(e);
+                    }
+                    break;
+                case '%':
+                    isReversed = !isReversed;
+                    break;
+                default:
+                    if (!isReversed) {
+                        deque.offerLast(c);
+                    } else {
+                        deque.offerFirst(c);
+                    }
+                break;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (char c : deque) {
+            if (!isReversed) {
+                sb.append(c);
+            } else {
+                sb.insert(0, c);
+            }
+        }
+        return sb.toString();
+    }
+}

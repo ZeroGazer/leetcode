@@ -1,0 +1,17 @@
+class Solution {
+    public int maxIceCream(int[] costs, int coins) {
+        int[] freqs = new int[100001];
+        for (int cost : costs) {
+            freqs[cost]++;
+        }
+        int count = 0;
+        for (int i = 1; i < 100001 && coins >= i; i++) {
+            if (freqs[i] > 0) {
+                int buy = Math.min(freqs[i], coins / i);
+                count += buy;
+                coins -= buy * i;
+            }
+        }
+        return count;
+    }
+}

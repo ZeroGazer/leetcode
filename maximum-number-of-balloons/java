@@ -1,0 +1,18 @@
+class Solution {
+    private static final Map<Character, Integer> TARGET = Map.of('b', 0, 'a', 1, 'l', 2, 'o', 3, 'n', 4);
+    public int maxNumberOfBalloons(String text) {
+        int[] freqs = new int[5];
+        for (char c : text.toCharArray()) {
+            if (TARGET.containsKey(c)) {
+                freqs[TARGET.get(c)]++;
+            }
+        }
+        freqs[2] >>= 1;
+        freqs[3] >>= 1;
+        int min = Integer.MAX_VALUE;
+        for (int freq : freqs) {
+            min = Math.min(min, freq);
+        }
+        return min;
+    }
+}

@@ -1,0 +1,22 @@
+class Solution {
+    public int maximumLength(int[] nums) {
+        Map<Long, Integer> freqs = new HashMap<>();
+        for (int num : nums) {
+            freqs.put((long) num, freqs.getOrDefault((long) num, 0) + 1);
+        }
+        int max = 0;
+        if (freqs.containsKey(1L)) {
+            int count1 = freqs.remove(1L);
+            max = count1 - 1 + (count1 & 1);
+        }
+        for (long num : freqs.keySet()) {
+            int count = 0;
+            while (freqs.getOrDefault(num, 0) > 1) {
+                num *= num;
+                count++;
+            }
+            max = Math.max(max, count * 2 + freqs.getOrDefault(num, -1));
+        }
+        return max;
+    }
+}

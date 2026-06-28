@@ -1,0 +1,14 @@
+class Solution {
+    public int maximumElementAfterDecrementingAndRearranging(int[] arr) {
+        int n = arr.length;
+        int[] freqs = new int[n + 1];
+        for (int num : arr) {
+            freqs[Math.min(n, num)]++;
+        }
+        int max = 1;
+        for(int i = 2; i <= n; i++) {
+            max = Math.min(i, max + freqs[i]);
+        }
+        return max;
+    }
+}

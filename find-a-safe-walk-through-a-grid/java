@@ -1,0 +1,37 @@
+class Solution {
+    private static final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public boolean findSafeWalk(List<List<Integer>> grid, int health) {
+        int m = grid.size(), n = grid.getFirst().size();
+        int[][] costs = new int[m][n];
+        for (int[] it : costs) {
+            Arrays.fill(it, Integer.MAX_VALUE);
+        }
+        costs[0][0] = grid.getFirst().getFirst();
+        Deque<int[]> deque = new ArrayDeque<>();
+        deque.offerFirst(new int[] {0, 0});
+        while (!deque.isEmpty()) {
+            int[] curr = deque.pollFirst();
+            if (curr[0] == (m - 1) && curr[1] == (n - 1)) {
+                return true;
+            }
+            for (int[] direction : DIRECTIONS) {
+                int x = curr[0] + direction[0], y = curr[1] + direction[1];
+                if (x < 0 || x >= m || y < 0 || y >= n) {
+                    continue;
+                }
+                int cost = costs[curr[0]][curr[1]] + grid.get(x).get(y);
+                if (cost >= health || cost >= costs[x][y]) {
+                    continue;
+                }
+                costs[x][y] = cost;
+                if (grid.get(x).get(y) == 0) {
+                    deque.offerFirst(new int[] {x, y});
+                } else {
+                    deque.offerLast(new int[] {x, y});
+                }
+            }
+        }
+        return false;
+    }
+}

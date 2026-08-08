@@ -1,0 +1,30 @@
+class Solution {
+    public int[] validSequence(String word1, String word2) {
+        int n = word1.length(), m = word2.length();
+        int[] rightmost = new int[m];
+        Arrays.fill(rightmost, -1);
+        for (int i = n - 1, j = m - 1; i > -1; i--) {
+            if (j > -1 && word1.charAt(i) == word2.charAt(j)) {
+                rightmost[j--] = i;
+            }
+        }
+        int[] result = new int[m];
+        boolean isSkipped = false;
+        int index = 0;
+        for (int i = 0; i < n; i++) {
+            if (index == m) {
+                break;
+            }
+            if (word1.charAt(i) == word2.charAt(index)) {
+                result[index++] = i;
+            } else if (!isSkipped && (index == (m - 1) || i < rightmost[index + 1])) {
+                isSkipped = true;
+                result[index++] = i;
+            }
+        }
+        if (index != m) {
+            return new int[0];
+        }
+        return result;
+    }
+}

@@ -1,20 +1,25 @@
 class Solution {
     public int stoneGameII(int[] piles) {
-        int[][] dp = new int[piles.length + 1][piles.length + 1];
-        int[] suffixSum = new int[piles.length + 1];
-        for (int i = piles.length - 1; i >= 0; i--) {
+        int n = piles.length;
+        int[] suffixSum = new int[n];
+        suffixSum[n - 1] = piles[n - 1];
+        for (int i = n - 2; i > -1; i--) {
             suffixSum[i] = suffixSum[i + 1] + piles[i];
         }
-        for (int i = 0; i <= piles.length; i++) {
-            dp[i][piles.length] = suffixSum[i];
+        return dp(suffixSum, 1, 0, new int[n][n], n);
+    }
+
+    private int dp(int[] suffixSum, int M, int index, int[][] memo, int n) {
+        if (index + 2 * M >= n) {
+            return suffixSum[index];
         }
-        for (int i = piles.length - 1; i >= 0; i--) {
-            for (int j = piles.length - 1; j >= 1; j--) {
-                for (int k = 1; k <= 2 * j && i + k <= piles.length; k++) {
-                    dp[i][j] = Math.max(dp[i][j], suffixSum[i] - dp[i + k][Math.max(j, k)]);
-                }
-            }
+        if (memo[M][index] > 0) {
+            return memo[M][index];
         }
-        return dp[0][1];
+        int min = Integer.MAX_VALUE;
+        for (int i = 1; i <= 2 * M; i++) {
+            min = Math.min(min, dp(suffixSum, Math.max(i, M), index + i, memo, n));
+        }
+        return memo[M][index] = suffixSum[index] - min;
     }
 }

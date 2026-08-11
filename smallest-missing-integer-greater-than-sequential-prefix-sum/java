@@ -1,0 +1,22 @@
+class Solution {
+    public int missingInteger(int[] nums) {
+        int n = nums.length, result = nums[0];
+        Set<Integer> set = new HashSet<>();
+        set.add(nums[0]);
+        boolean isSequential = true;
+        for (int i = 1; i < n; i++) {
+            if (isSequential) {
+                if (nums[i] == nums[i - 1] + 1) {
+                    result += nums[i];
+                } else {
+                    isSequential = false;
+                }
+            }
+            set.add(nums[i]);
+        }
+        while (set.contains(result)) {
+            result++;
+        }
+        return result;
+    }
+}

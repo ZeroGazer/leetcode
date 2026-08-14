@@ -1,0 +1,15 @@
+class Solution {
+    public int maximumLengthSubstring(String s) {
+        int n = s.length(), max = 0;
+        int[] freqs = new int[26];
+        for (int left = 0, right = 0; right < n; right++) {
+            int index = s.charAt(right) - 'a';
+            freqs[index]++;
+            while (freqs[index] > 2) {
+                freqs[s.charAt(left++) - 'a']--;
+            }
+            max = Math.max(max, right - left + 1);
+        }
+        return max;
+    }
+}

@@ -1,0 +1,16 @@
+class Solution {
+    public int longestSubsequence(int[] nums) {
+        int n = nums.length, xor = 0, or = 0;
+        for (int num : nums) {
+            xor ^= num;
+            or |= num;
+        }
+        if (xor > 0) {
+            return n;
+        } else if (or == 0) {
+            return 0;
+        } else {
+            return n - 1;
+        }
+    }
+}

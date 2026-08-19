@@ -1,0 +1,19 @@
+class Solution {
+    public int maxNumberOfFamilies(int n, int[][] reservedSeats) {
+        int block1 = 0b00001111, block2 = 0b11000011, block3 = 0b11110000;
+        Map<Integer, Integer> rows = new HashMap<>();
+        for (int[] reservedSeat : reservedSeats) {
+            if (reservedSeat[1] > 1 && reservedSeat[1] < 10) {
+                int row = rows.getOrDefault(reservedSeat[0], 0);
+                rows.put(reservedSeat[0], row | 1 << (reservedSeat[1] - 2));
+            }
+        }
+        int result = (n - rows.size()) * 2;
+        for (int row : rows.values()) {
+            if ((block1 | row) == block1 || (block2 | row) == block2 || (block3 | row) == block3) {
+                result++;
+            }
+        }
+        return result;
+    }
+}

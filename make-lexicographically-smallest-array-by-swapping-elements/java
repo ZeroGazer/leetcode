@@ -1,20 +1,20 @@
 class Solution {
     public int[] lexicographicallySmallestArray(int[] nums, int limit) {
-        int[] sortedNums = Arrays.copyOf(nums, nums.length);
+        int n = nums.length;
+        int[] sortedNums = Arrays.copyOf(nums, n);
         Arrays.sort(sortedNums);
-        Map<Integer, Integer> numMap = new HashMap<>();
-        Map<Integer, Queue<Integer>> groupMap = new HashMap<>();
-        int groupIndex = 0;
-        for (int i = 0; i < sortedNums.length; i++) {
+        Map<Integer, Integer> numToGroup = new HashMap<>();
+        Map<Integer, Queue<Integer>> groupToSortedNum = new HashMap<>();
+        for (int i = 0, groupIndex = 0; i < n; i++) {
             if (i != 0 && sortedNums[i] - sortedNums[i - 1] > limit) {
                 groupIndex++;
             }
-            numMap.put(sortedNums[i], groupIndex);
-            groupMap.putIfAbsent(groupIndex, new LinkedList<>());
-            groupMap.get(groupIndex).add(sortedNums[i]);
+            numToGroup.put(sortedNums[i], groupIndex);
+            groupToSortedNum.putIfAbsent(groupIndex, new LinkedList<>());
+            groupToSortedNum.get(groupIndex).offer(sortedNums[i]);
         }
-        for (int i = 0; i < nums.length; i++) {
-            nums[i] = groupMap.get(numMap.get(nums[i])).poll();
+        for (int i = 0; i < n; i++) {
+            nums[i] = groupToSortedNum.get(numToGroup.get(nums[i])).poll();
         }
         return nums;
     }

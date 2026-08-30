@@ -1,0 +1,15 @@
+class Solution {
+    public int minimumDeletions(int[] nums) {
+        int n = nums.length, minIndex = 0, maxIndex = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > nums[maxIndex]) {
+                maxIndex = i;
+            }
+            if (nums[i] < nums[minIndex]) {
+                minIndex = i;
+            }
+        }
+        int leftIndex = Math.min(minIndex, maxIndex), rightIndex = Math.max(minIndex, maxIndex);
+        return Math.min(Math.min(rightIndex + 1, n - leftIndex), leftIndex + 1 + n - rightIndex);
+    }
+}

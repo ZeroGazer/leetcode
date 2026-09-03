@@ -1,0 +1,13 @@
+class Solution {
+    public boolean uniformArray(int[] nums1) {
+        int min = (int) 1e9;
+        boolean hasOdd = false;
+        for (int num : nums1) {
+            min = Math.min(min, num);
+            if ((num & 1) == 1) {
+                hasOdd = true;
+            }
+        }
+        return ((min & 1) == 1 || !hasOdd);
+    }
+}

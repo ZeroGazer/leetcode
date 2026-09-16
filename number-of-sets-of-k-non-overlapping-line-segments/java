@@ -1,0 +1,25 @@
+class Solution {
+    private static final int MOD = (int) 1e9 + 7;
+
+    public int numberOfSets(int n, int k) {
+        int r = 2 * k;
+        long a = 1, b = 1;
+        for (int i = 0; i < r; i++) {
+            a = (a * (n + k - 1 - i)) % MOD;
+            b = (b * (i + 1)) % MOD;
+        }
+        return (int) ((a * pow(b, MOD - 2)) % MOD);
+    }
+
+    private long pow(long a, long p) {
+        long result = 1;
+        while (p > 0) {
+            if ((p & 1) == 1) {
+                result = (result * a) % MOD;
+            }
+            a = (a * a) % MOD;
+            p >>= 1;
+        }
+        return result;
+    }
+}

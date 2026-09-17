@@ -1,0 +1,22 @@
+class Solution {
+    public int minSumOfLengths(int[] arr, int target) {
+        int n = arr.length, sum = 0, min = n + 1;
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, n);
+        for (int left = 0, right = 0; right < n; right++) {
+            sum += arr[right];
+            while (sum > target) {
+                sum -= arr[left++];
+            }
+            dp[right + 1] = dp[right];
+            if (sum == target) {
+                min = Math.min(min, dp[left] + right - left + 1);
+                dp[right + 1] = Math.min(dp[right], right - left + 1);
+            }
+        }
+        if (min == n + 1) {
+            return -1;
+        }
+        return min;
+    }
+}

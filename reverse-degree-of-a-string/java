@@ -1,0 +1,9 @@
+class Solution {
+    public int reverseDegree(String s) {
+        int n = s.length(), degree = 0;
+        for (int i = 0; i < n; i++) {
+            degree += (i + 1) * (26 - (s.charAt(i) - 'a'));
+        }
+        return degree;
+    }
+}

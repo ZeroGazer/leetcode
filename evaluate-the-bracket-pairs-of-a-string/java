@@ -1,0 +1,24 @@
+class Solution {
+    public String evaluate(String s, List<List<String>> knowledge) {
+        Map<String, String> dict = new HashMap<>();
+        for (List<String> pair : knowledge) {
+            dict.put(pair.getFirst(), pair.getLast());
+        }
+        StringBuilder key = new StringBuilder(), result = new StringBuilder();
+        boolean isEvaluatingKey = false;
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                isEvaluatingKey = true;
+            } else if (c == ')') {
+                isEvaluatingKey = false;
+                result.append(dict.getOrDefault(key.toString(), "?"));
+                key.setLength(0);
+            } else if (isEvaluatingKey) {
+                key.append(c);
+            } else {
+                result.append(c);
+            }
+        }
+        return result.toString();
+    }
+}

@@ -1,0 +1,11 @@
+class Solution {
+    private static final int[] DAYS = new int[] {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+
+    public int countDaysTogether(String arriveAlice, String leaveAlice, String arriveBob, String leaveBob) {
+        return Math.max(0, Math.min(countDays(leaveAlice), countDays(leaveBob)) - Math.max(countDays(arriveAlice), countDays(arriveBob)) + 1);
+    }
+
+    private int countDays(String date) {
+        return DAYS[Integer.parseInt(date.substring(0, 2)) - 1] + Integer.parseInt(date.substring(3));
+    }
+}

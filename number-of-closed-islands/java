@@ -1,0 +1,37 @@
+class Solution {
+    private static final int[][] DIRECTIONS = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
+
+    public int closedIsland(int[][] grid) {
+        int m = grid.length, n = grid[0].length, count = 0;
+        boolean[][] visited = new boolean[m][n];
+        Queue<int[]> queue = new LinkedList<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1 || visited[i][j]) {
+                    continue;
+                }
+                queue.offer(new int[] {i, j});
+                visited[i][j] = true;
+                boolean isClosed = true;
+                while (!queue.isEmpty()) {
+                    int[] curr = queue.poll();
+                    for (int[] direction : DIRECTIONS) {
+                        int x = curr[0] + direction[0], y = curr[1] + direction[1];
+                        if (x < 0 || x == m || y < 0 || y == n) {
+                            isClosed = false;
+                            continue;
+                        }
+                        if (grid[x][y] == 0 && !visited[x][y]) {
+                            queue.offer(new int[] {x, y});
+                            visited[x][y] = true;
+                        }
+                    }
+                }
+                if (isClosed) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}

@@ -1,0 +1,42 @@
+class Solution {
+    public int minMoves2(int[] nums) {
+        int n = nums.length;
+        int median = quickselect(nums, n), moves = 0;
+        for (int num : nums) {
+            moves += Math.abs(num - median);
+        }
+        return moves;
+    }
+
+    private int quickselect(int[] nums, int n) {
+        int left = 0, right = n - 1, target = n / 2;
+        while (true) {
+            int pivot = partition(nums, left, right);
+            if (pivot < target) {
+                left = pivot + 1;
+            } else if (pivot > target) {
+                right = pivot - 1;
+            } else {
+                return nums[pivot];
+            }
+        }
+    }
+
+    private int partition(int[] nums, int left, int right) {
+        int pivot = left;
+        for (int i = left; i < right; i++) {
+            if (nums[i] < nums[right]) {
+                swap(nums, i, pivot);
+                pivot++;
+            }
+        }
+        swap(nums, pivot, right);
+        return pivot;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
